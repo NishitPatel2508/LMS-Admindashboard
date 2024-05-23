@@ -1,0 +1,1290 @@
+.sampleLogoChild {
+    align-self: stretch;
+    width: 34px;
+    position: relative;
+    max-height: 100%;
+    min-height: 24px;
+  }
+  .edCircle {
+    position: relative;
+    letter-spacing: 0.02em;
+    font-weight: 800;
+    display: inline-block;
+    min-width: 104px;
+  }
+  .sampleLogo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: var(--padding-8xs) var(--padding-3xs);
+    gap: var(--gap-4xs);
+  }
+  .supportingText {
+    align-self: stretch;
+    position: relative;
+    font-size: var(--text-md-normal-size);
+    line-height: 24px;
+    color: var(--gray-200);
+  }
+  .logoAndSupportingText {
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: var(--gap-13xl);
+    min-width: 320px;
+  }
+  .heading,
+  .text {
+    position: relative;
+  }
+  .heading {
+    align-self: stretch;
+    line-height: 20px;
+    font-weight: 600;
+  }
+  .text {
+    line-height: 24px;
+    font-weight: 500;
+    display: inline-block;
+    min-width: 73px;
+  }
+  .button,
+  .buttonBase,
+  .footerLink {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button,
+  .footerLink {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .footerLink {
+    align-items: center;
+  }
+  .text1 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+    display: inline-block;
+    min-width: 67px;
+  }
+  .button1,
+  .buttonBase1,
+  .footerLink1 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button1,
+  .footerLink1 {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .footerLink1 {
+    align-items: center;
+  }
+  .text2 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+    display: inline-block;
+    min-width: 72px;
+  }
+  .button2,
+  .buttonBase2,
+  .footerLink2 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button2,
+  .footerLink2 {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .footerLink2 {
+    align-items: center;
+  }
+  .text3 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+    display: inline-block;
+    min-width: 67px;
+  }
+  .button3,
+  .buttonBase3,
+  .footerLink3 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button3,
+  .footerLink3 {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .footerLink3 {
+    align-items: center;
+  }
+  .text4 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+    display: inline-block;
+    min-width: 53px;
+  }
+  .button4,
+  .buttonBase4,
+  .footerLink4 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button4,
+  .footerLink4 {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .footerLink4 {
+    align-items: center;
+  }
+  .buttonBase5,
+  .text5 {
+    align-self: stretch;
+    flex: 1;
+  }
+  .text5 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+  }
+  .buttonBase5 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button5,
+  .footerLink5 {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .button5 {
+    height: 24px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+  .footerLink5 {
+    align-self: stretch;
+    display: none;
+    align-items: center;
+  }
+  .buttonBase6,
+  .text6 {
+    align-self: stretch;
+    flex: 1;
+  }
+  .text6 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+  }
+  .buttonBase6 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button6,
+  .footerLink6 {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .button6 {
+    height: 24px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+  .footerLink6 {
+    align-self: stretch;
+    display: none;
+    align-items: center;
+  }
+  .buttonBase7,
+  .text7 {
+    align-self: stretch;
+    flex: 1;
+  }
+  .text7 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+  }
+  .buttonBase7 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button7,
+  .footerLink7 {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .button7 {
+    height: 24px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+  .footerLink7 {
+    align-self: stretch;
+    display: none;
+    align-items: center;
+  }
+  .buttonBase8,
+  .text8 {
+    align-self: stretch;
+    flex: 1;
+  }
+  .text8 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+  }
+  .buttonBase8 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button8,
+  .footerLink8 {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .button8 {
+    height: 24px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+  .footerLink8 {
+    align-self: stretch;
+    display: none;
+    align-items: center;
+  }
+  .buttonBase9,
+  .text9 {
+    align-self: stretch;
+    flex: 1;
+  }
+  .text9 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+  }
+  .buttonBase9 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button9,
+  .footerLink9 {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .button9 {
+    height: 24px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+  .footerLink9 {
+    align-self: stretch;
+    display: none;
+    align-items: center;
+  }
+  .footerLinks,
+  .footerLinksColumn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .footerLinks {
+    align-self: stretch;
+    padding: 0 var(--padding-92xl) 0 0;
+    gap: var(--gap-xs);
+    font-size: var(--text-md-normal-size);
+    color: var(--gray-200);
+  }
+  .footerLinksColumn {
+    flex: 1;
+    gap: var(--gap-base);
+    min-width: 138px;
+    max-width: 184px;
+  }
+  .heading1 {
+    align-self: stretch;
+    position: relative;
+    line-height: 20px;
+    font-weight: 600;
+  }
+  .text10 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+    display: inline-block;
+    min-width: 69px;
+  }
+  .button10,
+  .buttonBase10,
+  .footerLink10 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button10,
+  .footerLink10 {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .footerLink10 {
+    align-items: center;
+  }
+  .text11 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+    display: inline-block;
+    min-width: 61px;
+  }
+  .button11,
+  .buttonBase11,
+  .footerLink11 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button11,
+  .footerLink11 {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .footerLink11 {
+    align-items: center;
+  }
+  .text12 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+    display: inline-block;
+    min-width: 43px;
+  }
+  .button12,
+  .buttonBase12 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button12 {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .text13 {
+    width: 26px;
+    position: relative;
+    line-height: 18px;
+    font-weight: 500;
+    display: inline-block;
+    min-width: 26px;
+  }
+  .badgeBase {
+    border-radius: var(--br-base);
+    background-color: var(--color-whitesmoke-300);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: var(--padding-11xs) var(--padding-5xs);
+  }
+  .badge,
+  .footerLink12 {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .badge {
+    align-items: flex-start;
+    mix-blend-mode: normal;
+    text-align: center;
+    font-size: var(--text-xs-medium-size);
+    color: var(--color-gray-100);
+  }
+  .footerLink12 {
+    align-items: center;
+    gap: var(--gap-5xs);
+  }
+  .text14 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+    display: inline-block;
+    min-width: 44px;
+  }
+  .button13,
+  .buttonBase13,
+  .footerLink13 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button13,
+  .footerLink13 {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .footerLink13 {
+    align-items: center;
+  }
+  .buttonBase14,
+  .text15 {
+    align-self: stretch;
+    flex: 1;
+  }
+  .text15 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+  }
+  .buttonBase14 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button14,
+  .footerLink14 {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .button14 {
+    height: 24px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+  .footerLink14 {
+    width: 73px;
+    display: none;
+    align-items: center;
+  }
+  .buttonBase15,
+  .text16 {
+    align-self: stretch;
+    flex: 1;
+  }
+  .text16 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+  }
+  .buttonBase15 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button15,
+  .footerLink15 {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .button15 {
+    height: 24px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+  .footerLink15 {
+    width: 73px;
+    display: none;
+    align-items: center;
+  }
+  .buttonBase16,
+  .text17 {
+    align-self: stretch;
+    flex: 1;
+  }
+  .text17 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+  }
+  .buttonBase16 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button16,
+  .footerLink16 {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .button16 {
+    height: 24px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+  .footerLink16 {
+    width: 73px;
+    display: none;
+    align-items: center;
+  }
+  .buttonBase17,
+  .text18 {
+    align-self: stretch;
+    flex: 1;
+  }
+  .text18 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+  }
+  .buttonBase17 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button17,
+  .footerLink17 {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .button17 {
+    height: 24px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+  .footerLink17 {
+    width: 73px;
+    display: none;
+    align-items: center;
+  }
+  .buttonBase18,
+  .text19 {
+    align-self: stretch;
+    flex: 1;
+  }
+  .text19 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+  }
+  .buttonBase18 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button18,
+  .footerLink18 {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .button18 {
+    height: 24px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+  .footerLink18 {
+    width: 73px;
+    display: none;
+    align-items: center;
+  }
+  .footerLinks1,
+  .footerLinksColumn1 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .footerLinks1 {
+    align-self: stretch;
+    padding: 0 var(--padding-72xl) 0 0;
+    gap: var(--gap-xs);
+    font-size: var(--text-md-normal-size);
+    color: var(--gray-200);
+  }
+  .footerLinksColumn1 {
+    flex: 1;
+    gap: var(--gap-base);
+    min-width: 138px;
+    max-width: 184px;
+  }
+  .heading2 {
+    align-self: stretch;
+    position: relative;
+    line-height: 20px;
+    font-weight: 600;
+  }
+  .text20 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+    display: inline-block;
+    min-width: 54px;
+  }
+  .button19,
+  .buttonBase19,
+  .footerLink19 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button19,
+  .footerLink19 {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .footerLink19 {
+    align-items: center;
+  }
+  .text21 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+    display: inline-block;
+    min-width: 65px;
+  }
+  .button20,
+  .buttonBase20,
+  .footerLink20 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button20,
+  .footerLink20 {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .footerLink20 {
+    align-items: center;
+  }
+  .text22 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+    display: inline-block;
+    min-width: 55px;
+  }
+  .button21,
+  .buttonBase21,
+  .footerLink21 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button21,
+  .footerLink21 {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .footerLink21 {
+    align-items: center;
+  }
+  .text23 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+    display: inline-block;
+    min-width: 66px;
+  }
+  .button22,
+  .buttonBase22,
+  .footerLink22 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button22,
+  .footerLink22 {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .footerLink22 {
+    align-items: center;
+  }
+  .buttonBase23,
+  .text24 {
+    align-self: stretch;
+    flex: 1;
+  }
+  .text24 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+  }
+  .buttonBase23 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button23,
+  .footerLink23 {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .button23 {
+    height: 24px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+  .footerLink23 {
+    width: 73px;
+    display: none;
+    align-items: center;
+  }
+  .buttonBase24,
+  .text25 {
+    align-self: stretch;
+    flex: 1;
+  }
+  .text25 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+  }
+  .buttonBase24 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button24,
+  .footerLink24 {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .button24 {
+    height: 24px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+  .footerLink24 {
+    width: 73px;
+    display: none;
+    align-items: center;
+  }
+  .buttonBase25,
+  .text26 {
+    align-self: stretch;
+    flex: 1;
+  }
+  .text26 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+  }
+  .buttonBase25 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button25,
+  .footerLink25 {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .button25 {
+    height: 24px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+  .footerLink25 {
+    width: 73px;
+    display: none;
+    align-items: center;
+  }
+  .buttonBase26,
+  .text27 {
+    align-self: stretch;
+    flex: 1;
+  }
+  .text27 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+  }
+  .buttonBase26 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button26,
+  .footerLink26 {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .button26 {
+    height: 24px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+  .footerLink26 {
+    width: 73px;
+    display: none;
+    align-items: center;
+  }
+  .buttonBase27,
+  .text28 {
+    align-self: stretch;
+    flex: 1;
+  }
+  .text28 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+  }
+  .buttonBase27 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button27,
+  .footerLink27 {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .button27 {
+    height: 24px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+  .footerLink27 {
+    width: 73px;
+    display: none;
+    align-items: center;
+  }
+  .footerLinks2,
+  .footerLinksColumn2 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .footerLinks2 {
+    align-self: stretch;
+    padding: 0 var(--padding-99xl) 0 0;
+    gap: var(--gap-xs);
+    font-size: var(--text-md-normal-size);
+    color: var(--gray-200);
+  }
+  .footerLinksColumn2 {
+    flex: 1;
+    gap: var(--gap-base);
+    min-width: 138px;
+    max-width: 184px;
+  }
+  .heading3 {
+    align-self: stretch;
+    position: relative;
+    line-height: 20px;
+    font-weight: 600;
+  }
+  .text29 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+    display: inline-block;
+    min-width: 48px;
+  }
+  .button28,
+  .buttonBase28,
+  .footerLink28 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button28,
+  .footerLink28 {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .footerLink28 {
+    align-items: center;
+  }
+  .text30 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+    display: inline-block;
+    min-width: 57px;
+  }
+  .button29,
+  .buttonBase29,
+  .footerLink29 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button29,
+  .footerLink29 {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .footerLink29 {
+    align-items: center;
+  }
+  .text31 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+    display: inline-block;
+    min-width: 62px;
+  }
+  .button30,
+  .buttonBase30,
+  .footerLink30 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button30,
+  .footerLink30 {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .footerLink30 {
+    align-items: center;
+  }
+  .text32 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+    display: inline-block;
+    min-width: 62px;
+  }
+  .button31,
+  .buttonBase31,
+  .footerLink31 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button31,
+  .footerLink31 {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .footerLink31 {
+    align-items: center;
+  }
+  .buttonBase32,
+  .text33 {
+    align-self: stretch;
+    flex: 1;
+  }
+  .text33 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+  }
+  .buttonBase32 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button32,
+  .footerLink32 {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .button32 {
+    height: 24px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+  .footerLink32 {
+    width: 73px;
+    display: none;
+    align-items: center;
+  }
+  .buttonBase33,
+  .text34 {
+    align-self: stretch;
+    flex: 1;
+  }
+  .text34 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+  }
+  .buttonBase33 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button33,
+  .footerLink33 {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .button33 {
+    height: 24px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+  .footerLink33 {
+    width: 73px;
+    display: none;
+    align-items: center;
+  }
+  .buttonBase34,
+  .text35 {
+    align-self: stretch;
+    flex: 1;
+  }
+  .text35 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+  }
+  .buttonBase34 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button34,
+  .footerLink34 {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .button34 {
+    height: 24px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+  .footerLink34 {
+    width: 73px;
+    display: none;
+    align-items: center;
+  }
+  .buttonBase35,
+  .text36 {
+    align-self: stretch;
+    flex: 1;
+  }
+  .text36 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+  }
+  .buttonBase35 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button35,
+  .footerLink35 {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .button35 {
+    height: 24px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+  .footerLink35 {
+    width: 73px;
+    display: none;
+    align-items: center;
+  }
+  .buttonBase36,
+  .text37 {
+    align-self: stretch;
+    flex: 1;
+  }
+  .text37 {
+    position: relative;
+    line-height: 24px;
+    font-weight: 500;
+  }
+  .buttonBase36 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .button36,
+  .footerLink36 {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .button36 {
+    height: 24px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+  .footerLink36 {
+    width: 73px;
+    display: none;
+    align-items: center;
+  }
+  .footerLinks3 {
+    align-self: stretch;
+    flex-direction: column;
+    padding: 0 var(--padding-103xl) 0 0;
+    gap: var(--gap-xs);
+    font-size: var(--text-md-normal-size);
+    color: var(--gray-200);
+  }
+  .container,
+  .content,
+  .footerLinks3,
+  .footerLinksColumn3,
+  .links,
+  .section {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .footerLinksColumn3 {
+    flex: 1;
+    flex-direction: column;
+    gap: var(--gap-base);
+    min-width: 138px;
+    max-width: 184px;
+  }
+  .container,
+  .content,
+  .links,
+  .section {
+    max-width: 100%;
+  }
+  .links {
+    flex: 1;
+    flex-direction: row;
+    gap: var(--gap-13xl);
+    min-width: 541px;
+    font-size: var(--text-sm-semibold-size);
+    color: var(--color-darkgray-100);
+  }
+  .container,
+  .content,
+  .section {
+    align-self: stretch;
+  }
+  .content {
+    flex-direction: row;
+    gap: var(--gap-45xl);
+  }
+  .container,
+  .section {
+    flex-direction: column;
+    padding: 0 var(--padding-13xl);
+    box-sizing: border-box;
+  }
+  .section {
+    align-items: center;
+    padding: var(--padding-45xl) var(--padding-61xl) var(--padding-29xl);
+    text-align: left;
+    font-size: var(--text-xl-normal-size);
+    color: var(--color-white);
+    font-family: var(--text-md-normal);
+  }
+  @media screen and (max-width: 1200px) {
+    .logoAndSupportingText {
+      flex: 1;
+    }
+    .content {
+      flex-wrap: wrap;
+    }
+  }
+  @media screen and (max-width: 1050px) {
+    .links {
+      flex-wrap: wrap;
+      min-width: 100%;
+    }
+  }
+  @media screen and (max-width: 750px) {
+    .content {
+      gap: var(--gap-13xl);
+    }
+    .container {
+      gap: var(--gap-5xl);
+    }
+    .section {
+      gap: var(--gap-13xl);
+      padding-left: var(--padding-21xl);
+      padding-right: var(--padding-21xl);
+      box-sizing: border-box;
+    }
+  }
+  @media screen and (max-width: 450px) {
+    .edCircle {
+      font-size: var(--text-md-normal-size);
+    }
+    .content,
+    .links,
+    .logoAndSupportingText,
+    .section {
+      gap: var(--gap-base);
+    }
+  }
+
+  
+  
+  
+  

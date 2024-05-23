@@ -1,0 +1,189 @@
+.heading,
+.subheading {
+  align-self: stretch;
+  position: relative;
+  line-height: 24px;
+  font-weight: 600;
+}
+.heading {
+  margin: 0;
+  font-size: var(--display-md-semibold-size);
+  letter-spacing: -0.02em;
+  line-height: 44px;
+  font-family: inherit;
+  color: var(--color-gray-100);
+}
+.headingAndSubheading,
+.headingAndSupportingText {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.headingAndSubheading {
+  align-self: stretch;
+  align-items: flex-start;
+  gap: var(--gap-xs);
+}
+.headingAndSupportingText {
+  width: 768px;
+  align-items: center;
+  max-width: 100%;
+}
+.icon {
+  width: 24px;
+  height: 24px;
+  position: relative;
+}
+.iconWrapper {
+  border-radius: var(--br-3xs);
+  background-color: var(--color-lavender-200);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: var(--padding-xs) var(--padding-2xs);
+}
+.webDevelopment {
+  position: relative;
+  letter-spacing: 0.02em;
+  line-height: 150%;
+}
+.frameGroup {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-lgi);
+}
+.classesInDevelopment {
+  align-self: stretch;
+  position: relative;
+  font-size: var(--text-md-normal-size);
+  line-height: 180%;
+  color: var(--color-dimgray);
+}
+.frameParent {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-11xl);
+}
+.learnMore {
+  flex: 1;
+  position: relative;
+  letter-spacing: 0.02em;
+  line-height: 140%;
+  font-weight: 500;
+  display: inline-block;
+  min-width: 102px;
+  white-space: nowrap;
+}
+.vectorIcon {
+  height: 10px;
+  width: 5px;
+  position: relative;
+}
+.learnMoreParent {
+  width: 127px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--gap-xl);
+  text-align: center;
+  font-size: var(--text-lg-semibold-size);
+  color: var(--color-mediumslateblue);
+}
+.categoryCards {
+  width: 373px;
+  border-radius: var(--br-xs);
+  background-color: var(--color-white);
+  box-shadow: 0 67.1px 109.06px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-gainsboro-200);
+  box-sizing: border-box;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--padding-11xl) var(--padding-20xl);
+  gap: var(--gap-3xl);
+  color: var(--color-gray-100);
+}
+.learningCategories {
+  width: 1199px;
+  overflow-x: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-21xl);
+  max-width: 100%;
+}
+.learningFeaturesChild {
+  width: 96px;
+  height: 12px;
+  position: relative;
+}
+.learningFeatures,
+.learningHeader,
+.mainContentArea {
+  display: flex;
+  justify-content: flex-start;
+  max-width: 100%;
+}
+.learningFeatures {
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-21xl);
+  text-align: left;
+  font-size: var(--display-xs-semibold-size);
+  color: var(--color-white);
+}
+.learningHeader,
+.mainContentArea {
+  box-sizing: border-box;
+}
+.learningHeader {
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 var(--padding-xl);
+  gap: var(--gap-21xl);
+}
+.mainContentArea {
+  align-self: stretch;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0 var(--padding-7xs) var(--padding-xl) var(--padding-6xs-5);
+  flex-shrink: 0;
+  text-align: center;
+  font-size: var(--text-md-normal-size);
+  color: var(--color-slateblue);
+  font-family: var(--text-md-normal);
+}
+@media screen and (max-width: 1050px) {
+  .heading {
+    font-size: var(--font-size-10xl);
+    line-height: 35px;
+  }
+}
+@media screen and (max-width: 750px) {
+  .learningCategories,
+  .learningFeatures,
+  .learningHeader {
+    gap: var(--gap-xl);
+  }
+}
+@media screen and (max-width: 450px) {
+  .heading {
+    font-size: var(--font-size-3xl);
+    line-height: 26px;
+  }
+  .webDevelopment {
+    font-size: var(--font-size-lgi);
+    line-height: 29px;
+  }
+}

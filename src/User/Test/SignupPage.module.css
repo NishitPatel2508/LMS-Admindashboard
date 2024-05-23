@@ -1,0 +1,145 @@
+.blobsIcon {
+    width: 100%;
+    /* height: 100%; */
+    object-fit: contain;
+    position: absolute;
+    left: 56px;
+    top: 68px;
+    transform: scale(1.195);
+  }
+  .wrapperBlobs {
+    position: absolute;
+    top: 15px;
+    left: -140px;
+    width: 791.1px;
+    height: 857.2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .createAccount {
+    margin: 0;
+    position: absolute;
+    top: -20px;
+    left: 0;
+    font-size: inherit;
+    text-transform: capitalize;
+    font-weight: 700;
+    font-family: inherit;
+  }
+  .createAccountParent {
+    position: absolute;
+    top: 120px;
+    left: 250px;
+    width: 655px;
+    height: 490px;
+    /* max-width: 100%; */
+  }
+  .form,
+  .illustrationIcon {
+    position: absolute;
+    max-width: 80%;
+    overflow: hidden;
+  }
+  .form {
+    height: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    box-shadow: -20px 0 80px rgba(0, 0, 0, 0.25);
+    border-radius: var(--br-26xl) 0 0 var(--br-26xl);
+    background-color: var(--color-white);
+    width: 960px;
+    text-align: left;
+    font-size: 40px;
+    color: #212121;
+    font-family: var(--font-outfit);
+  }
+  .illustrationIcon {
+    height: 53%;
+    width: 30%;
+    top: 31.35%;
+    right: 56.12%;
+    bottom: 19.27%;
+    left: 12%;
+    max-height: 100%;
+  }
+  .timetrack,
+  .timetrackWrapper {
+    position: absolute;
+    top: 0;
+    display: none;
+  }
+  .timetrack {
+    left: 0;
+    letter-spacing: 0.02em;
+    text-transform: capitalize;
+    width: 143.9px;
+  }
+  .timetrackWrapper {
+    left: 41px;
+    width: 0;
+    height: 0;
+  }
+  .logoChild {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 8.16%;
+    right: 10.63%;
+    bottom: 0;
+    left: 0;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+  }
+  .logo {
+    position: absolute;
+    top: 28.4px;
+    left: 46px;
+    width: 160px;
+    height: 89px;
+  }
+  .signupPage {
+    /* border: 1px solid black; */
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    background-color: var(--color-blueviolet);
+    overflow: hidden;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    font-size: 30.6px;
+    color: var(--color-white);
+    font-family: var(--font-pacifico);
+  }
+  @media screen and (max-width: 750px) {
+    .createAccount {
+      font-size: 32px;
+    }
+    .timetrack {
+      font-size: var(--font-size-5xl);
+    }
+  }
+  @media screen and (max-width: 675px) {
+    .createAccountParent {
+      height: auto;
+      min-height: 490;
+    }
+    .form,
+    .signupPage {
+      height: auto;
+      min-height: 1024;
+    }
+  }
+  @media screen and (max-width: 450px) {
+    .createAccount {
+      font-size: var(--font-size-5xl);
+    }
+    .timetrack {
+      font-size: 18px;
+    }
+  }
+  
+  

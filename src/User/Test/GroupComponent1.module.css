@@ -1,0 +1,48 @@
+.frameChild {
+    position: absolute;
+    top: 16px;
+    left: 0;
+    border-radius: var(--br-3xs);
+    background-color: var(--color-white);
+    border: 1px solid var(--color-dimgray);
+    box-sizing: border-box;
+    width: 313.5px;
+    height: 55px;
+  }
+  .firstName {
+    position: relative;
+    font-size: var(--font-size-base);
+    text-transform: capitalize;
+    font-family: var(--font-outfit);
+    color: var(--color-dimgray);
+    text-align: left;
+    display: inline-block;
+    min-width: 78px;
+  }
+  .firstNameWrapper {
+    cursor: pointer;
+    border: 0;
+    padding: var(--padding-9xs) var(--padding-5xs);
+    background-color: var(--color-white);
+    position: absolute;
+    top: 0;
+    left: 18px;
+    width: 99.6px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    white-space: nowrap;
+  }
+  .firstNameWrapper:hover {
+    background-color: var(--color-gainsboro);
+  }
+  .rectangleParent {
+    height: 71px;
+    flex: 1;
+    position: relative;
+    min-width: 203px;
+  }
+  
+  

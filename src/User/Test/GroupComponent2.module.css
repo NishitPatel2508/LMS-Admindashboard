@@ -1,0 +1,43 @@
+.frameChild {
+    border: 0;
+    background-color: transparent;
+    position: absolute;
+    top: 16px;
+    left: 0;
+  }
+  .email {
+    position: relative;
+    font-size: var(--font-size-base);
+    text-transform: capitalize;
+    font-family: var(--font-outfit);
+    color: var(--color-dimgray);
+    text-align: left;
+    display: inline-block;
+    min-width: 40px;
+  }
+  .emailWrapper {
+    cursor: pointer;
+    border: 0;
+    padding: var(--padding-9xs) var(--padding-5xs);
+    background-color: var(--color-white);
+    position: absolute;
+    top: 0;
+    left: 18px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .emailWrapper:hover {
+    background-color: var(--color-gainsboro);
+  }
+  .rectangleParent {
+    position: absolute;
+    top: 99px;
+    left: 0;
+    width: 100%;
+    height: 71px;
+  }
+  
+  
+  

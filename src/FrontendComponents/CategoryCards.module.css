@@ -1,0 +1,115 @@
+.icon {
+    width: 26px;
+    height: 24px;
+    position: relative;
+    object-fit: cover;
+  }
+  .categoryDescriptions {
+    border-radius: var(--br-3xs);
+    background-color: var(--color-lavender-100);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: var(--padding-xs) var(--padding-2xs);
+  }
+  .userExperience {
+    margin: 0;
+    position: relative;
+    font-size: inherit;
+    letter-spacing: 0.02em;
+    line-height: 150%;
+    font-weight: 700;
+    font-family: inherit;
+  }
+  .categoryLabels {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--gap-xl);
+  }
+  .lessonsOnDesign {
+    align-self: stretch;
+    position: relative;
+    font-size: var(--text-md-normal-size);
+    line-height: 180%;
+  }
+  .categoryIcons {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: var(--gap-11xl);
+  }
+  .learnMore {
+    flex: 1;
+    position: relative;
+    letter-spacing: 0.02em;
+    line-height: 140%;
+    font-weight: 500;
+    display: inline-block;
+    min-width: 102px;
+    white-space: nowrap;
+  }
+  .vectorIcon {
+    height: 10px;
+    width: 5px;
+    position: relative;
+  }
+  .actionButtons {
+    width: 127px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--gap-xl);
+    text-align: center;
+    font-size: var(--text-lg-semibold-size);
+  }
+  .categoryCards {
+    width: 373px;
+    border-radius: var(--br-xs);
+    background-color: var(--color-mediumslateblue);
+    box-shadow: 0 67.1px 109.06px rgba(0, 0, 0, 0.05);
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: var(--padding-11xl) var(--padding-21xl);
+    box-sizing: border-box;
+    gap: var(--gap-3xl);
+    text-align: left;
+    font-size: var(--display-xs-semibold-size);
+    color: var(--color-white);
+    font-family: var(--text-md-normal);
+  }
+  @media screen and (max-width: 750px) {
+    .categoryCards {
+      opacity: 0;
+    }
+    .categoryCards.animate {
+      animation: 1s ease 0s 1 normal forwards slide-in-top;
+    }
+    @keyframes slide-in-top {
+      0% {
+        transform: translateY(-200px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+  }
+  @media screen and (max-width: 450px) {
+    .userExperience {
+      font-size: var(--font-size-lgi);
+      line-height: 29px;
+    }
+    .categoryLabels {
+      flex-wrap: wrap;
+    }
+  }

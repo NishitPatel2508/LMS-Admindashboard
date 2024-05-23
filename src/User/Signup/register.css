@@ -1,0 +1,34 @@
+
+.register{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* flex-direction: column; */
+    height: 120vh;
+   
+    /* width: 50%; */
+    /* border: 1px solid black; */
+    
+}
+form{
+    background-color: #ececec;
+    border-radius: 10px;
+    /* height: 110vh; */
+    width: 50vw;
+
+    padding: 5px;
+    justify-content: center;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.signupBtn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.errorcss{
+    color: #ff0000;
+    font-weight: 500;
+}
+
+

@@ -1,0 +1,88 @@
+.placeholder,
+.userImagesChild {
+  position: absolute;
+  top: 85px;
+  left: 0;
+  width: 1212px;
+  height: 535px;
+  z-index: 3;
+}
+.placeholder {
+  top: 0;
+  left: 704.4px;
+  border-radius: var(--br-669xl-5);
+  border: 0.8px solid var(--color-mediumslateblue);
+  box-sizing: border-box;
+  width: 495.7px;
+  height: 495.7px;
+  z-index: 1;
+}
+.placeholder1,
+.userImageMaskChild {
+  position: absolute;
+  background-color: var(--color-mediumslateblue);
+  box-sizing: border-box;
+}
+.placeholder1 {
+  top: 0;
+  left: 0;
+  border-radius: var(--br-669xl-5);
+  border: 0.8px solid var(--color-mediumslateblue);
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+.userImageMaskChild {
+  top: 394.1px;
+  left: 9.6px;
+  border-radius: 50%;
+  border: 0 solid var(--color-mediumslateblue);
+  width: 42.8px;
+  height: 42.8px;
+  z-index: 7;
+}
+.maskGroupIcon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.userImageMask {
+  position: absolute;
+  top: 20.6px;
+  left: 0.4px;
+  width: 495px;
+  height: 474px;
+}
+.userImage,
+.userImagesItem {
+  position: absolute;
+  background-color: var(--color-mediumslateblue);
+}
+.userImage {
+  top: 21.4px;
+  left: 726.6px;
+  border-radius: var(--br-669xl-5);
+  border: 0.8px solid var(--color-mediumslateblue);
+  box-sizing: border-box;
+  width: 495.4px;
+  height: 495px;
+  z-index: 2;
+}
+.userImagesItem {
+  top: 611px;
+  left: 990px;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  z-index: 7;
+}
+.userImages {
+  position: absolute;
+  top: 141px;
+  left: 63px;
+  width: 1222px;
+  height: 625px;
+}

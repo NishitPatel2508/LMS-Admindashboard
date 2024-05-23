@@ -1,0 +1,479 @@
+/* .blurIcon {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    left: -191px;
+    max-height: 100%;
+    width: 1821px;
+    z-index: 1;
+  }
+  .navigationChild,
+  .navigationItem {
+    position: absolute;
+    top: 396px;
+    left: 1040px;
+    width: 414px;
+    height: 492px;
+    object-fit: contain;
+    z-index: 2;
+  }
+  .navigationItem {
+    top: 108px;
+    left: -7px;
+    height: 489px;
+  }
+  .navigation {
+    width: 100%;
+    height: 935px;
+    position: absolute;
+    margin: 0 !important;
+    top: 10px;
+    right: 0;
+    left: 0;
+  }
+  .designFileChild {
+    align-self: stretch;
+    height: 900px;
+    position: relative;
+    display: none;
+    z-index: 1;
+  }
+  .headerChild,
+  .maskGroupChild {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
+  .headerChild {
+    left: -1px;
+    background-color: var(--color-mediumseagreen);
+  }
+  .maskGroupChild {
+    left: 0;
+  }
+  .progressCircleIcon {
+    width: 80px;
+    height: 80px;
+    position: relative;
+  }
+  .k,
+  .onlineCourses {
+    position: relative;
+    display: inline-block;
+  }
+  .k {
+    width: 50px;
+    min-width: 50px;
+  }
+  .onlineCourses {
+    align-self: stretch;
+    font-size: var(--font-size-mini);
+    color: var(--color-gray-200);
+    min-width: 108px;
+  }
+  .div,
+  .icon {
+    position: absolute;
+  }
+  .div {
+    top: 143px;
+    left: 1176px;
+    border-radius: 18.36px;
+    background-color: var(--color-whitesmoke-200);
+    box-shadow: 0 18.4px 38.25px rgba(0, 0, 0, 0.15);
+    border: 0.8px solid var(--color-mediumslateblue);
+    box-sizing: border-box;
+    width: 144.7px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: var(--padding-lg-4) 17px var(--padding-lg-4) var(--padding-lg-4);
+    gap: 12.2px;
+    z-index: 7;
+    text-align: center;
+  }
+  .icon {
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+    object-fit: contain;
+    left: 0;
+    top: 18px;
+    transform: scale(2.562);
+  }
+  .wrapperIcon {
+    position: absolute;
+    height: 53.96%;
+    width: 22.88%;
+    top: 23.02%;
+    right: 68.53%;
+    bottom: 23.02%;
+    left: 8.59%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .k1,
+  .videoCourses {
+    left: 91.8px;
+    display: inline-block;
+  }
+  .k1 {
+    position: absolute;
+    top: 18.4px;
+    min-width: 49px;
+  }
+  .videoCourses {
+    top: 54.5px;
+    font-size: var(--font-size-mini);
+    color: var(--color-gray-200);
+    min-width: 104px;
+  }
+  .div1,
+  .icon1,
+  .videoCourses {
+    position: absolute;
+  }
+  .div1 {
+    top: 317px;
+    left: 697px;
+    border-radius: 18.36px;
+    background-color: var(--color-whitesmoke-200);
+    box-shadow: 0 18.4px 38.25px rgba(0, 0, 0, 0.15);
+    border: 0.8px solid var(--color-mediumslateblue);
+    box-sizing: border-box;
+    width: 214.2px;
+    height: 90.8px;
+    z-index: 9;
+  }
+  .icon1 {
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+    object-fit: contain;
+    left: 0;
+    top: 18px;
+    transform: scale(2.562);
+  }
+  .wrapperIcon1 {
+    position: absolute;
+    height: 57.18%;
+    width: 29.71%;
+    top: 21.47%;
+    right: 59.13%;
+    bottom: 21.35%;
+    left: 11.16%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tutors,
+  .tutorsCount {
+    position: absolute;
+    top: 18.4px;
+    left: 79.6px;
+    display: inline-block;
+    min-width: 45px;
+  }
+  .tutorsCount {
+    top: 36.4px;
+    font-size: var(--font-size-6xl);
+    color: var(--color-gray-100);
+    min-width: 67px;
+  }
+  .div2 {
+    position: absolute;
+    top: 533px;
+    left: 1144px;
+    border-radius: 18.36px;
+    background-color: var(--color-whitesmoke-200);
+    box-shadow: 0 18.4px 38.25px rgba(0, 0, 0, 0.15);
+    border: 0.8px solid var(--color-mediumslateblue);
+    box-sizing: border-box;
+    width: 164.9px;
+    height: 85.7px;
+    z-index: 9;
+    text-align: center;
+    font-size: var(--font-size-mini);
+    color: var(--color-gray-200);
+  }
+  .skills {
+    color: var(--color-mediumslateblue);
+  }
+  .upYourSkills {
+    margin: 0;
+  }
+  .to,
+  .your {
+    color: var(--color-gray-100);
+  }
+  .career {
+    color: var(--color-mediumslateblue);
+  }
+  .path {
+    color: var(--color-gray-100);
+  }
+  .toAdvanceYourCareerPath {
+    margin: 0;
+    color: var(--color-mediumslateblue);
+  }
+  .upYourSkillsContainer {
+    margin: 0;
+    align-self: stretch;
+    position: relative;
+    font-size: inherit;
+    letter-spacing: -0.5px;
+    line-height: 82px;
+    text-transform: capitalize;
+    font-weight: 700;
+    font-family: inherit;
+  }
+  .providesYouWith {
+    width: 507px;
+    position: relative;
+    font-size: var(--text-md-normal-size);
+    line-height: 180%;
+    color: var(--color-dimgray);
+    display: inline-block;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding-right: var(--padding-xl);
+  }
+  .upYourSkillsToAdvanceYourParent {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: var(--gap-xl);
+    max-width: 100%;
+  }
+  .button,
+  .button1 {
+    align-self: stretch;
+    flex: 1;
+  }
+  .heroButtons,
+  .heroContent {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    max-width: 100%;
+  }
+  .heroButtons {
+    width: 370px;
+    height: 60px;
+    flex-direction: row;
+    padding: 0 var(--padding-xl) 0 0;
+    box-sizing: border-box;
+    gap: 28px;
+  }
+  .heroContent {
+    align-self: stretch;
+    flex-direction: column;
+    gap: 36px;
+  }
+  .frameChild {
+    height: 32px;
+    width: 32px;
+    position: relative;
+  }
+  .publicSpeaking {
+    position: relative;
+    line-height: 40px;
+    display: inline-block;
+    min-width: 121px;
+  }
+  .frameParent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--gap-3xs);
+  }
+  .briefcaseIcon {
+    height: 32px;
+    width: 32px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .careerOriented {
+    position: relative;
+    line-height: 40px;
+    display: inline-block;
+    min-width: 124px;
+  }
+  .briefcaseParent {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--gap-3xs);
+    min-width: 108px;
+  }
+  .ideaIcon {
+    height: 32px;
+    width: 32px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .creativeThinking {
+    position: relative;
+    line-height: 40px;
+  }
+  .featureCards,
+  .hero,
+  .ideaParent {
+    display: flex;
+    justify-content: flex-start;
+  }
+  .ideaParent {
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--gap-3xs);
+    min-width: 114px;
+  }
+  .featureCards,
+  .hero {
+    align-items: flex-start;
+  }
+  .featureCards {
+    align-self: stretch;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0 1px 0 0;
+    gap: 34px;
+    font-size: var(--text-md-normal-size);
+    color: var(--color-gray-300);
+  }
+  .hero {
+    position: absolute;
+    top: 200px;
+    left: 120px;
+    width: 573px;
+    flex-direction: column;
+    gap: 50px;
+    max-width: 100%;
+    z-index: 7;
+    font-size: 64px;
+  }
+  .p {
+    margin: 0;
+  }
+  .collaboration1 {
+    margin: 0;
+    font-size: var(--font-size-6xl);
+    font-weight: 300;
+    color: var(--color-gray-100);
+  }
+  .collaboration {
+    position: absolute;
+    top: 783px;
+    left: 116px;
+    line-height: 34px;
+    display: inline-block;
+    width: 178px;
+    z-index: 7;
+    font-size: 30px;
+    color: var(--color-mediumslateblue);
+  }
+  .groupIcon,
+  .maskGroup {
+    position: absolute;
+    top: 800px;
+    left: 349px;
+    width: 153.1px;
+    height: 36px;
+    z-index: 7;
+  }
+  .maskGroup {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    z-index: 6;
+  }
+  .header {
+    align-self: stretch;
+    height: 900px;
+    position: relative;
+    background-color: var(--color-mediumseagreen);
+    max-width: 100%;
+    flex-shrink: 0;
+    text-align: left;
+    font-size: var(--font-size-6xl);
+    color: var(--color-gray-100);
+    font-family: var(--text-md-normal);
+  }
+  .designFile,
+  .footer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .footer {
+    align-self: stretch;
+    background-color: var(--color-gray-100);
+    max-width: 100%;
+    flex-shrink: 0;
+  }
+  .designFile {
+    width: 100%;
+    height: 4746px;
+    position: relative;
+    background-color: var(--color-white);
+    overflow: hidden;
+    padding: var(--padding-3xs) 0 515.7px;
+    box-sizing: border-box;
+    gap: 60px;
+    line-height: normal;
+    letter-spacing: normal;
+  }
+  @media screen and (max-width: 1050px) {
+    .upYourSkillsContainer {
+      font-size: 51px;
+      line-height: 66px;
+    }
+  }
+  @media screen and (max-width: 750px) {
+    .designFile {
+      gap: var(--gap-11xl);
+    }
+  }
+  @media screen and (max-width: 450px) {
+    .k,
+    .k1,
+    .tutorsCount {
+      font-size: var(--text-xl-normal-size);
+    }
+    .upYourSkillsContainer {
+      font-size: var(--font-size-19xl);
+      line-height: 49px;
+    }
+    .collaboration {
+      font-size: var(--text-xl-normal-size);
+      line-height: 27px;
+    }
+    .header,
+    .maskGroup {
+      height: auto;
+      min-height: 900;
+    }
+    .designFile {
+      height: auto;
+    }
+  } */

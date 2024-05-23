@@ -1,0 +1,103 @@
+@keyframes slide-in-top {
+    0% {
+      transform: translateY(-200px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  .avatarIcon {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--br-21xl);
+    object-fit: cover;
+  }
+  .name,
+  .role {
+    align-self: stretch;
+    position: relative;
+  }
+  .name {
+    line-height: 28px;
+    font-weight: 500;
+  }
+  .role {
+    font-size: var(--text-md-normal-size);
+    line-height: 24px;
+    color: var(--color-slateblue);
+  }
+  .nameAndRole {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .supportingText {
+    align-self: stretch;
+    position: relative;
+    font-size: var(--text-md-normal-size);
+    line-height: 24px;
+    color: var(--color-slategray);
+  }
+  .nameAndSupportingText {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--gap-5xs);
+  }
+  .socialIcon,
+  .socialIcon1 {
+    height: 20px;
+    width: 20px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    min-height: 20px;
+  }
+  .socialIcons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 0 var(--padding-xl);
+  }
+  .socialIcons,
+  .textAndSocialLinks {
+    align-self: stretch;
+    align-items: center;
+    gap: var(--gap-base);
+  }
+  .teamMember,
+  .teamMemberWrap,
+  .textAndSocialLinks {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .teamMember {
+    align-self: stretch;
+    align-items: center;
+    gap: var(--gap-xl);
+    opacity: 0;
+  }
+  .teamMember.animate {
+    animation: 1s ease 0s 1 normal forwards slide-in-top;
+  }
+  .teamMemberWrap {
+    flex: 1;
+    background-color: var(--color-whitesmoke-100);
+    align-items: flex-start;
+    padding: var(--padding-5xl);
+    box-sizing: border-box;
+    min-width: 207px;
+    max-width: 276px;
+    text-align: center;
+    font-size: var(--text-lg-semibold-size);
+    color: var(--color-gray-100);
+    font-family: var(--text-md-normal);
+  }
+    

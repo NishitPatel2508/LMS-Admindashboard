@@ -1,0 +1,69 @@
+.frameGroup {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap-9xl);
+    max-width: 100%;
+    width: 100%;
+  }
+  .frameChild {
+    position: absolute;
+    top: 297px;
+    left: 0;
+  }
+  .a {
+    text-transform: capitalize;
+  }
+  .lreadyHaveAn {
+    text-transform: lowercase;
+  }
+  .alreadyHaveAnContainer,
+  .login {
+    position: relative;
+    flex-shrink: 0;
+    padding-left: var(--padding-xl);
+    padding-right: var(--padding-xl);
+  }
+  .alreadyHaveAnContainer {
+    white-space: nowrap;
+  }
+  .login {
+    text-transform: capitalize;
+    color: var(--color-blueviolet);
+  }
+  .alreadyHaveAnAccountParent {
+    position: absolute;
+    top: 364px;
+    left: 0;
+    background-color: var(--color-white);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: var(--padding-9xs) 0;
+    gap: var(--gap-6xs);
+  }
+  .frameParent {
+    position: absolute;
+    top: 0px;
+    left: 0;
+    width: 100%;
+    /* height: 300px; */
+    max-width: 100%;
+    text-align: left;
+    font-size: var(--font-size-base);
+    color: var(--color-dimgray);
+    font-family: var(--font-outfit);
+  }
+  @media screen and (max-width: 675px) {
+    .frameParent {
+      height: auto;
+      min-height: 392;
+    }
+  }
+  

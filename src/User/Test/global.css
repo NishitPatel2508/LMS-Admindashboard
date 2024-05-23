@@ -1,0 +1,38 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Pacifico:wght@400&display=swap"); */
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+body {
+  margin: 0;
+  line-height: normal;
+}
+:root {
+  /* fonts */
+  --font-pacifico: Pacifico;
+  --font-outfit: Outfit;
+
+  /* font sizes */
+  --font-size-5xl: 24px;
+  --font-size-base: 16px;
+
+  /* Colors */
+  --color-blueviolet: #7144f1;
+  --color-white: #fff;
+  --color-dimgray: #676666;
+  --color-gainsboro: #e6e6e6;
+
+  /* Gaps */
+  --gap-6xs: 7px;
+  --gap-9xl: 28px;
+
+  /* Paddings */
+  --padding-9xs: 4px;
+  --padding-xl: 20px;
+  --padding-5xs: 8px;
+
+  /* Border radiuses */
+  --br-26xl: 45px;
+  --br-3xs: 10px;
+}
+
+
