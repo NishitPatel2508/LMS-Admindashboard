@@ -106,6 +106,7 @@ const handleSubmit = async (e) => {
       .catch((err) => {
         // console.log(err.response.data);
         console.log(err.response.data.message);
+        console.log(err.response.data);
         toast.error(err.response.data.message);
         // setError(err.response.data.message);
       });
