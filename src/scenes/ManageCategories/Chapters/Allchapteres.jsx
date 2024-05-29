@@ -160,7 +160,10 @@ const Allchapteres = () => {
           const currentRow = params.row;
 
           allChapter.map((ele) => {
-            if (currentRow.name == ele.chapterName) {
+            if (
+              currentRow.name == ele.chapterName &&
+              currentRow.course == ele.course.name
+            ) {
               setUpdate(true);
               handleOpenUpdate();
               localStorage.setItem("updatechapter", ele._id);
@@ -174,7 +177,10 @@ const Allchapteres = () => {
 
           // const id = ;
           allChapter.map((ele) => {
-            if (currentRow.name == ele.chapterName) {
+            if (
+              currentRow.name == ele.chapterName &&
+              currentRow.course == ele.course.name
+            ) {
               // console.log(currentRow._id);
               deleteChapter(ele._id);
               // alert(JSON.stringify(currentRow));

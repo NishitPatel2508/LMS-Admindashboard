@@ -57,20 +57,20 @@ const DonutChart = () => {
                 // console.log(e.courseAmount, e.courseInfo.name);
               });
               response.data.data.map((e) => {
-                if (courseNames.includes(e.courseInfo.name) == false) {
+                if (courseNames.includes(e.courseInfo) == false) {
                   cnt++;
-                  courseNames.push(e.courseInfo.name);
+                  courseNames.push(e.courseInfo);
                   const finalData = {};
-                  // finalData.name = e.courseInfo.name;
-                  finalData.id = e.courseInfo.name;
-                  finalData.label = e.courseInfo.name;
+                  // finalData.name = e.courseInfo;
+                  finalData.id = e.courseInfo;
+                  finalData.label = e.courseInfo;
                   finalData.value = 0;
                   finalData.value += e.courseAmount;
                   finalData.color = colorOfFields[cnt];
                   finalArray.push(finalData);
                 } else {
                   for (const i of finalArray) {
-                    if (i.label == e.courseInfo.name) {
+                    if (i.label == e.courseInfo) {
                       i.value += e.courseAmount;
                       console.log(typeof i.value);
                     }

@@ -94,8 +94,8 @@ const Contacts = () => {
       id: i,
       // _id: element._id,
       username: element.userInfo.name,
-      coursename: element.courseInfo.name,
-      price: element.courseInfo.price,
+      coursename: element.courseInfo,
+      price: element.courseAmount,
       date: formattedDate,
     };
   });
