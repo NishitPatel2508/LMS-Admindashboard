@@ -9,6 +9,7 @@ const BarChart = ({ isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [finalArray1, setFinalArray1] = useState([]);
+  const [cname, setCourseNames] = useState([]);
   const finalArray = [];
   const [allData, setAllData] = useState([]);
   let i = 0;
@@ -62,42 +63,83 @@ const BarChart = ({ isDashboard = false }) => {
               console.log(response.data.data);
               console.log("all", allData);
               response.data.data.map((e) => {
-                if (courseNames.includes(e.courseInfo.name) == false) {
+                // if (courseNames.includes(e.courseInfo) == false) {
+                //   cnt++;
+                //   courseNames.push(e.courseInfo);
+                //   const finalData = {};
+                //   const xy = moment(e.buyDate).format("MMMM");
+                //   // finalData.name = e.courseInfo;
+                //   finalData.id = xy;
+                //   finalData.label = e.courseInfo;
+                //   finalData.value = 0;
+                //   finalData.value += e.courseAmount;
+                //   finalData.color = colorOfFields[cnt];
+                //   finalData[xy] = finalData.value;
+                //   // const x = moment(e.buyDate).format("MMMM");
+                //   // m.push(x);
+                //   finalArray.push(finalData);
+                // }
+                // else {
+                //   for (const i of finalArray) {
+                //     if (i.label == e.courseInfo) {
+                //       // i.value += e.courseAmount;
+                //       if (
+                //         i[moment(e.buyDate).format("MMMM")] ==
+                //         finalArray[moment(e.buyDate).format("MMMM")]
+                //       ) {
+                //         i[moment(e.buyDate).format("MMMM")] = e.courseAmount;
+                //         i.value += e.courseAmount;
+                //       } else {
+                //         i[moment(e.buyDate).format("MMMM")] += e.courseAmount;
+                //         i.value += e.courseAmount;
+                //       }
+
+                //       console.log(typeof i.value);
+                //     }
+                //   }
+                // }
+                const xy = moment(e.buyDate).format("MMMM");
+                if (months.includes(xy) == false) {
+                  months.push(xy);
                   cnt++;
-                  courseNames.push(e.courseInfo.name);
                   const finalData = {};
-                  const xy = moment(e.buyDate).format("MMMM");
-                  // finalData.name = e.courseInfo.name;
-                  finalData.id = e.courseInfo.name;
-                  finalData.label = e.courseInfo.name;
+                  finalData.id = xy;
+                  finalData.label = xy;
                   finalData.value = 0;
                   finalData.value += e.courseAmount;
                   finalData.color = colorOfFields[cnt];
-                  finalData[xy] = finalData.value;
-                  // const x = moment(e.buyDate).format("MMMM");
-                  // m.push(x);
+                  finalData[e.courseInfo] = finalData.value;
                   finalArray.push(finalData);
+                  if (courseNames.includes(e.courseInfo) == false) {
+                    courseNames.push(e.courseInfo);
+                  }
+                  setCourseNames(courseNames);
                 } else {
+                  let x = 0;
                   for (const i of finalArray) {
-                    if (i.label == e.courseInfo.name) {
+                    if (i.label == moment(e.buyDate).format("MMMM")) {
+                      console.log(
+                        xy,
+                        e.courseInfo,
+                        e.courseAmount,
+                        i.label,
+                        i[e.courseInfo]
+                      );
                       i.value += e.courseAmount;
-                      if (
-                        i[moment(e.buyDate).format("MMMM")] ==
-                        finalArray[moment(e.buyDate).format("MMMM")]
-                      ) {
-                        i[moment(e.buyDate).format("MMMM")] = e.courseAmount;
+                      if (i[e.courseInfo]) {
+                        i[e.courseInfo] += e.courseAmount;
                       } else {
-                        i[moment(e.buyDate).format("MMMM")] += e.courseAmount;
+                        i[e.courseInfo] = e.courseAmount;
                       }
-
-                      console.log(typeof i.value);
                     }
                   }
                 }
-                setFinalArray1(finalArray);
               });
             }
+            setFinalArray1(finalArray);
+
             console.log(finalArray);
+            console.log(cname);
             // console.log(m);
           }
         })
@@ -140,7 +182,7 @@ const BarChart = ({ isDashboard = false }) => {
           },
         },
       }}
-      keys={["April", "May"]}
+      keys={cname}
       indexBy="id"
       margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
       padding={0.3}
@@ -176,10 +218,10 @@ const BarChart = ({ isDashboard = false }) => {
       axisBottom={{
         tickSize: 10,
         tickPadding: 15,
-        tickRotation: isDashboard ? -7 : 0,
-        legend: isDashboard ? undefined : "Course Name", // changed
-        legendPosition: "left",
-        legendOffset: 32,
+        tickRotation: isDashboard ? 0 : 0,
+        legend: isDashboard ? undefined : "Months", // changed
+        legendPosition: "middle",
+        legendOffset: 40,
       }}
       axisLeft={{
         tickSize: 5,
@@ -187,7 +229,7 @@ const BarChart = ({ isDashboard = false }) => {
         tickRotation: 0,
         legend: isDashboard ? undefined : "Income", // changed
         legendPosition: "middle",
-        legendOffset: -40,
+        legendOffset: -50,
       }}
       enableLabel={false}
       labelSkipWidth={12}
@@ -202,8 +244,8 @@ const BarChart = ({ isDashboard = false }) => {
           anchor: "top-right",
           direction: "column",
           justify: false,
-          translateX: 120,
-          translateY: 0,
+          translateX: 40,
+          translateY: -50,
           itemsSpacing: 5,
           itemWidth: 100,
           itemHeight: 20,

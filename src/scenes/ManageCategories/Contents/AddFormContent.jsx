@@ -211,7 +211,7 @@ export default function AddFormContent({ closeEvent }) {
             console.log(result);
             console.log(result.data.data);
             console.log(result.data.message);
-            toast.success("Created Successfully");
+            toast.success(result.data.message);
             closeEvent();
             setTimeout(() => {
               navigate("/managecategories");
@@ -363,8 +363,8 @@ export default function AddFormContent({ closeEvent }) {
           </Grid>
         </Grid>
 
-        <ToastContainer />
         <Box height={15} />
+        <ToastContainer />
       </Box>
     </>
   );
