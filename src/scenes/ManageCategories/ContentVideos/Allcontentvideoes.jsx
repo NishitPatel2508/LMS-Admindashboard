@@ -38,6 +38,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { baseURL } from "../../../basic";
 
 const Allcontentvideoes = () => {
   const theme = useTheme();
@@ -76,7 +77,7 @@ const Allcontentvideoes = () => {
         throw new Error("Access token is missing.");
       }
       let result = await axios
-        .get("http://localhost:5000/getAllContentVideo", {
+        .get(`${baseURL}/getAllContentVideo`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",
@@ -106,7 +107,7 @@ const Allcontentvideoes = () => {
       }
 
       let result = await axios
-        .delete(`http://localhost:5000/contentvideo/delete/${id}`, {
+        .delete(`${baseURL}/contentvideo/delete/${id}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },

@@ -27,6 +27,7 @@ import { ToastContainer, toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { baseURL } from "../../../basic";
 
 export default function AddForm({ closeEvent }) {
   useEffect(() => {
@@ -60,7 +61,7 @@ export default function AddForm({ closeEvent }) {
       //   setCourseId(courseid);
       //   console.log(courseid);
       let result = await axios
-        .get(`http://localhost:5000/getAllCategory`, {
+        .get(`${baseURL}/getAllCategory`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",
@@ -107,7 +108,7 @@ export default function AddForm({ closeEvent }) {
           subCategoryName: subCategory,
         };
         let result = await axios
-          .post(`http://localhost:5000/subCategory/create`, fields, {
+          .post(`${baseURL}/subCategory/create`, fields, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
               // "Content-Type": "multipart/form-data",

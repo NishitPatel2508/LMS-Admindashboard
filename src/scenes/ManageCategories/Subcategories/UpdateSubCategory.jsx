@@ -18,6 +18,7 @@ import { ToastContainer, toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { baseURL } from "../../../basic";
 
 export default function UpdateSubCategory({ closeEvent }) {
   useEffect(() => {
@@ -54,7 +55,7 @@ export default function UpdateSubCategory({ closeEvent }) {
       //   setCourseId(courseid);
       //   console.log(courseid);
       let result = await axios
-        .get(`http://localhost:5000/subCategory/${id}`, {
+        .get(`${baseURL}/subCategory/${id}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",
@@ -88,7 +89,7 @@ export default function UpdateSubCategory({ closeEvent }) {
       }
 
       let result = await axios
-        .get(`http://localhost:5000/getAllCategory`, {
+        .get(`${baseURL}/getAllCategory`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",
@@ -132,7 +133,7 @@ export default function UpdateSubCategory({ closeEvent }) {
           subCategoryName: subCategory,
         };
         let result = await axios
-          .patch(`http://localhost:5000/subCategory/update/${id}`, fields, {
+          .patch(`${baseURL}/subCategory/update/${id}`, fields, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
               // "Content-Type": "multipart/form-data",

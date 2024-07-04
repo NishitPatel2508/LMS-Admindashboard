@@ -7,19 +7,16 @@ import {
   Select,
   MenuItem,
   InputLabel,
-  Modal,
   FormControl,
   FormHelperText,
   Grid,
-  useTheme,
-  TextField,
-  Stack,
 } from "@mui/material";
 
 import { ToastContainer, toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { baseURL } from "../../../basic";
 
 export default function UpdateContent({ closeEvent }) {
   useEffect(() => {
@@ -77,7 +74,7 @@ export default function UpdateContent({ closeEvent }) {
       //   setCourseId(courseid);
       //   console.log(courseid);
       let result = await axios
-        .get(`http://localhost:5000/content/${id}`, {
+        .get(`${baseURL}/content/${id}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",
@@ -113,7 +110,7 @@ export default function UpdateContent({ closeEvent }) {
         throw new Error("Access token is missing.");
       }
       let result = await axios
-        .get("http://localhost:5000/getAllCourse", {
+        .get(`${baseURL}/getAllCourse`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",
@@ -140,7 +137,7 @@ export default function UpdateContent({ closeEvent }) {
         throw new Error("Access token is missing.");
       }
       let result = await axios
-        .get(`http://localhost:5000/getAllChapter`, {
+        .get(`${baseURL}/getAllChapter`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",
@@ -169,7 +166,7 @@ export default function UpdateContent({ closeEvent }) {
         throw new Error("Access token is missing.");
       }
       let result = await axios
-        .get("http://localhost:5000/getAllContentVideo", {
+        .get(`${baseURL}/getAllContentVideo`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",
@@ -197,7 +194,7 @@ export default function UpdateContent({ closeEvent }) {
         throw new Error("Access token is missing.");
       }
       let result = await axios
-        .get("http://localhost:5000/allFiles", {
+        .get(`${baseURL}/allFiles`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "multipart/form-data",
@@ -236,13 +233,15 @@ export default function UpdateContent({ closeEvent }) {
         if (!accessToken) {
           throw new Error("Access token is missing.");
         }
-        const id = localStorage.getItem("updatechapter");
+        const id = localStorage.getItem("updatecontent");
         const fields = {
-          course: courseName,
-          chapterName: chapter,
+          courseDetailes: courseName,
+          chapterDetailes: chapter,
+          contentVideoDetailes: contentVideo,
+          contentFileDetailes: file,
         };
         let result = await axios
-          .patch(`http://localhost:5000/chapter/update/${id}`, fields, {
+          .patch(`${baseURL}/content/update/${id}`, fields, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
               // "Content-Type": "multipart/form-data",
@@ -262,7 +261,7 @@ export default function UpdateContent({ closeEvent }) {
           .catch((err) => {
             console.log(err.response);
             toast.error(err.response.data.message);
-            console.log(result.data.data.message);
+            // console.log(result.data.data.message);
             console.log(accessToken);
             console.log(id);
             // console.log(result);

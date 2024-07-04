@@ -27,6 +27,7 @@ import dayjs from "dayjs";
 import { ToastContainer, toast } from "react-toastify";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { baseURL } from "../../basic";
 
 const CreateCourse = () => {
   const [isSidebar, setIsSidebar] = useState(true);
@@ -182,7 +183,7 @@ const CreateCourse = () => {
       //   setCourseId(courseid);
       //   console.log(courseid);
       let result = await axios
-        .get(`http://localhost:5000/getAllCategory`, {
+        .get(`${baseURL}/getAllCategory`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",

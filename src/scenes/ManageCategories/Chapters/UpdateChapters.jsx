@@ -18,6 +18,7 @@ import { ToastContainer, toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { baseURL } from "../../../basic";
 
 export default function UpdateChapters({ closeEvent }) {
   useEffect(() => {
@@ -52,7 +53,7 @@ export default function UpdateChapters({ closeEvent }) {
       //   setCourseId(courseid);
       //   console.log(courseid);
       let result = await axios
-        .get(`http://localhost:5000/chapter/${id}`, {
+        .get(`${baseURL}/chapter/${id}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",
@@ -84,7 +85,7 @@ export default function UpdateChapters({ closeEvent }) {
         throw new Error("Access token is missing.");
       }
       let result = await axios
-        .get("http://localhost:5000/getAllCourse", {
+        .get(`${baseURL}/getAllCourse`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",
@@ -126,7 +127,7 @@ export default function UpdateChapters({ closeEvent }) {
           chapterName: chapter,
         };
         let result = await axios
-          .patch(`http://localhost:5000/chapter/update/${id}`, fields, {
+          .patch(`${baseURL}/chapter/update/${id}`, fields, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
               // "Content-Type": "multipart/form-data",

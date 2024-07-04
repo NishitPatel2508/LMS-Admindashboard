@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import moment from "moment";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { baseURL } from "../../basic";
 
 const Contacts = () => {
   const [allData, setAllData] = useState([]);
@@ -30,7 +31,7 @@ const Contacts = () => {
         throw new Error("Access token is missing.");
       }
       const result = await axios
-        .get(`http://localhost:5000/getAllRevenue`, {
+        .get(`${baseURL}/getAllRevenue`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",

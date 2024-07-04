@@ -20,6 +20,7 @@ import { ToastContainer, toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { baseURL } from "../../../basic";
 
 export default function UpdateProgrammingLang({ closeEvent }) {
   useEffect(() => {
@@ -58,7 +59,7 @@ export default function UpdateProgrammingLang({ closeEvent }) {
       //   setCourseId(courseid);
       //   console.log(courseid);
       let result = await axios
-        .get(`http://localhost:5000/programmingLanguage/${id}`, {
+        .get(`${baseURL}/programmingLanguage/${id}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",
@@ -90,7 +91,7 @@ export default function UpdateProgrammingLang({ closeEvent }) {
         throw new Error("Access token is missing.");
       }
       let result = await axios
-        .get(`http://localhost:5000/getAllSubCategory`, {
+        .get(`${baseURL}/getAllSubCategory`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",

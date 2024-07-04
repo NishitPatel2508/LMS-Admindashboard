@@ -5,6 +5,7 @@ import { mockBarData as data } from "../data/mockData";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
+import { baseURL } from "../basic";
 const BarChart = ({ isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -49,7 +50,7 @@ const BarChart = ({ isDashboard = false }) => {
         throw new Error("Access token is missing.");
       }
       const result = await axios
-        .get(`http://localhost:5000/getAllRevenue`, {
+        .get(`${baseURL}/getAllRevenue`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",

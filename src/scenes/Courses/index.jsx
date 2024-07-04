@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { baseURL } from "../../basic";
 
 // import { Outlet, Link } from "react-router-dom";
 
@@ -94,7 +95,7 @@ const Course = () => {
         throw new Error("Access token is missing.");
       }
       let result = await axios
-        .get("http://localhost:5000/getAllCourse", {
+        .get(`${baseURL}/getAllCourse`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",

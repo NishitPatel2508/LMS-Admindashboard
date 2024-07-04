@@ -15,7 +15,7 @@ import DonutChart from "../../components/DonutChart";
 import BarChart from "../../components/BarChart";
 import generatePDF, { Resolution, Margin } from "react-to-pdf";
 import ReactToPrint from "react-to-print";
-
+import { baseURL } from "../../basic";
 const options = {
   filename: "InstructorReport.pdf",
   // default is `save`
@@ -82,16 +82,16 @@ const Dashboard = () => {
         throw new Error("Access token is missing.");
       }
       const result = await axios
-        .get("http://localhost:5000/dashboard", {
+        .get(`${baseURL}/dashboard`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "multipart/form-data",
           },
         })
         .then((result) => {
-          console.log(result);
-          console.log(result.data.data[0]);
-          console.log(result.data.data);
+          // console.log(result);
+          // console.log(result.data.data[0]);
+          // console.log(result.data.data);
           fetchDataFieldVise(result.data.data);
           // console.log(result.data.data[0]);
           // const c = JSON.parse(result.data.data[0])
@@ -118,12 +118,12 @@ const Dashboard = () => {
   const fetchDataFieldVise = (records) => {
     for (const field of records) {
       if (Object.keys(field) == "Courses") {
-        console.log(field);
+        // console.log(field);
         const j = Object.values(field)[0].length;
         setCoursesLength(j);
       }
       if (Object.keys(field) == "ContentFiles") {
-        console.log(field);
+        // console.log(field);
         const j = Object.values(field)[0].length;
         setContentFileLength(j);
       }
@@ -140,7 +140,7 @@ const Dashboard = () => {
         setAllRevenue(field);
         // allContentVideo.push(field)
         const j = Object.values(field)[0];
-        console.log(Object.values(field)[0]);
+        // console.log(Object.values(field)[0]);
         hanldleRevenue(j);
         const s = Object.values(field)[0].length;
         setTotalStudents(s);
