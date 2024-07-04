@@ -27,8 +27,6 @@ import { pdfjs } from "react-pdf";
 import AddFormContentFiles from "./AddFormContentFiles";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
-// Your render function
-
 import { tokens } from "../../../theme";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -38,13 +36,14 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useMode } from "../../../theme";
 import Sidebar from "../../global/Sidebar";
 import Topbar from "../../global/Topbar";
-import StatBox from "../../../components/StatBox";
 import Header from "../../../components/Header";
 import { ToastContainer, toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ReactPDF from "@react-pdf/renderer";
+import { baseURL, BLOB_READ_WRITE_TOKEN } from "../../../basic";
+import { del } from "@vercel/blob";
 
 const AllContentFiles = () => {
   pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
@@ -68,6 +67,7 @@ const AllContentFiles = () => {
   // const port = process.env.PORT;
   const [numPages, setNumPages] = useState();
   const [pageNumber, setPageNumber] = useState(1);
+  const [readPDF, setReadPDF] = useState("");
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
   }
@@ -104,7 +104,7 @@ const AllContentFiles = () => {
         throw new Error("Access token is missing.");
       }
       let result = await axios
-        .get("http://localhost:5000/allFiles", {
+        .get(`${baseURL}/allFiles`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "multipart/form-data",
@@ -136,7 +136,7 @@ const AllContentFiles = () => {
       }
 
       let result = await axios
-        .delete(`http://localhost:5000/file/delete/${id}`, {
+        .delete(`${baseURL}/file/delete/${id}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -207,6 +207,11 @@ const AllContentFiles = () => {
           allFiles.map((ele) => {
             if (currentRow.filename == ele.name) {
               console.log(ele._id);
+              let r = del(ele.pdf, {
+                access: "public",
+                token: BLOB_READ_WRITE_TOKEN,
+              });
+              // console.log(r.url);
               deleteContentFile(ele._id);
               // alert(JSON.stringify(currentRow));
             }
@@ -220,6 +225,7 @@ const AllContentFiles = () => {
               console.log(ele._id);
               setFile(ele.pdf);
               setFileName(ele.name);
+              // setReadPDF(ele.pdf)
               console.log(ele.pdf);
               // window.open(ele.name);
               // let reader = new FileReader();
@@ -326,9 +332,7 @@ const AllContentFiles = () => {
                       width: "500",
                     }}
                   >
-                    <Viewer
-                      fileUrl={`http://localhost:5000/uploads/${fileName}`}
-                    />
+                    <Viewer fileUrl={`${file}`} />
                   </div>
                 </Worker>
               </div>

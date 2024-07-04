@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { baseURL } from "../../basic";
 
 const Project = () => {
   const [name, setName] = useState("");
@@ -90,7 +91,7 @@ const Project = () => {
       const header = { "Access-control-Allow-Origin": "*" };
 
       let result = await axios
-        .post("http://localhost:5000/instructor/create", {
+        .post(`${baseURL}/instructor/create`, {
           firstname: name,
           email: email,
           password: password,

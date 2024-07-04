@@ -17,6 +17,7 @@ import { ToastContainer, toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { baseURL } from "../../../basic";
 
 export default function AddFormChapters({ closeEvent }) {
   useEffect(() => {
@@ -47,7 +48,7 @@ export default function AddFormChapters({ closeEvent }) {
         throw new Error("Access token is missing.");
       }
       let result = await axios
-        .get("http://localhost:5000/getAllCourse", {
+        .get(`${baseURL}/getAllCourse`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",

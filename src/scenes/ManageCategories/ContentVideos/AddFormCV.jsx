@@ -17,6 +17,7 @@ import { ToastContainer, toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { baseURL } from "../../../basic";
 
 export default function AddFormCV({ closeEvent }) {
   useEffect(() => {
@@ -55,7 +56,7 @@ export default function AddFormCV({ closeEvent }) {
         throw new Error("Access token is missing.");
       }
       let result = await axios
-        .get(`http://localhost:5000/getAllChapter`, {
+        .get(`${baseURL}/getAllChapter`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",
@@ -102,7 +103,7 @@ export default function AddFormCV({ closeEvent }) {
           videoLink: videoLink,
         };
         let result = await axios
-          .post(`http://localhost:5000/contentvideo/create`, fields, {
+          .post(`${baseURL}/contentvideo/create`, fields, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
               // "Content-Type": "multipart/form-data",

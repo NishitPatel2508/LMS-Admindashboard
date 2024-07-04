@@ -7,6 +7,7 @@ import axios from "axios";
 import { ResponsivePieCanvas } from "@nivo/pie";
 
 // import { Pie } from "react-chartjs-2";
+import { baseURL } from "../basic";
 import { Chart as ChartJS, Tooltip, Legend, ArcElement } from "chart.js";
 ChartJS.register(Tooltip, Legend, ArcElement);
 const DonutChart = () => {
@@ -39,7 +40,7 @@ const DonutChart = () => {
         throw new Error("Access token is missing.");
       }
       const result = await axios
-        .get(`http://localhost:5000/getAllRevenue`, {
+        .get(`${baseURL}//getAllRevenue`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",

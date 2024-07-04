@@ -20,6 +20,7 @@ import { ToastContainer, toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { baseURL } from "../../../basic";
 
 export default function UpdateContentVideoes({ closeEvent }) {
   useEffect(() => {
@@ -62,7 +63,7 @@ export default function UpdateContentVideoes({ closeEvent }) {
       //   setCourseId(courseid);
       //   console.log(courseid);
       let result = await axios
-        .get(`http://localhost:5000/contentvideo/${id}`, {
+        .get(`${baseURL}/contentvideo/${id}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",
@@ -95,7 +96,7 @@ export default function UpdateContentVideoes({ closeEvent }) {
         throw new Error("Access token is missing.");
       }
       let result = await axios
-        .get(`http://localhost:5000/getAllChapter`, {
+        .get(`${baseURL}/getAllChapter`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",
@@ -143,7 +144,7 @@ export default function UpdateContentVideoes({ closeEvent }) {
           chapter: chapterName,
         };
         let result = await axios
-          .patch(`http://localhost:5000/contentvideo/update/${id}`, fields, {
+          .patch(`${baseURL}/contentvideo/update/${id}`, fields, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
               // "Content-Type": "multipart/form-data",

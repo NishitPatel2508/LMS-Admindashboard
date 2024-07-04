@@ -17,6 +17,7 @@ import { ToastContainer, toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { baseURL } from "../../../basic";
 
 export default function AddFormContent({ closeEvent }) {
   useEffect(() => {
@@ -67,7 +68,7 @@ export default function AddFormContent({ closeEvent }) {
         throw new Error("Access token is missing.");
       }
       let result = await axios
-        .get("http://localhost:5000/getAllCourse", {
+        .get(`${baseURL}/getAllCourse`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",
@@ -94,7 +95,7 @@ export default function AddFormContent({ closeEvent }) {
         throw new Error("Access token is missing.");
       }
       let result = await axios
-        .get(`http://localhost:5000/getAllChapter`, {
+        .get(`${baseURL}/getAllChapter`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",
@@ -123,7 +124,7 @@ export default function AddFormContent({ closeEvent }) {
         throw new Error("Access token is missing.");
       }
       let result = await axios
-        .get("http://localhost:5000/getAllContentVideo", {
+        .get(`${baseURL}/getAllContentVideo`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",
@@ -151,7 +152,7 @@ export default function AddFormContent({ closeEvent }) {
         throw new Error("Access token is missing.");
       }
       let result = await axios
-        .get("http://localhost:5000/allFiles", {
+        .get(`${baseURL}/allFiles`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "multipart/form-data",
@@ -200,7 +201,7 @@ export default function AddFormContent({ closeEvent }) {
           contentfile: file,
         };
         let result = await axios
-          .post(`http://localhost:5000/content/create`, fields, {
+          .post(`${baseURL}/content/create`, fields, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
               // "Content-Type": "multipart/form-data",
@@ -363,7 +364,7 @@ export default function AddFormContent({ closeEvent }) {
           </Grid>
         </Grid>
 
-        <Box height={15} />
+        {/* <Box height={15} /> */}
         <ToastContainer />
       </Box>
     </>

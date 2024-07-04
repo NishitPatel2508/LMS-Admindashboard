@@ -38,6 +38,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { baseURL } from "../../../basic";
 
 const Allsubcategories = () => {
   const theme = useTheme();
@@ -75,7 +76,7 @@ const Allsubcategories = () => {
         throw new Error("Access token is missing.");
       }
       let result = await axios
-        .get("http://localhost:5000/getAllSubCategory", {
+        .get(`${baseURL}/getAllSubCategory`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",
@@ -106,7 +107,7 @@ const Allsubcategories = () => {
       }
 
       let result = await axios
-        .delete(`http://localhost:5000/subCategory/delete/${id}`, {
+        .delete(`${baseURL}/subCategory/delete/${id}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },

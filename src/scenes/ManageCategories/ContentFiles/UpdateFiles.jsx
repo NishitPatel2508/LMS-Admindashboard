@@ -22,6 +22,8 @@ import { ToastContainer, toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { baseURL, BLOB_READ_WRITE_TOKEN } from "../../../basic";
+import { put } from "@vercel/blob";
 
 export default function UpdateFiles({ closeEvent }) {
   useEffect(() => {
@@ -84,7 +86,7 @@ export default function UpdateFiles({ closeEvent }) {
       //   setCourseId(courseid);
       //   console.log(courseid);
       let result = await axios
-        .get(`http://localhost:5000/singleFile/${id}`, {
+        .get(`${baseURL}/singleFile/${id}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "multipart/form-data",
@@ -116,7 +118,7 @@ export default function UpdateFiles({ closeEvent }) {
         throw new Error("Access token is missing.");
       }
       let result = await axios
-        .get("http://localhost:5000/getAllChapter", {
+        .get(`${baseURL}/getAllChapter`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",
@@ -154,19 +156,26 @@ export default function UpdateFiles({ closeEvent }) {
           throw new Error("Access token is missing.");
         }
         const id = localStorage.getItem("updatefile");
-        const fields = {
-          course: chapterName,
-          chapterName: chapter,
-        };
+
         const formData = new FormData();
         formData.append("file", file);
         formData.append("name", fileName);
         // formData.append("chapter", chapterName);
+        let r = await put(fileName, formData, {
+          access: "public",
+          token: BLOB_READ_WRITE_TOKEN,
+        });
+        console.log(r.url);
+        const fields = {
+          name: fileName,
+          pdf: r.url,
+          chapter: chapterName,
+        };
         let result = await axios
-          .patch(`http://localhost:5000/file/update/${id}`, formData, {
+          .patch(`${baseURL}/file/update/${id}`, fields, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
-              "Content-Type": "multipart/form-data",
+              // "Content-Type": "multipart/form-data",
             },
           })
           .then((result) => {
@@ -183,7 +192,7 @@ export default function UpdateFiles({ closeEvent }) {
           .catch((err) => {
             console.log(err.response);
             toast.error(err.response.data.message);
-            console.log(result.data.data.message);
+            // console.log(result.data.data.message);
             console.log(accessToken);
             console.log(id);
             // console.log(result);

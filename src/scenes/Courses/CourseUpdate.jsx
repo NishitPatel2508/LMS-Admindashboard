@@ -19,6 +19,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { baseURL } from "../../basic";
 
 const CourseUpdate = () => {
   const [isSidebar, setIsSidebar] = useState(true);
@@ -150,7 +151,7 @@ const CourseUpdate = () => {
       //   setCourseId(courseid);
       //   console.log(courseid);
       let result = await axios
-        .get(`http://localhost:5000/getAllCategory`, {
+        .get(`${baseURL}/getAllCategory`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",

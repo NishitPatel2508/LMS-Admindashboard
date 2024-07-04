@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Box,
   Button,
@@ -18,7 +18,9 @@ import { ToastContainer, toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import { baseURL, BLOB_READ_WRITE_TOKEN } from "../../../basic";
+import { put } from "@vercel/blob";
+// import {  } from "../../../basic";
 export default function AddFormContentFiles({ closeEvent }) {
   useEffect(() => {
     getallChapter();
@@ -31,6 +33,10 @@ export default function AddFormContentFiles({ closeEvent }) {
   const [chapterName, setChapterName] = useState("");
   const [chapterNameError, setChapterNameError] = useState("");
   const [chapterError, setChapterError] = useState("");
+
+  //Vercel File Upload
+  const inputFileRef = useRef(null);
+  const [blob, setBlob] = useState(null);
 
   const navigate = useNavigate();
   const onChangeChapter = (e) => {
@@ -53,7 +59,7 @@ export default function AddFormContentFiles({ closeEvent }) {
         throw new Error("Access token is missing.");
       }
       let result = await axios
-        .get("http://localhost:5000/getAllChapter", {
+        .get(`${baseURL}/getAllChapter`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",
@@ -94,16 +100,33 @@ export default function AddFormContentFiles({ closeEvent }) {
         const formData = new FormData();
         formData.append("file", file);
         formData.append("chapter", chapterName);
-        // formData.append("name", fileName);
+        // formData.append("extractArchive", "false");
+        formData.append("name", fileName);
+        // const newBlob = fileName.json();
+        //{ name: fileName, chapter: chapterName }
+        let r = await put(fileName, formData, {
+          access: "public",
+          token: BLOB_READ_WRITE_TOKEN,
+        });
+        console.log(r.url);
+        setBlob(fileName);
+        // setBlob(fileName);
+        // console.log(file);
         let response = await axios
-          .post(`http://localhost:5000/file/upload`, formData, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              "Content-Type": "multipart/form-data",
-            },
-          })
+          .post(
+            `${baseURL}/file/upload`,
+            { fileName: r.pathname, pdf: r.url, chapter: chapterName },
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+                // "Content-Type": "multipart/form-data",
+              },
+            }
+          )
           .then((response) => {
             console.log("Created");
+
+            // console.log(newBlob);
             console.log(response);
             console.log(response.data.data);
             toast.success(response.data.message);
@@ -150,6 +173,7 @@ export default function AddFormContentFiles({ closeEvent }) {
               error={fileError}
               helperText={fileError}
               sx={{ marginTop: "8px" }}
+              ref={inputFileRef}
             />
           </Grid>
           <Grid item xs={12}>
@@ -198,7 +222,7 @@ export default function AddFormContentFiles({ closeEvent }) {
 
         <Box height={15} />
       </Box>
-      {/* <ToastContainer /> */}
+      // <ToastContainer />
     </>
   );
 }

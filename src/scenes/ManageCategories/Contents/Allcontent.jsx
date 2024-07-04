@@ -44,11 +44,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 // Import the main component
-
 import { Viewer, Worker } from "@react-pdf-viewer/core";
-
 // // Import the styles
 import "@react-pdf-viewer/core/lib/styles/index.css";
+import { baseURL } from "../../../basic";
 
 const Allcontent = () => {
   const theme = useTheme();
@@ -70,6 +69,7 @@ const Allcontent = () => {
   const [viewCourse, setViewCourse] = useState("");
   const [viewContentVideo, setViewContentVideo] = useState("");
   const [viewContentFile, setViewContentFile] = useState("");
+  const [viewContentFilePDF, setViewContentFilePDF] = useState("");
   const navigate = useNavigate();
 
   const style = {
@@ -94,7 +94,7 @@ const Allcontent = () => {
         throw new Error("Access token is missing.");
       }
       let result = await axios
-        .get("http://localhost:5000/getAllContent", {
+        .get(`${baseURL}/getAllContent`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",
@@ -124,7 +124,7 @@ const Allcontent = () => {
       }
 
       let result = await axios
-        .delete(`http://localhost:5000/content/delete/${id}`, {
+        .delete(`${baseURL}/content/delete/${id}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -221,6 +221,7 @@ const Allcontent = () => {
               setViewCourse(currentRow.course);
               setViewContentVideo(currentRow.contentvideo);
               setViewContentFile(currentRow.contentfile);
+              setViewContentFilePDF(ele.contentFileDetailes.pdf);
               handleOpenView();
               // alert(JSON.stringify(currentRow));
             }
@@ -354,9 +355,7 @@ const Allcontent = () => {
                         width: "500",
                       }}
                     >
-                      <Viewer
-                        fileUrl={`http://localhost:5000/uploads/${viewContentFile}`}
-                      />
+                      <Viewer fileUrl={`${viewContentFilePDF}`} />
                     </div>
                   </Worker>
                 </Grid>
@@ -432,9 +431,9 @@ const Allcontent = () => {
                   editMode="row"
                 />
               </Box>
-              <ToastContainer />
             </Box>
           </Box>
+          <ToastContainer />
         </main>
       </div>
     </>
