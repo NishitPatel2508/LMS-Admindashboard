@@ -1,58 +1,43 @@
 import React from "react";
-import {
-  Box,
-  Button,
-  IconButton,
-  Typography,
-  Modal,
-  useTheme,
-  FormControl,
-  Select,
-  MenuItem,
-  InputLabel,
-  Stack,
-} from "@mui/material";
-import {
-  GridRowModes,
-  DataGrid,
-  GridToolbar,
-  GridToolbarContainer,
-  GridActionsCellItem,
-  GridRowEditStopReasons,
-} from "@mui/x-data-grid";
+import { Box, Button, Modal, useTheme } from "@mui/material";
+import { DataGrid, GridToolbar, GridActionsCellItem } from "@mui/x-data-grid";
 import AddForm from "./AddForm";
 import UpdateSubCategory from "./UpdateSubCategory";
 import { tokens } from "../../../theme";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Close";
-
-import { useMode } from "../../../theme";
 import Sidebar from "../../global/Sidebar";
 import Topbar from "../../global/Topbar";
-import StatBox from "../../../components/StatBox";
 import Header from "../../../components/Header";
 import { ToastContainer, toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { baseURL } from "../../../basic";
+import {
+  deleteSubCategoryInstance,
+  getAllSubCategoryInstance,
+} from "../../../instances/SubCategoryInstance";
 
 const Allsubcategories = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
   const [isSidebar, setIsSidebar] = useState(true);
   const [allSubCategories, setAllSubCategories] = useState([]);
   const [open, setOpen] = React.useState(false);
-  const [update, setUpdate] = React.useState(false);
+  const [, setUpdate] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    getAllSubCategories();
+  };
   const [openHandle, setOpenHandle] = React.useState(false);
   const handleOpenUpdate = () => setOpenHandle(true);
-  const handleCloseUpdate = () => setOpenHandle(false);
-  const navigate = useNavigate();
+  const handleCloseUpdate = () => {
+    setOpenHandle(false);
+    getAllSubCategories();
+  };
 
   const style = {
     position: "absolute",
@@ -71,61 +56,18 @@ const Allsubcategories = () => {
   }, []);
   const getAllSubCategories = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      let result = await axios
-        .get(`${baseURL}/getAllSubCategory`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          debugger;
-          setAllSubCategories(result.data.data);
-          console.log(allSubCategories);
-          // console.log(allSubCategories);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-        });
+      const data = await getAllSubCategoryInstance();
+      setAllSubCategories(data);
     } catch (error) {
-      console.error("Error during signup:", error);
+      console.error("Error during Get all subcategory:", error);
     }
   };
 
   const deleteSubCategory = async (id) => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-
-      let result = await axios
-        .delete(`${baseURL}/subCategory/delete/${id}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-        .then((result) => {
-          toast.success("Deleted successfully");
-          console.log("Deleted");
-          setTimeout(() => {
-            navigate("/managecategories");
-          }, 3000);
-
-          console.log(result);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-          console.log(id);
-        });
+      await deleteSubCategoryInstance(id);
+      toast.success("Deleted successfully", { autoClose: 2000 });
+      getAllSubCategories();
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -153,11 +95,6 @@ const Allsubcategories = () => {
       disableClickEventBubbling: true,
 
       renderCell: (params) => {
-        const onClick = (e) => {
-          const currentRow = params.row;
-          return alert(JSON.stringify(currentRow, null, 4));
-        };
-
         const handleUpdate = () => {
           const currentRow = params.row;
 
@@ -212,10 +149,6 @@ const Allsubcategories = () => {
   });
   return (
     <>
-      <div className="app">
-        <Sidebar isSidebar={isSidebar} />
-        <main className="content">
-          <Topbar setIsSidebar={setIsSidebar} />
           <Modal
             open={open}
             // onClose={handleClose}
@@ -306,13 +239,13 @@ const Allsubcategories = () => {
                   components={{ Toolbar: GridToolbar }}
                   getRowId={(rows) => rows.id}
                   editMode="row"
+                  // loading={loading}
                 />
               </Box>
             </Box>
           </Box>
           <ToastContainer />
-        </main>
-      </div>
+
     </>
   );
 };

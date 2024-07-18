@@ -7,7 +7,6 @@ import {
   Select,
   MenuItem,
   InputLabel,
-  Modal,
   FormControl,
   FormHelperText,
   Grid,
@@ -16,11 +15,11 @@ import {
 
 import { ToastContainer, toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { baseURL, BLOB_READ_WRITE_TOKEN } from "../../../basic";
+import { BLOB_READ_WRITE_TOKEN } from "../../../basic";
 import { put } from "@vercel/blob";
-// import {  } from "../../../basic";
+import { getAllChapterInstance } from "../../../instances/ChapterInstance";
+import { createContentFileInstance } from "../../../instances/ContentFileInstance";
+
 export default function AddFormContentFiles({ closeEvent }) {
   useEffect(() => {
     getallChapter();
@@ -36,46 +35,19 @@ export default function AddFormContentFiles({ closeEvent }) {
 
   //Vercel File Upload
   const inputFileRef = useRef(null);
-  const [blob, setBlob] = useState(null);
-
-  const navigate = useNavigate();
   const onChangeChapter = (e) => {
     setChapterName(e.target.value);
-    console.log(e.target.value);
     setChapterNameError("");
   };
   const onChangeFile = (e) => {
     setFile(e.target.files[0]);
     setFileName(e.target.files[0].name);
-    console.log(e.target.files[0].name);
-    console.log(e.target.files[0]);
-    console.log(e.target.files[0].path);
   };
 
   const getallChapter = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      let result = await axios
-        .get(`${baseURL}/getAllChapter`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          setAllChapters(result.data.data);
-          console.log(allChapter);
-        })
-
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-        });
+      let response = await getAllChapterInstance();
+      setAllChapters(response);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -91,57 +63,30 @@ export default function AddFormContentFiles({ closeEvent }) {
     if (chapterName && file) {
       try {
         e.preventDefault();
-        const accessToken = JSON.parse(
-          localStorage.getItem("accessToken") || ""
-        );
-        if (!accessToken) {
-          throw new Error("Access token is missing.");
-        }
         const formData = new FormData();
         formData.append("file", file);
         formData.append("chapter", chapterName);
         // formData.append("extractArchive", "false");
         formData.append("name", fileName);
-        // const newBlob = fileName.json();
-        //{ name: fileName, chapter: chapterName }
         let r = await put(fileName, formData, {
           access: "public",
           token: BLOB_READ_WRITE_TOKEN,
         });
         console.log(r.url);
-        setBlob(fileName);
-        // setBlob(fileName);
-        // console.log(file);
-        let response = await axios
-          .post(
-            `${baseURL}/file/upload`,
-            { fileName: r.pathname, pdf: r.url, chapter: chapterName },
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-                // "Content-Type": "multipart/form-data",
-              },
-            }
-          )
-          .then((response) => {
-            console.log("Created");
-
-            // console.log(newBlob);
-            console.log(response);
-            console.log(response.data.data);
-            toast.success(response.data.message);
-            closeEvent();
-            setTimeout(() => {
-              navigate("/managecategories");
-            }, 3000);
-          })
-          .catch((err) => {
-            console.log(err.response);
-            toast.error(err.response.data.message);
-            // console.log(result.data.data.message);
-            console.log(accessToken);
-            // console.log(result);
-          });
+        const fields = {
+          fileName: r.pathname,
+          pdf: r.url,
+          chapter: chapterName,
+        };
+        let response = await createContentFileInstance(fields);
+        toast.success(response.message, { autoClose: 2000 });
+        closeEvent();
+        // if (result.message == "Programming Language already exists") {
+        //   toast.error(result.message, { autoClose: 2000 });
+        // } else {
+        //   toast.success(result.message, { autoClose: 2000 });
+        //   closeEvent();
+        // }
       } catch (error) {
         console.error("Error during signup:", error);
       }
@@ -222,7 +167,7 @@ export default function AddFormContentFiles({ closeEvent }) {
 
         <Box height={15} />
       </Box>
-      // <ToastContainer />
+      <ToastContainer />
     </>
   );
 }

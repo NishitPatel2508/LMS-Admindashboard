@@ -5,10 +5,15 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Avatar,Box, Grid,TextField,Button,Typography ,Link} from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { useAuth } from '../Store/auth';
+// import { useAuth } from '../Store/auth';
+import { baseURL } from '../basic';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../app/Slice/authSlice';
+import axiosInstructorInstance from '../instances/axiosInstructorInstance';
+
 const Login = () => {
     
-  const {storeTokenInLS} = useAuth();
+  // const {storeTokenInLS} = useAuth();
     const [email ,setEmail] = useState("")
     const [password ,setPassword ] = useState("")
     const [emailError, setEmailError] = useState("")
@@ -20,10 +25,15 @@ const Login = () => {
       placeholder: null,
       file: null,
     });
+
+    //Redux
+    const dispatch = useDispatch();
     useEffect(()=>{
         setprofileImg(localStorage.getItem("profilepic"))
     })
-  
+    const handleSignup = () =>{
+      navigate("/")
+    }
     const [imgError, setImageError] = useState("");
     const handleImageChange = (event) => {
         // const localFile = event.target.files[0]
@@ -104,26 +114,32 @@ const Login = () => {
             setPasswordError("Password is required")
         }
         if(email && password){
-            
-            const header = {"Access-control-Allow-Origin":"*"}
-            let result = await axios.post('http://localhost:5000/instructor/login',{
-                email:email,
+            const payload = {
+              email:email,
                 password:password
-            })
-            .then(result =>{
-                console.log(result);
-                if (result.data) {
-                    if (result.data.data.accessToken) {
-                      // localStorage.setItem(
-                      //   "accessToken",
-                      //   JSON.stringify(result.data.data.accessToken)
-                      // );
-                      storeTokenInLS(result.data.data.accessToken)
-                }
             }
-                console.log("accessToken",result.data.data.accessToken)
+            const header = {"Access-control-Allow-Origin":"*"}
+            let response = await axiosInstructorInstance({
+              url:"/login",
+              method:"POST",
+              data:payload
+            })
+            .then((response) =>{
+                console.log(response);
+                if (response.data) {
+                    if (response.data.data.accessToken) {
+                      localStorage.setItem("accessToken",JSON.stringify(response.data.data.accessToken))
+                      // storeTokenInLS(result.data.data.accessToken)
+                      const user = {
+                        email:email
+                      }
+                      const accessToken = response.data.data.accessToken
+                      dispatch(login({user,accessToken}))
+                  }
+                }
+                console.log("accessToken",response.data.data.accessToken)
                 
-                toast.success(result.data.message)
+                toast.success(response.data.message)
                 setTimeout(() => {
                   navigate("/db")
                 }, 2000);
@@ -186,8 +202,8 @@ const Login = () => {
             <Typography >
                 <Link href="/forgotpassword" underline="none">Forgot password?</Link>
             </Typography>
-            <Typography> 
-                <Link  href="/"  underline="none">Create new account</Link>
+            <Typography onClick={handleSignup}> 
+                <p    underline="none">Create new account</p>
             </Typography>
         </Grid>
         <ToastContainer />

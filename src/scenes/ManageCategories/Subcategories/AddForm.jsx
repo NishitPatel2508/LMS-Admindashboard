@@ -7,27 +7,18 @@ import {
   Select,
   MenuItem,
   InputLabel,
-  Modal,
   FormControl,
   FormHelperText,
   Grid,
-  useTheme,
   TextField,
-  Stack,
 } from "@mui/material";
-import {
-  GridRowModes,
-  DataGrid,
-  GridToolbar,
-  GridToolbarContainer,
-  GridActionsCellItem,
-  GridRowEditStopReasons,
-} from "@mui/x-data-grid";
-import { ToastContainer, toast } from "react-toastify";
+
+import { toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { baseURL } from "../../../basic";
+import { getAllCategoryInstance } from "../../../instances/CategoryInstance";
+import { createSubCategoryInstance } from "../../../instances/SubCategoryInstance";
 
 export default function AddForm({ closeEvent }) {
   useEffect(() => {
@@ -38,49 +29,20 @@ export default function AddForm({ closeEvent }) {
   const [subCategory, setSubCategory] = useState("");
   const [categoryError, setCategoryError] = useState("");
   const [subCategoryError, setSubCategoryError] = useState("");
-  const [msg, setMsg] = useState(false);
-  const navigate = useNavigate();
+
   const onChangeCategory = (e) => {
     setCategoryName(e.target.value);
-    console.log(e.target.value);
     setCategoryError("");
   };
   const onChangeSubCategory = (e) => {
     setSubCategory(e.target.value);
-    console.log(e.target.value);
     setSubCategoryError("");
   };
 
   const getAllCategory = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      const id = localStorage.getItem("courseid");
-      //   setCourseId(courseid);
-      //   console.log(courseid);
-      let result = await axios
-        .get(`${baseURL}/getAllCategory`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          //   console.log(courseId);
-          setAllCategory(result.data.data);
-          // console.log(allCategory);
-          // console.log(arrayPrint());
-          // convertToArray(result.data.data);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-          console.log(id);
-        });
+      const res = await getAllCategoryInstance();
+      setAllCategory(res);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -95,43 +57,17 @@ export default function AddForm({ closeEvent }) {
     if (categoryName && subCategory) {
       try {
         e.preventDefault();
-        const accessToken = JSON.parse(
-          localStorage.getItem("accessToken") || ""
-        );
-        if (!accessToken) {
-          throw new Error("Access token is missing.");
-        }
-        const courseid = localStorage.getItem("courseid");
-        const id = courseid;
         const fields = {
           category: categoryName,
           subCategoryName: subCategory,
         };
-        let result = await axios
-          .post(`${baseURL}/subCategory/create`, fields, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              // "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((result) => {
-            console.log("Created");
-            console.log(result);
-            console.log(result.data.SubCategory);
-            toast.success(result.data.message);
-            closeEvent();
-            setTimeout(() => {
-              navigate("/managecategories");
-            }, 3000);
-          })
-          .catch((err) => {
-            console.log(err.response);
-            toast.error(err.response.data.message);
-            console.log(result.data.data.message);
-            console.log(accessToken);
-            console.log(id);
-            // console.log(result);
-          });
+        let result = await createSubCategoryInstance(fields);
+        if (result.message == "Subcategory already exists") {
+          toast.error(result.message, { autoClose: 2000 });
+        } else {
+          toast.success(result.message, { autoClose: 2000 });
+          closeEvent();
+        }
       } catch (error) {
         console.error("Error during signup:", error);
       }
@@ -209,7 +145,6 @@ export default function AddForm({ closeEvent }) {
 
         <Box height={15} />
       </Box>
-      {/* <ToastContainer /> */}
     </>
   );
 }

@@ -19,7 +19,17 @@ import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { baseURL } from "../../basic";
+import { baseURL, BLOB_READ_WRITE_TOKEN } from "../../basic";
+
+import { put } from "@vercel/blob";
+import {
+  handleSingleCourse,
+  handleUpdateCourse,
+} from "../../instances/Course/CourseInstance";
+import { getAllCategoryInstance } from "../../instances/CategoryInstance";
+import { getAllSubCategoryInstance } from "../../instances/SubCategoryInstance";
+import { getAllProgrammingLanguageInstance } from "../../instances/ProgrammingLangauageInstance";
+import { getAllLanguagesInstance } from "../../instances/LanguagesInstance";
 
 const CourseUpdate = () => {
   const [isSidebar, setIsSidebar] = useState(true);
@@ -49,6 +59,10 @@ const CourseUpdate = () => {
   });
 
   const [imgError, setImageError] = useState("");
+  const [file, setFile] = useState("");
+
+  const [imgName, setImgName] = useState("");
+  const [imgURL, setImgURL] = useState("");
 
   const navigate = useNavigate();
 
@@ -64,14 +78,19 @@ const CourseUpdate = () => {
     width: 1,
   });
 
-  const handleProfileImageChange = (event) => {
+  let urlImg = "";
+  const handleProfileImageChange = async (event) => {
     // const localFile = event.target.files[0]
     console.log(event.target.files[0]);
+    setFile(event.target.files[0]);
+    // Db stores the url provided by vercel blob
     if (
       event.target.files[0].type === "image/png" ||
       event.target.files[0].type === "image/jpeg"
     ) {
+      //Cloudinary
       //Preview Show
+      setImgName(event.target.files[0].name);
       setImageError("");
       const reader = new FileReader();
       reader.onload = (r) => {
@@ -79,13 +98,46 @@ const CourseUpdate = () => {
           placeholder: r.target.result,
           file: event.target.files[0],
         });
-        setCourseImg(r.target.result);
+        // setprofileImg(r.target.result);
       };
-      const imgfile = event.target.files[0];
-      reader.readAsDataURL(imgfile);
-      console.log(imgfile);
-      console.log(courseImg);
-      //readAsDataURL : file in anadar src ma value store kare.
+
+      const formDataImg = new FormData();
+      formDataImg.append("file", event.target.files[0]);
+      formDataImg.append("upload_preset", "olpsdimages");
+      formDataImg.append("cloud_name", "nishitproject");
+      const response = await axios
+        .post(
+          "https://api.cloudinary.com/v1_1/nishitproject/image/upload",
+          formDataImg
+        )
+        .then((response) => {
+          // console.log(imgUploaded);
+
+          console.log(response);
+          setImgURL(response.data.url);
+          urlImg = response.data.url;
+          setCourseImg(response.data.url);
+          console.log(response.data.url);
+          // console.log(response);
+          // if (urlImg == "") {
+          //   // setCourseImg(urlImg);
+          //   urlImg = courseImg;
+          // }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      // const imgfile = event.target.files[0];
+      // const url = URL.createObjectURL(imgfile);
+      // console.log("uuuu", url);
+      // setImgFinale(url);
+      // reader.readAsDataURL(imgfile);
+
+      // console.log(imgfile);
+      // console.log(avatar.placeholder);
+      // const courseImg = avatar.placeholder;
+
+      //readAsDataURL : Store the value inside the file.
     } else {
       setImageError("Invalid File");
       avatar.file = null;
@@ -143,127 +195,32 @@ const CourseUpdate = () => {
   };
   const getAllCategory = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      const id = localStorage.getItem("courseid");
-      //   setCourseId(courseid);
-      //   console.log(courseid);
-      let result = await axios
-        .get(`${baseURL}/getAllCategory`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          console.log(courseId);
-          setAllCategory(result.data.data);
-          // console.log(allCategory);
-          // console.log(arrayPrint());
-          // convertToArray(result.data.data);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-          console.log(id);
-        });
+      const data = await getAllCategoryInstance();
+      setAllCategory(data);
     } catch (error) {
-      console.error("Error during signup:", error);
+      console.error("Error during Get All Category:", error);
     }
   };
   const getAllSubCategory = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      const id = localStorage.getItem("courseid");
-      //   setCourseId(courseid);
-      //   console.log(courseid);
-      let result = await axios
-        .get(`http://localhost:5000/getAllSubCategory`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          console.log(courseId);
-          setAllSubCategory(result.data.data);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-          console.log(id);
-        });
+      const data = await getAllSubCategoryInstance();
+      setAllSubCategory(data);
     } catch (error) {
-      console.error("Error during signup:", error);
+      console.error("Error during subCategory:", error);
     }
   };
   const getAllProgrammingLanguage = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      const id = localStorage.getItem("courseid");
-      //   setCourseId(courseid);
-      //   console.log(courseid);
-      let result = await axios
-        .get(`http://localhost:5000/getAllProgrammingLanguage`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          console.log(courseId);
-          setAllProgrammingLanguage(result.data.data);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-          console.log(id);
-        });
+      const data = await getAllProgrammingLanguageInstance();
+      setAllProgrammingLanguage(data);
     } catch (error) {
       console.error("Error during signup:", error);
     }
   };
   const getAllLanguages = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      const id = localStorage.getItem("courseid");
-      //   setCourseId(courseid);
-      //   console.log(courseid);
-      let result = await axios
-        .get(`http://localhost:5000/getAllLanguages`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          console.log(courseId);
-          setAllLanguages(result.data.data);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-          console.log(id);
-        });
+      const data = await getAllLanguagesInstance();
+      setAllLanguages(data);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -271,45 +228,22 @@ const CourseUpdate = () => {
   const allLevel = ["Expert", "Intermediate", "Beginner"];
   const getSingleCourse = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
       const id = localStorage.getItem("courseid");
-      //   setCourseId(courseid);
-      //   console.log(courseid);
-      let result = await axios
-        .get(`http://localhost:5000/course/${id}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          console.log(courseId);
-          setSingleCourse(result.data.data);
-          setCourseImg(result.data.data.courseImg);
-          setName(result.data.data.name);
-          setCategoryName(result.data.data.category._id);
-          // console.log(category.categoryName);
-          setSubCategory(result.data.data.subCategory._id);
-          setProgrammingLanguage(result.data.data.programmingLanguage._id);
-          setLanguage(result.data.data.language._id);
-          setLevel(result.data.data.level);
-          setDescription(result.data.data.description);
-          setOverview(result.data.data.overview);
-          setRequirement(result.data.data.requirement);
-          setPrice(result.data.data.price);
-          setDiscount(result.data.data.discount);
-          setDeadline(result.data.data.deadline);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-          console.log(id);
-        });
+      let res = await handleSingleCourse(id);
+      setSingleCourse(res);
+      setCourseImg(res.courseImg);
+      setName(res.name);
+      setCategoryName(res.category._id);
+      setSubCategory(res.subCategory._id);
+      setProgrammingLanguage(res.programmingLanguage._id);
+      setLanguage(res.language._id);
+      setLevel(res.level);
+      setDescription(res.description);
+      setOverview(res.overview);
+      setRequirement(res.requirement);
+      setPrice(res.price);
+      setDiscount(res.discount);
+      setDeadline(res.deadline);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -317,18 +251,10 @@ const CourseUpdate = () => {
   const handleUpdate = async (e) => {
     try {
       e.preventDefault();
-
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
       const courseid = localStorage.getItem("courseid");
-      //   setCourseId();
-      // console.log(courseid);
-      // const formData = new FormData();
-      // formData.append("id", courseid);
+
       const id = courseid;
-      // formData.append("name", name);
+
       const fields = {
         id: courseid,
         name: name,
@@ -345,39 +271,20 @@ const CourseUpdate = () => {
         deadline: deadline,
         courseImg: courseImg,
       };
-      let result = await axios
-        .patch(`http://localhost:5000/course/update/${id}`, fields, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          debugger;
-          console.log("updated");
-          toast.success("Updated successfully");
-          console.log(name);
-          console.log(result);
-          setTimeout(() => {
-            navigate("/courses");
-          }, 5000);
-          // setName(result.data.data.name);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-          console.log(id);
-          // console.log(result);
-        });
+      try {
+        const data = await handleUpdateCourse(fields, id);
+        toast.success("Updated successfully", { autoClose: 2000 });
+        setTimeout(() => {
+          navigate("/courses");
+        }, 2500);
+      } catch (e) {
+        console.log("ttt", e);
+      }
     } catch (error) {
       console.error("Error during signup:", error);
     }
   };
   return (
-    <div className="app">
-      <Sidebar isSidebar={isSidebar} />
-      <main className="content">
-        <Topbar setIsSidebar={setIsSidebar} />
         <Box m="20px">
           {/* HEADER */}
           <Box
@@ -606,11 +513,9 @@ const CourseUpdate = () => {
               Update
             </Button>
           </Box>
+        <ToastContainer />
         </Box>
 
-        <ToastContainer />
-      </main>
-    </div>
   );
 };
 export default CourseUpdate;

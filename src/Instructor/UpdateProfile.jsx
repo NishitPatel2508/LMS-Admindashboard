@@ -28,6 +28,10 @@ import { ToastContainer, toast } from "react-toastify";
 
 import { useDispatch, useSelector } from "react-redux";
 import { addImage } from "../app/Slice/imageSlice";
+import Loading from "../scenes/global/Loading";
+import { baseURL, BLOB_READ_WRITE_TOKEN } from "../basic";
+import { put } from "@vercel/blob";
+
 const UpdateProfile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -35,6 +39,8 @@ const UpdateProfile = () => {
     getInstructorInfo();
   }, []);
   const todos = useSelector((state) => state.image);
+
+  const [loading, setLoading] = useState(true);
   const [isSidebar, setIsSidebar] = useState(true);
   const [name, setName] = useState("");
   const [id, setId] = useState("");
@@ -53,15 +59,17 @@ const UpdateProfile = () => {
   const [linkedInLinkError, setLinkedInLinkError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [genderError, setGenderError] = useState("");
-  const [profileImg, setprofileImg] = useState("");
   const [avatar, setImage] = useState({
     placeholder: null,
     file: null,
   });
   const [error, setError] = useState("");
+
+  //Image
   const [imgError, setImageError] = useState("");
   const [file, setFile] = useState();
   const [fileName, setFileName] = useState();
+  const [imgURL, setImgURL] = useState("");
   const isPasswordValid =
     /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
   const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i;
@@ -114,6 +122,9 @@ const UpdateProfile = () => {
     console.log(e.target.files[0]);
     // console.log(e.target.files[0].path);
   };
+  // const getFile = () =>{
+
+  // }
   const getInstructorInfo = async () => {
     try {
       const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
@@ -122,6 +133,7 @@ const UpdateProfile = () => {
       }
       //   setCourseId(courseid);
       //   console.log(courseid);
+
       let result = await axios
         .get(`http://localhost:5000/instructor/get`, {
           headers: {
@@ -142,6 +154,8 @@ const UpdateProfile = () => {
           setPassword(result.data.data.password);
           setLinkedInLink(result.data.data.linkedin);
           setGender(result.data.data.gender);
+          setLoading(false);
+          // getFile(result.data.data.profileImg);
           console.log(id);
         })
         .catch((err) => {
@@ -153,36 +167,7 @@ const UpdateProfile = () => {
       console.error("Error during signup:", error);
     }
   };
-  // const handleImageChange = (event) => {
-  //   // const localFile = event.target.files[0]
-  //   console.log(event.target.files[0]);
-  //   if (
-  //     event.target.files[0].type === "image/png" ||
-  //     event.target.files[0].type === "image/jpeg"
-  //   ) {
-  //     //Preview Show
-  //     setImageError("");
-  //     const reader = new FileReader();
-  //     reader.onload = (r) => {
-  //       setImage({
-  //         placeholder: r.target.result,
-  //         file: event.target.files[0],
-  //       });
-  //       setprofileImg(r.target.result);
-  //       setUserPhotoError("");
-  //       // dispatch(addImage(r.target.result));
-  //       // localStorage.setItem("profilepic", r.target.result);
-  //     };
-  //     const imgfile = event.target.files[0];
-  //     reader.readAsDataURL(imgfile);
-  //     console.log(imgfile);
-  //     console.log(profileImg);
-  //     //readAsDataURL : file in anadar src ma value store kare.
-  //   } else {
-  //     setImageError("Invalid File");
-  //     avatar.file = null;
-  //   }
-  // };
+
   const handleUpdate = async (e) => {
     e.preventDefault();
     if (!name) {
@@ -232,6 +217,36 @@ const UpdateProfile = () => {
       //   mobile: mobile,
       //   profileImg: courseImg,
       // };
+
+      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
+      if (!accessToken) {
+        throw new Error("Access token is missing.");
+      }
+
+      const formDataImg = new FormData();
+      formDataImg.append("file", file);
+      formDataImg.append("upload_preset", "olpsdimages");
+      formDataImg.append("cloud_name", "nishitproject");
+      // setImgName(imgFile.name);
+      console.log(file);
+      let urlImg = "";
+      const imgUploaded = await axios
+        .post(
+          "https://api.cloudinary.com/v1_1/nishitproject/image/upload",
+          formDataImg
+        )
+        .then((result) => {
+          // console.log(imgUploaded);
+          setImgURL(result.data.url);
+          urlImg = result.data.url;
+          console.log(result.data.url);
+          console.log(result);
+          // console.log(result);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
       const formData = new FormData();
       formData.append("name", name);
       formData.append("email", email);
@@ -239,15 +254,12 @@ const UpdateProfile = () => {
       formData.append("linkedin", linkedInLink);
       formData.append("gender", gender);
       formData.append("mobile", mobile);
-      formData.append("file", file);
-      formData.append("profileImg", fileName);
-      localStorage.setItem("profilepic", fileName);
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
+      // formData.append("file", file);
+      formData.append("profileImg", urlImg);
+      localStorage.setItem("profilepic", urlImg);
+
       await axios
-        .patch(`http://localhost:5000/instructor/update/${id}`, formData, {
+        .patch(`${baseURL}/instructor/update/${id}`, formData, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "multipart/form-data",
@@ -260,9 +272,12 @@ const UpdateProfile = () => {
               // const user = response.data.user;
               // dispatch(setUser(user));
               console.log(formData);
-              toast.success("Profile updated Successfully!");
+              toast.success("Profile updated Successfully!", {
+                autoClose: 2000,
+              });
               setTimeout(() => {
-                navigate("/db");
+                getInstructorInfo();
+                //   navigate("/db");
               }, 2000);
             }
           }
@@ -282,158 +297,153 @@ const UpdateProfile = () => {
     }
   };
   return (
-    <div className="app">
-      <Sidebar isSidebar={isSidebar} />
-      <main className="content">
-        <Box height="100vh" width="100%">
-          <Topbar setIsSidebar={setIsSidebar} />
-          <Box>
-            <Box m="10px">
-              {/* HEADER */}
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Header title="Update Profile" subtitle="Your Profile" />
-              </Box>
-              <Box
-                padding="10px"
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
+    <Box height="100vh" width="100%">
+      <Box>
+        <Loading show={loading} />
+        <Box m="10px">
+          {/* HEADER */}
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Header title="Update Profile" subtitle="Your Profile" />
+          </Box>
+          <Box
+            padding="10px"
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <input
+              style={{ display: "none" }}
+              id="file"
+              type="file"
+              onChange={onChangeFile}
+            />
+            <label htmlFor="file" style={{ cursor: "pointer" }}>
+              <Avatar
+                alt="User Photo"
+                src={`http://localhost:5000/uploads/${fileName}`}
+                sx={{
+                  width: 100,
+                  height: 95,
+                  backgroundColor: "lightgray",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
               >
                 <input
+                  accept="image/*"
                   style={{ display: "none" }}
                   id="file"
                   type="file"
                   onChange={onChangeFile}
                 />
-                <label htmlFor="file" style={{ cursor: "pointer" }}>
-                  <Avatar
-                    alt="User Photo"
-                    src={`http://localhost:5000/uploads/${fileName}`}
-                    sx={{
-                      width: 100,
-                      height: 95,
-                      backgroundColor: "lightgray",
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      backgroundRepeat: "no-repeat",
-                    }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                  >
-                    <input
-                      accept="image/*"
-                      style={{ display: "none" }}
-                      id="file"
-                      type="file"
-                      onChange={onChangeFile}
-                    />
-                  </Avatar>
-                </label>
-                {userPhotoError && (
-                  <p style={{ color: "red" }}>{userPhotoError}</p>
-                )}
-              </Box>
-              <Box
-                display="grid"
-                gap="16px"
-                gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-                sx={{
-                  "& > div": {
-                    gridColumn: "span 2",
-                  },
-                }}
+              </Avatar>
+            </label>
+            {userPhotoError && <p style={{ color: "red" }}>{userPhotoError}</p>}
+          </Box>
+          <Box
+            display="grid"
+            gap="16px"
+            gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+            sx={{
+              "& > div": {
+                gridColumn: "span 2",
+              },
+            }}
+          >
+            <TextField
+              variant="filled"
+              type="text"
+              label="Name"
+              // onBlur={handleBlur}
+              onChange={onChangeName}
+              value={name}
+              name="name"
+              sx={{ m: 1, minWidth: 125 }}
+              error={nameError}
+              helperText={nameError}
+              // sx={{ gridColumn: "span 2" }}
+            />
+
+            <TextField
+              variant="filled"
+              type="text"
+              label="email"
+              onChange={onChangeEmail}
+              value={email}
+              name="email"
+              // onBlur={handleBlur}
+              error={emailError}
+              helperText={emailError}
+              sx={{ gridColumn: "span 4", m: 1, minWidth: 125 }}
+            />
+
+            <TextField
+              variant="filled"
+              type="Number"
+              label="Mobile Number"
+              // onBlur={handleBlur}
+              onChange={onChangeMobile}
+              value={mobile}
+              name="Mobile"
+              error={mobileError}
+              helperText={mobileError}
+              sx={{ gridColumn: "span 4", m: 1, minWidth: 125 }}
+            />
+            <TextField
+              variant="filled"
+              type="password"
+              label="Password"
+              onChange={onChangePassword}
+              value={password}
+              name="password"
+              // onBlur={handleBlur}
+              error={passwordError}
+              helperText={passwordError}
+              sx={{ gridColumn: "span 4", m: 1, minWidth: 125 }}
+            />
+            <TextField
+              variant="filled"
+              type="text"
+              label="LinkedIn Link"
+              multiline
+              maxRows={5}
+              onChange={onChangeLinkedinLink}
+              value={linkedInLink}
+              name="LinkedIn Link"
+              error={linkedInLinkError}
+              helperText={linkedInLinkError}
+              sx={{ gridColumn: "span 4", m: 1, minWidth: 125 }}
+            />
+
+            <FormControl variant="filled" sx={{ m: 1, minWidth: 125 }}>
+              <InputLabel id="demo-simple-select-filled-label">
+                Gender
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-filled-label"
+                id="demo-simple-select-filled"
+                value={gender}
+                onChange={onChangeGender}
+                error={genderError}
+                helperText={genderError}
               >
-                <TextField
-                  variant="filled"
-                  type="text"
-                  label="Name"
-                  // onBlur={handleBlur}
-                  onChange={onChangeName}
-                  value={name}
-                  name="name"
-                  sx={{ m: 1, minWidth: 125 }}
-                  error={nameError}
-                  helperText={nameError}
-                  // sx={{ gridColumn: "span 2" }}
-                />
-
-                <TextField
-                  variant="filled"
-                  type="text"
-                  label="email"
-                  onChange={onChangeEmail}
-                  value={email}
-                  name="email"
-                  // onBlur={handleBlur}
-                  error={emailError}
-                  helperText={emailError}
-                  sx={{ gridColumn: "span 4", m: 1, minWidth: 125 }}
-                />
-
-                <TextField
-                  variant="filled"
-                  type="Number"
-                  label="Mobile Number"
-                  // onBlur={handleBlur}
-                  onChange={onChangeMobile}
-                  value={mobile}
-                  name="Mobile"
-                  error={mobileError}
-                  helperText={mobileError}
-                  sx={{ gridColumn: "span 4", m: 1, minWidth: 125 }}
-                />
-                <TextField
-                  variant="filled"
-                  type="password"
-                  label="Password"
-                  onChange={onChangePassword}
-                  value={password}
-                  name="password"
-                  // onBlur={handleBlur}
-                  error={passwordError}
-                  helperText={passwordError}
-                  sx={{ gridColumn: "span 4", m: 1, minWidth: 125 }}
-                />
-                <TextField
-                  variant="filled"
-                  type="text"
-                  label="LinkedIn Link"
-                  multiline
-                  maxRows={5}
-                  onChange={onChangeLinkedinLink}
-                  value={linkedInLink}
-                  name="LinkedIn Link"
-                  error={linkedInLinkError}
-                  helperText={linkedInLinkError}
-                  sx={{ gridColumn: "span 4", m: 1, minWidth: 125 }}
-                />
-
-                <FormControl variant="filled" sx={{ m: 1, minWidth: 125 }}>
-                  <InputLabel id="demo-simple-select-filled-label">
-                    Gender
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-filled-label"
-                    id="demo-simple-select-filled"
-                    value={gender}
-                    onChange={onChangeGender}
-                    error={genderError}
-                    helperText={genderError}
-                  >
-                    {genderInput.map((opts, i) => (
-                      <MenuItem key={i} value={opts}>
-                        {opts}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                {genderInput.map((opts, i) => (
+                  <MenuItem key={i} value={opts}>
+                    {opts}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["DateField"]}>
                 <DateField
                   label="Deadline of Course"
@@ -447,19 +457,17 @@ const UpdateProfile = () => {
                 />
               </DemoContainer>
             </LocalizationProvider> */}
-              </Box>
-              <Box display="flex" justifyContent="center" mt="20px">
-                <Button variant="contained" onClick={handleUpdate}>
-                  {/* color="secondary" */}
-                  Update
-                </Button>
-              </Box>
-              <ToastContainer />
-            </Box>
           </Box>
+          <Box display="flex" justifyContent="center" mt="20px">
+            <Button variant="contained" onClick={handleUpdate}>
+              {/* color="secondary" */}
+              Update
+            </Button>
+          </Box>
+          <ToastContainer />
         </Box>
-      </main>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

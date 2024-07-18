@@ -9,13 +9,14 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import TrafficIcon from "@mui/icons-material/Traffic";
 import Header from "../../components/Header";
 import StatBox from "../../components/StatBox";
-import { Component, useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import DonutChart from "../../components/DonutChart";
 import BarChart from "../../components/BarChart";
 import generatePDF, { Resolution, Margin } from "react-to-pdf";
 import ReactToPrint from "react-to-print";
-import { baseURL } from "../../basic";
+import { getAllDataDBInstance } from "../../instances/dashboardInstance";
+import { ToastContainer, toast } from "react-toastify";
+
 const options = {
   filename: "InstructorReport.pdf",
   // default is `save`
@@ -58,6 +59,11 @@ const downloadPdf = () => generatePDF(getTargetElement, { options });
 const getPageMargins = () => {
   return `@page {  size: landscape;  }`;
 };
+const getTargetElement1 = () => document.getElementById("courseChart");
+const downloadPdf1 = () => generatePDF(getTargetElement1, { options });
+const getPageMargins1 = () => {
+  return `@page {  size: landscape;  }`;
+};
 const Dashboard = () => {
   const theme = useTheme();
 
@@ -70,43 +76,21 @@ const Dashboard = () => {
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [courseLength, setCoursesLength] = useState("");
   const [contentFileLength, setContentFileLength] = useState("");
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     getAllData();
   }, []);
 
   const getAllData = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      const result = await axios
-        .get(`${baseURL}/dashboard`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          // console.log(result);
-          // console.log(result.data.data[0]);
-          // console.log(result.data.data);
-          fetchDataFieldVise(result.data.data);
-          // console.log(result.data.data[0]);
-          // const c = JSON.parse(result.data.data[0])
-          // console.log(c);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-        });
+      const response = await getAllDataDBInstance();
+
+      fetchDataFieldVise(response);
+      setLoading(false);
     } catch (error) {
       console.error("Error during signup:", error);
     }
   };
-  // const fields = ["Courses","Languages","Categories","Subcategories","ProgrammingLanguages","Chapteres","ContentVideoes","Contents"]
-  // const r = [cs,ls,cats,subcats,pl,ch,cv,ct]
   let r = 0;
   const hanldleRevenue = (e) => {
     e.map((i) => {
@@ -148,10 +132,6 @@ const Dashboard = () => {
     }
   };
   return (
-    <div className="app">
-      <Sidebar isSidebar={isSidebar} />
-      <main className="content">
-        <Topbar setIsSidebar={setIsSidebar} />
         <Box m="20px">
           {/* HEADER */}
           <Box
@@ -183,9 +163,9 @@ const Dashboard = () => {
                 content={getTargetElement}
                 documentTitle="InstructorReportPDF"
                 pageStyle={getPageMargins}
-                onAfterPrint={() => {
-                  console.log("Document is Printed");
-                }}
+                // onAfterPrint={() => {
+                //   toast.success("Document is Printed", { autoClose: 2000 });
+                // }}
               />
             </Box>
           </Box>
@@ -280,8 +260,9 @@ const Dashboard = () => {
             {/* ROW 2 */}
             <Box
               gridColumn="span 6"
-              gridRow="span 2"
+              gridRow="span 3"
               backgroundColor={colors.primary[400]}
+              id="courseChart"
             >
               <Box
                 mt="25px"
@@ -308,13 +289,40 @@ const Dashboard = () => {
                 </Box>
                 <Box>
                   <IconButton>
-                    <DownloadOutlinedIcon
-                      sx={{ fontSize: "26px", color: colors.greenAccent[500] }}
+                    <ReactToPrint
+                      trigger={() => {
+                        return (
+                          <Button
+                            sx={{
+                              backgroundColor: colors.blueAccent[700],
+                              color: colors.grey[100],
+                              fontSize: "14px",
+                              fontWeight: "bold",
+                              padding: "10px 10px",
+                            }}
+                            onClick={downloadPdf1}
+                          >
+                            <DownloadOutlinedIcon sx={{ mr: "10px" }} />
+                            Download
+                          </Button>
+                        );
+                      }}
+                      content={getTargetElement1}
+                      documentTitle="RevenueAsPerCoursePDF"
+                      pageStyle={getPageMargins1}
+                      onAfterPrint={() => {
+                        toast.success("Document is Printed", {
+                          autoClose: 2000,
+                        });
+                      }}
                     />
+                    {/* <DownloadOutlinedIcon
+                      sx={{ fontSize: "26px", color: colors.greenAccent[500] }}
+                    /> */}
                   </IconButton>
                 </Box>
               </Box>
-              <Box height="280px" m="-20px 0 0 0">
+              <Box height="325px" m="-20px 0 0 0">
                 <DonutChart isDashboard={true} />
               </Box>
             </Box>
@@ -402,7 +410,7 @@ const Dashboard = () => {
             </Box> */}
             <Box
               gridColumn="span 6"
-              gridRow="span 2"
+              gridRow="span 3"
               backgroundColor={colors.primary[400]}
             >
               <Typography
@@ -412,7 +420,7 @@ const Dashboard = () => {
               >
                 Sold Course Per Month
               </Typography>
-              <Box height="250px" mt="-20px">
+              <Box height="320px" mt="20px">
                 <BarChart isDashboard={true} />
               </Box>
             </Box>
@@ -429,12 +437,13 @@ const Dashboard = () => {
               >
                 Geography Based Traffic
               </Typography>
-              <Box height="200px"><PieChart isDashboard={true} /></Box>
+              <Box height="200px">
+                <BarChart isDashboard={true} />
+              </Box>
             </Box> */}
           </Box>
+          <ToastContainer />
         </Box>
-      </main>
-    </div>
   );
 };
 

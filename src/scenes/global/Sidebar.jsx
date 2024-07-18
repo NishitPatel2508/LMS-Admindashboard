@@ -20,6 +20,7 @@ import DonutLargeIcon from "@mui/icons-material/DonutLarge";
 
 import CategoryIcon from "@mui/icons-material/Category";
 import axios from "axios";
+import { baseURL } from "../../basic";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -50,7 +51,7 @@ const Sidebar = () => {
   useEffect(() => {
     // setprofileImg(localStorage.getItem("profilepic"));
     getInstructorInfo();
-  });
+  }, []);
   const getInstructorInfo = async () => {
     try {
       const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
@@ -60,7 +61,7 @@ const Sidebar = () => {
       //   setCourseId(courseid);
       //   console.log(courseid);
       let result = await axios
-        .get(`http://localhost:5000/instructor/get`, {
+        .get(`${baseURL}/instructor/get`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             // "Content-Type": "multipart/form-data",
@@ -73,7 +74,7 @@ const Sidebar = () => {
           //   console.log(courseId);
           setName(result.data.data.name);
           setprofileImg(result.data.data.profileImg);
-          localStorage.setItem("profilepic", result.data.data.profileImg);
+          localStorage.setItem("profilepic", profileImg);
         })
         .catch((err) => {
           console.log(err.response);
@@ -138,7 +139,7 @@ const Sidebar = () => {
                   alt="profile-user"
                   width="100px"
                   height="100px"
-                  src={`http://localhost:5000/uploads/${profileImg}`}
+                  src={`${profileImg}`}
                   style={{ cursor: "pointer", borderRadius: "50%" }}
                 />
               </Box>

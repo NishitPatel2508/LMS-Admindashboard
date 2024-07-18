@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -19,11 +19,18 @@ import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { baseURL } from "../../../basic";
+import {
+  getAllChapterInstance,
+  getSingleChapterInstance,
+  updateChapterInstance,
+} from "../../../instances/ChapterInstance";
+import { getAllCourseInstance } from "../../../instances/Course/CourseInstance";
 
 export default function UpdateChapters({ closeEvent }) {
   useEffect(() => {
     getAllCourse();
     getSingleChapter();
+    getallChapter();
   }, []);
 
   const navigate = useNavigate();
@@ -33,46 +40,25 @@ export default function UpdateChapters({ closeEvent }) {
   const [courseNameError, setCourseNameError] = useState("");
   const [chapterError, setChapterError] = useState("");
   const [chapter, setChapter] = useState("");
+  const [courseId, setCourseId] = useState("");
+  const [allChapter, setAllChapters] = useState([]);
+  const [updated, setUpdated] = useState(false);
+
   const onChangeCourse = (e) => {
     setCourseName(e.target.value);
-    console.log(e.target.value);
+
     setCourseNameError("");
   };
   const onChangeChapter = (e) => {
     setChapter(e.target.value);
-    console.log(e.target.value);
     setChapterError("");
   };
   const getSingleChapter = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
       const id = localStorage.getItem("updatechapter");
-      //   setCourseId(courseid);
-      //   console.log(courseid);
-      let result = await axios
-        .get(`${baseURL}/chapter/${id}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          // console.log(courseId);
-          setChapter(result.data.data.chapterName);
-          console.log(result.data.data.chapter);
-          // console.log(category.programmingLangName);
-          setCourseName(result.data.data.course._id);
-          console.log(result.data.data.course._id);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-        });
+      let data = await getSingleChapterInstance(id);
+      setChapter(data.chapterName);
+      setCourseName(data.course._id);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -80,27 +66,16 @@ export default function UpdateChapters({ closeEvent }) {
 
   const getAllCourse = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      let result = await axios
-        .get(`${baseURL}/getAllCourse`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data[0]);
-          console.log(allCourse, "all");
-          setAllCourse(result.data.data);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-        });
+      let data = await getAllCourseInstance();
+      setAllCourse(data);
+    } catch (error) {
+      console.error("Error during signup:", error);
+    }
+  };
+  const getallChapter = async () => {
+    try {
+      let data = await getAllChapterInstance();
+      setAllChapters(data);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -115,42 +90,14 @@ export default function UpdateChapters({ closeEvent }) {
     if (courseName && chapter) {
       try {
         e.preventDefault();
-        const accessToken = JSON.parse(
-          localStorage.getItem("accessToken") || ""
-        );
-        if (!accessToken) {
-          throw new Error("Access token is missing.");
-        }
         const id = localStorage.getItem("updatechapter");
         const fields = {
           course: courseName,
           chapterName: chapter,
         };
-        let result = await axios
-          .patch(`${baseURL}/chapter/update/${id}`, fields, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              // "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((result) => {
-            console.log("Updated");
-            console.log(result);
-            console.log(result.data.data);
-            toast.success(result.data.message);
-            closeEvent();
-            setTimeout(() => {
-              navigate("/managecategories");
-            }, 3000);
-          })
-          .catch((err) => {
-            console.log(err.response);
-            toast.error(err.response.data.message);
-            console.log(result.data.data.message);
-            console.log(accessToken);
-            console.log(id);
-            // console.log(result);
-          });
+        let response = await updateChapterInstance(fields, id);
+        toast.success(response.message, { autoClose: 2000 });
+        closeEvent();
       } catch (error) {
         console.error("Error during signup:", error);
       }

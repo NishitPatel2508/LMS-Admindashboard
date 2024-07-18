@@ -7,20 +7,21 @@ import {
   Select,
   MenuItem,
   InputLabel,
-  Modal,
   FormControl,
   FormHelperText,
   Grid,
-  useTheme,
   TextField,
-  Stack,
 } from "@mui/material";
 
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { baseURL } from "../../../basic";
+import {
+  getAllChapterInstance,
+  getSingleChapterInstance,
+} from "../../../instances/ChapterInstance";
+import { getSingleContentVideoInstance, getUpdateContentVideoInstance } from "../../../instances/ContentVideoInstance";
 
 export default function UpdateContentVideoes({ closeEvent }) {
   useEffect(() => {
@@ -38,8 +39,6 @@ export default function UpdateContentVideoes({ closeEvent }) {
   const [videoLinkError, setVideoLinkError] = useState("");
   const [msg, setMsg] = useState(false);
 
-  const navigate = useNavigate();
-
   const onChangeThumbnail = (e) => {
     setThumbail(e.target.value);
     setThumbailError("");
@@ -50,40 +49,15 @@ export default function UpdateContentVideoes({ closeEvent }) {
   };
   const onChangeChapter = (e) => {
     setChapterName(e.target.value);
-    console.log(e.target.value);
     setChapterNameError("");
   };
   const getSingleContentVideo = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
       const id = localStorage.getItem("updatecontentvideo");
-      //   setCourseId(courseid);
-      //   console.log(courseid);
-      let result = await axios
-        .get(`${baseURL}/contentvideo/${id}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          // console.log(courseId);
-          setThumbail(result.data.data.thumbnail);
-          setChapterName(result.data.data.chapter._id);
-          // console.log(result.data.data.programmingLanguageName);
-          // console.log(category.programmingLangName);
-          setVideoLink(result.data.data.videoLink);
-          // console.log(result.data.data.subCategory._id);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-        });
+      let response = await getSingleContentVideoInstance(id);
+      setThumbail(response.thumbnail);
+      setChapterName(response.chapter._id);
+      setVideoLink(response.videoLink);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -91,29 +65,8 @@ export default function UpdateContentVideoes({ closeEvent }) {
 
   const getAllChapter = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      let result = await axios
-        .get(`${baseURL}/getAllChapter`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          setAllChapter(result.data.data);
-          console.log(allChapter);
-          // console.log(arrayPrint());
-          // convertToArray(result.data.data);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-        });
+      let response = await getAllChapterInstance();
+      setAllChapter(response);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -131,44 +84,15 @@ export default function UpdateContentVideoes({ closeEvent }) {
     if (thumbnail && videoLink && chapterName) {
       try {
         e.preventDefault();
-        const accessToken = JSON.parse(
-          localStorage.getItem("accessToken") || ""
-        );
-        if (!accessToken) {
-          throw new Error("Access token is missing.");
-        }
         const id = localStorage.getItem("updatecontentvideo");
         const fields = {
           thumbnail: thumbnail,
           videoLink: videoLink,
           chapter: chapterName,
         };
-        let result = await axios
-          .patch(`${baseURL}/contentvideo/update/${id}`, fields, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              // "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((result) => {
-            console.log("Updated");
-            console.log(result);
-            console.log(result.data.data);
-            // setSubCategory(result.data.SubCategory.subprogrammingLangName);
-            toast.success(result.data.message);
-            closeEvent();
-            setTimeout(() => {
-              navigate("/managecategories");
-            }, 3000);
-          })
-          .catch((err) => {
-            console.log(err.response);
-            toast.error(err.response.data.message);
-            console.log(result.data.data.message);
-            console.log(accessToken);
-            console.log(id);
-            // console.log(result);
-          });
+        let response = await getUpdateContentVideoInstance(fields, id);
+        toast.success(response.message, { autoClose: 2000 });
+        closeEvent();
       } catch (error) {
         console.error("Error during signup:", error);
       }
@@ -263,9 +187,6 @@ export default function UpdateContentVideoes({ closeEvent }) {
 
         <Box height={15} />
       </Box>
-      {/* <ToastContainer /> */}
     </>
   );
 }
-
-// UpdateContentVideoes;

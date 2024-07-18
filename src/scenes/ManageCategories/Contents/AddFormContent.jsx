@@ -16,8 +16,12 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { baseURL } from "../../../basic";
+import { getAllCourseInstance } from "../../../instances/Course/CourseInstance";
+import { getAllChapterInstance } from "../../../instances/ChapterInstance";
+import { getAllContentVideoInstance } from "../../../instances/ContentVideoInstance";
+import { getAllContentFileInstance } from "../../../instances/ContentFileInstance";
+import { createContentInstance } from "../../../instances/ContentInstance";
 
 export default function AddFormContent({ closeEvent }) {
   useEffect(() => {
@@ -39,80 +43,35 @@ export default function AddFormContent({ closeEvent }) {
   const [allFiles, setAllFiles] = useState([]);
   const [file, setFile] = useState();
   const [fileError, setFileError] = useState();
-  const navigate = useNavigate();
   const onChangeCourse = (e) => {
     setCourseName(e.target.value);
-    console.log(e.target.value);
     setCourseNameError("");
   };
   const onChangeChapter = (e) => {
     setChapter(e.target.value);
-    console.log(e.target.value);
     setChapterError("");
   };
   const onChangeContentVideo = (e) => {
     setContentVideo(e.target.value);
-    console.log(e.target.value);
     setContentVideoError("");
   };
   const onChangeContentFile = (e) => {
     setFile(e.target.value);
-    console.log(e.target.value);
     setFileError("");
   };
 
   const getAllCourse = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      let result = await axios
-        .get(`${baseURL}/getAllCourse`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data[0]);
-          console.log(allCourse, "all");
-          setAllCourse(result.data.data);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-        });
+      let response = await getAllCourseInstance();
+      setAllCourse(response);
     } catch (error) {
       console.error("Error during signup:", error);
     }
   };
   const getAllChapter = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      let result = await axios
-        .get(`${baseURL}/getAllChapter`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          console.log(result.data.data[0]);
-          console.log(allChapter, "alllllll");
-          setAllChapter(result.data.data);
-          console.log(result.data.data);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-        });
+      let response = await getAllChapterInstance();
+      setAllChapter(response);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -123,54 +82,16 @@ export default function AddFormContent({ closeEvent }) {
       if (!accessToken) {
         throw new Error("Access token is missing.");
       }
-      let result = await axios
-        .get(`${baseURL}/getAllContentVideo`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          setAllContentVideo(result.data.data);
-          //   console.log(allProgrammingLanguage);
-          // console.log(allProgrammingLanguage);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-        });
+      let response = await getAllContentVideoInstance();
+      setAllContentVideo(response);
     } catch (error) {
       console.error("Error during signup:", error);
     }
   };
   const getallContentFiles = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      let result = await axios
-        .get(`${baseURL}/allFiles`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          setAllFiles(result.data.data);
-          // setFile(result.data.data.name);
-          // console.log(result.data.data.pdf);
-          console.log(allFiles);
-        })
-
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-        });
+      let response = await getAllContentFileInstance();
+      setAllFiles(response);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -188,44 +109,20 @@ export default function AddFormContent({ closeEvent }) {
     if (courseName) {
       try {
         e.preventDefault();
-        const accessToken = JSON.parse(
-          localStorage.getItem("accessToken") || ""
-        );
-        if (!accessToken) {
-          throw new Error("Access token is missing.");
-        }
         const fields = {
           course: courseName,
           chapter: chapter,
           contentvideo: contentVideo,
           contentfile: file,
         };
-        let result = await axios
-          .post(`${baseURL}/content/create`, fields, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              // "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((result) => {
-            console.log("Created");
-            console.log(result);
-            console.log(result.data.data);
-            console.log(result.data.message);
-            toast.success(result.data.message);
-            closeEvent();
-            setTimeout(() => {
-              navigate("/managecategories");
-            }, 3000);
-          })
-          .catch((err) => {
-            console.log(err.response);
-            console.log(fields);
-            toast.error(err.response.data.message);
-            console.log(result.data.data.message);
-            console.log(accessToken);
-            // console.log(result);
-          });
+
+        let response = await createContentInstance(fields);
+        if (response.message == "Content already exists") {
+          toast.error(response.message, { autoClose: 2000 });
+        } else {
+          toast.success(response.message, { autoClose: 2000 });
+          closeEvent();
+        }
       } catch (error) {
         console.error("Error during signup:", error);
       }
@@ -365,7 +262,7 @@ export default function AddFormContent({ closeEvent }) {
         </Grid>
 
         {/* <Box height={15} /> */}
-        <ToastContainer />
+        {/* <ToastContainer /> */}
       </Box>
     </>
   );

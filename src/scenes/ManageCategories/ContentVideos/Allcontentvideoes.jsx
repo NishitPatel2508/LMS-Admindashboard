@@ -1,25 +1,6 @@
 import React from "react";
-import {
-  Box,
-  Button,
-  IconButton,
-  Typography,
-  Modal,
-  useTheme,
-  FormControl,
-  Select,
-  MenuItem,
-  InputLabel,
-  Stack,
-} from "@mui/material";
-import {
-  GridRowModes,
-  DataGrid,
-  GridToolbar,
-  GridToolbarContainer,
-  GridActionsCellItem,
-  GridRowEditStopReasons,
-} from "@mui/x-data-grid";
+import { Box, Button, Modal, useTheme } from "@mui/material";
+import { DataGrid, GridToolbar, GridActionsCellItem } from "@mui/x-data-grid";
 
 import AddFormCV from "./AddFormCV";
 import UpdateContentVideoes from "./UpdateContentVideoes";
@@ -27,33 +8,35 @@ import { tokens } from "../../../theme";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Close";
-import { useMode } from "../../../theme";
 import Sidebar from "../../global/Sidebar";
 import Topbar from "../../global/Topbar";
-import StatBox from "../../../components/StatBox";
 import Header from "../../../components/Header";
 import { ToastContainer, toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { baseURL } from "../../../basic";
+import { getAllContentVideoInstance } from "../../../instances/ContentVideoInstance";
 
 const Allcontentvideoes = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
   const [isSidebar, setIsSidebar] = useState(true);
   const [allContentVideo, setAllContentVideo] = useState([]);
 
   const [open, setOpen] = React.useState(false);
   const [update, setUpdate] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    getAllContentVideo();
+  };
   const [openHandle, setOpenHandle] = React.useState(false);
   const handleOpenUpdate = () => setOpenHandle(true);
-  const handleCloseUpdate = () => setOpenHandle(false);
-  const navigate = useNavigate();
+  const handleCloseUpdate = () => {
+    setOpenHandle(false);
+    getAllContentVideo();
+  };
 
   const style = {
     position: "absolute",
@@ -72,28 +55,8 @@ const Allcontentvideoes = () => {
   }, []);
   const getAllContentVideo = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      let result = await axios
-        .get(`${baseURL}/getAllContentVideo`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          setAllContentVideo(result.data.data);
-          //   console.log(allProgrammingLanguage);
-          // console.log(allProgrammingLanguage);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-        });
+      let response = await getAllContentVideoInstance();
+      setAllContentVideo(response);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -113,18 +76,12 @@ const Allcontentvideoes = () => {
           },
         })
         .then((result) => {
-          toast.success("Deleted successfully");
+          toast.success("Deleted successfully", { autoClose: 2000 });
           console.log("Deleted");
-          setTimeout(() => {
-            navigate("/managecategories");
-          }, 3000);
-
-          console.log(result);
+          getAllContentVideo();
         })
         .catch((err) => {
           console.log(err.response);
-          console.log(accessToken);
-          console.log(id);
         });
     } catch (error) {
       console.error("Error during signup:", error);
@@ -172,7 +129,6 @@ const Allcontentvideoes = () => {
               setUpdate(true);
               handleOpenUpdate();
               localStorage.setItem("updatecontentvideo", ele._id);
-              console.log(ele._id);
             }
           });
         };
@@ -225,10 +181,6 @@ const Allcontentvideoes = () => {
   });
   return (
     <>
-      <div className="app">
-        <Sidebar isSidebar={isSidebar} />
-        <main className="content">
-          <Topbar setIsSidebar={setIsSidebar} />
           <Modal
             open={open}
             // onClose={handleClose}
@@ -319,13 +271,12 @@ const Allcontentvideoes = () => {
                   components={{ Toolbar: GridToolbar }}
                   getRowId={(rows) => rows.id}
                   editMode="row"
+                  // loading={loading}
                 />
               </Box>
             </Box>
           </Box>
           <ToastContainer />
-        </main>
-      </div>
     </>
   );
 };

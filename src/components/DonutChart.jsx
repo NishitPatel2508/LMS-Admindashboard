@@ -9,8 +9,9 @@ import { ResponsivePieCanvas } from "@nivo/pie";
 // import { Pie } from "react-chartjs-2";
 import { baseURL } from "../basic";
 import { Chart as ChartJS, Tooltip, Legend, ArcElement } from "chart.js";
+import { getAllRevenueInstance } from "../instances/dashboardInstance";
 ChartJS.register(Tooltip, Legend, ArcElement);
-const DonutChart = () => {
+const DonutChart = ({ isDashboard = false }) => {
   const [finalArray1, setFinalArray1] = useState([]);
   const finalArray = [];
   const pieArray = [];
@@ -39,25 +40,19 @@ const DonutChart = () => {
       if (!accessToken) {
         throw new Error("Access token is missing.");
       }
-      const result = await axios
-        .get(`${baseURL}//getAllRevenue`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
+      await getAllRevenueInstance()
         .then((response) => {
           console.log(response);
           if (response) {
-            if (response.data) {
-              setAllData(response.data.data);
-              console.log(response.data.data);
+            if (response) {
+              setAllData(response);
+              console.log(response);
               console.log("all", allData);
-              response.data.data.map((e) => {
+              response.map((e) => {
                 i += e.courseAmount;
                 // console.log(e.courseAmount, e.courseInfo.name);
               });
-              response.data.data.map((e) => {
+              response.map((e) => {
                 if (courseNames.includes(e.courseInfo) == false) {
                   cnt++;
                   courseNames.push(e.courseInfo);
@@ -100,72 +95,6 @@ const DonutChart = () => {
 
   return (
     <>
-      {/* <div
-        style={{
-          height: "350px",
-          width: "800px",
-          // border: "1px solid black",
-        }}
-      >
-        <ResponsivePieCanvas
-          data={finalArray1}
-          margin={{ top: 60, right: 200, bottom: 40, left: 90 }}
-          innerRadius={0.5}
-          padAngle={0.7}
-          cornerRadius={3}
-          activeOuterRadiusOffset={8}
-          colors={{ scheme: "paired" }}
-          borderColor={{
-            from: "color",
-            modifiers: [["darker", 0.6]],
-          }}
-          arcLinkLabelsSkipAngle={8}
-          arcLinkLabelsTextColor="#333333"
-          arcLinkLabelsThickness={2}
-          arcLinkLabelsColor={{ from: "color" }}
-          arcLabelsSkipAngle={10}
-          arcLabelsTextColor="#333333"
-          defs={[
-            {
-              id: "dots",
-              type: "patternDots",
-              background: "inherit",
-              color: "rgba(255, 255, 255, 0.3)",
-              size: 4,
-              padding: 1,
-              stagger: true,
-            },
-            {
-              id: "lines",
-              type: "patternLines",
-              background: "inherit",
-              color: "rgba(255, 255, 255, 0.3)",
-              rotation: -45,
-              lineWidth: 6,
-              spacing: 10,
-            },
-          ]}
-          legends={[
-            {
-              anchor: "bottom",
-              direction: "row",
-              justify: false,
-              translateX: 10,
-              translateY: 35,
-              itemsSpacing: 10,
-              itemWidth: 180,
-              itemHeight: 18,
-              itemTextColor: "black",
-              itemDirection: "left-to-right",
-              itemOpacity: 1,
-              symbolSize: 14,
-              symbolShape: "circle",
-            },
-          ]}
-        />
-      </div> */}
-
-      {/* <h1>{pieChartData}</h1> */}
       <ResponsivePie
         data={finalArray1}
         theme={{
@@ -239,11 +168,11 @@ const DonutChart = () => {
         ]}
         legends={[
           {
-            anchor: "bottom",
-            direction: "row",
+            anchor: isDashboard ? "bottom-left" : "bottom-right", // changed"bottom",
+            direction: "column",
             justify: false,
-            translateX: 10,
-            translateY: 35,
+            translateX: 12,
+            translateY: isDashboard ? 85 : 65,
             itemsSpacing: 10,
             itemWidth: 180,
             itemHeight: 18,

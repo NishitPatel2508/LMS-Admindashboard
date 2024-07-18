@@ -18,6 +18,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { baseURL } from "../../../basic";
+import { getAllChapterInstance } from "../../../instances/ChapterInstance";
+import { createContentVideoInstance } from "../../../instances/ContentVideoInstance";
 
 export default function AddFormCV({ closeEvent }) {
   useEffect(() => {
@@ -51,29 +53,8 @@ export default function AddFormCV({ closeEvent }) {
   };
   const getAllChapter = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      let result = await axios
-        .get(`${baseURL}/getAllChapter`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          setAllChapter(result.data.data);
-          console.log(allChapter);
-          // console.log(arrayPrint());
-          // convertToArray(result.data.data);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-        });
+      let data = await getAllChapterInstance();
+      setAllChapter(data);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -91,41 +72,18 @@ export default function AddFormCV({ closeEvent }) {
     if (thumbnail && videoLink && chapterName) {
       try {
         e.preventDefault();
-        const accessToken = JSON.parse(
-          localStorage.getItem("accessToken") || ""
-        );
-        if (!accessToken) {
-          throw new Error("Access token is missing.");
-        }
         const fields = {
           chapter: chapterName,
           thumbnail: thumbnail,
           videoLink: videoLink,
         };
-        let result = await axios
-          .post(`${baseURL}/contentvideo/create`, fields, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              // "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((result) => {
-            console.log("Created");
-            console.log(result);
-            // console.log(result.data.SubCategory);
-            toast.success(result.data.message);
-            closeEvent();
-            setTimeout(() => {
-              navigate("/managecategories");
-            }, 3000);
-          })
-          .catch((err) => {
-            console.log(err.response);
-            toast.error(err.response.data.message);
-            console.log(result.data.data.message);
-            console.log(accessToken);
-            // console.log(result);
-          });
+        let response = await createContentVideoInstance(fields);
+        if (response.message == "Content already exists") {
+          toast.error(response.message, { autoClose: 2000 });
+        } else {
+          toast.success(response.message, { autoClose: 2000 });
+          closeEvent();
+        }
       } catch (error) {
         console.error("Error during signup:", error);
       }

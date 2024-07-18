@@ -1,6 +1,6 @@
 import { useState } from "react";
 import FullCalendar from "@fullcalendar/react";
-import { formatDate } from '@fullcalendar/core'
+import { formatDate } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -54,11 +54,6 @@ const Calendar = () => {
   };
 
   return (
-
-      <div className="app">
-        <Sidebar isSidebar={isSidebar} />
-        <main className="content">
-          <Topbar setIsSidebar={setIsSidebar} />
     <Box m="20px">
       <Header title="Calendar" subtitle="Full Calendar Interactive Page" />
 
@@ -137,9 +132,6 @@ const Calendar = () => {
         </Box>
       </Box>
     </Box>
-        </main>
-        </div>
-
   );
 };
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Box, Button, Modal, useTheme } from "@mui/material";
 import { DataGrid, GridToolbar, GridActionsCellItem } from "@mui/x-data-grid";
 
@@ -15,24 +15,31 @@ import Topbar from "../../global/Topbar";
 import Header from "../../../components/Header";
 import { ToastContainer, toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { baseURL } from "../../../basic";
+import {
+  deleteChapterInstance,
+  getAllChapterInstance,
+} from "../../../instances/ChapterInstance";
 
 const Allchapteres = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isSidebar, setIsSidebar] = useState(true);
   const [allChapter, setAllChapters] = useState([]);
+  const [updateChapter, setUpdateChapter] = useState("");
 
   const [open, setOpen] = React.useState(false);
   const [update, setUpdate] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    getallChapter();
+  };
   const [openHandle, setOpenHandle] = React.useState(false);
   const handleOpenUpdate = () => setOpenHandle(true);
-  const handleCloseUpdate = () => setOpenHandle(false);
-  const navigate = useNavigate();
+  const handleCloseUpdate = () => {
+    setOpenHandle(false);
+    getallChapter();
+  };
 
   const style = {
     position: "absolute",
@@ -49,30 +56,12 @@ const Allchapteres = () => {
   useEffect(() => {
     getallChapter();
   }, []);
+  // const show
+
   const getallChapter = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      let result = await axios
-        .get(`${baseURL}/getAllChapter`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          setAllChapters(result.data.data);
-          console.log(allChapter);
-        })
-
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-        });
+      let data = await getAllChapterInstance();
+      setAllChapters(data);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -80,31 +69,11 @@ const Allchapteres = () => {
 
   const deleteChapter = async (id) => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-
-      let result = await axios
-        .delete(`${baseURL}/chapter/delete/${id}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-        .then((result) => {
-          toast.success("Deleted successfully");
-          console.log("Deleted");
-          setTimeout(() => {
-            navigate("/managecategories");
-          }, 3000);
-
-          console.log(result);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-          console.log(id);
-        });
+      let response = await deleteChapterInstance(id);
+      toast.success(response.message, { autoClose: 2000 });
+      setTimeout(() => {
+        getallChapter();
+      }, 2000);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -147,7 +116,7 @@ const Allchapteres = () => {
               setUpdate(true);
               handleOpenUpdate();
               localStorage.setItem("updatechapter", ele._id);
-              console.log(ele._id);
+              setUpdateChapter(ele._id);
             }
           });
         };
@@ -203,10 +172,7 @@ const Allchapteres = () => {
 
   return (
     <>
-      <div className="app">
-        <Sidebar isSidebar={isSidebar} />
-        <main className="content">
-          <Topbar setIsSidebar={setIsSidebar} />
+
           <Modal
             open={open}
             // onClose={handleClose}
@@ -227,7 +193,7 @@ const Allchapteres = () => {
               <UpdateChapters closeEvent={handleCloseUpdate} />
             </Box>
           </Modal>
-          ,
+        
           <Box m="18px">
             <Box
               display="flex"
@@ -294,13 +260,12 @@ const Allchapteres = () => {
                   components={{ Toolbar: GridToolbar }}
                   getRowId={(rows) => rows.id}
                   editMode="row"
+                  // loading={loading}
                 />
               </Box>
             </Box>
           </Box>
           <ToastContainer />
-        </main>
-      </div>
     </>
   );
 };

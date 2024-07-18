@@ -44,10 +44,16 @@ import { useNavigate } from "react-router-dom";
 import ReactPDF from "@react-pdf/renderer";
 import { baseURL, BLOB_READ_WRITE_TOKEN } from "../../../basic";
 import { del } from "@vercel/blob";
+import {
+  deleteContentFileInstance,
+  getAllContentFileInstance,
+} from "../../../instances/ContentFileInstance";
 
 const AllContentFiles = () => {
   pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
   const theme = useTheme();
+
+  const [loading, setLoading] = useState(true);
   const colors = tokens(theme.palette.mode);
   const [isSidebar, setIsSidebar] = useState(true);
   const [allFiles, setAllFiles] = useState([]);
@@ -56,21 +62,26 @@ const AllContentFiles = () => {
   const [open, setOpen] = React.useState(false);
   const [update, setUpdate] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    getallContentFiles();
+  };
   const [openHandle, setOpenHandle] = React.useState(false);
   const handleOpenUpdate = () => setOpenHandle(true);
-  const handleCloseUpdate = () => setOpenHandle(false);
+  const handleCloseUpdate = () => {
+    setOpenHandle(false);
+    getallContentFiles();
+  };
   const handleOpenFile = () => setOpenHandleFile(true);
   const [openHandleFile, setOpenHandleFile] = React.useState(false);
-  const handleCloseFile = () => setOpenHandleFile(false);
-  const navigate = useNavigate();
+  const handleCloseFile = () => {
+    setOpenHandleFile(false);
+    // getallContentFiles();
+  };
+
   // const port = process.env.PORT;
   const [numPages, setNumPages] = useState();
-  const [pageNumber, setPageNumber] = useState(1);
-  const [readPDF, setReadPDF] = useState("");
-  function onDocumentLoadSuccess({ numPages }) {
-    setNumPages(numPages);
-  }
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -99,30 +110,8 @@ const AllContentFiles = () => {
   }, []);
   const getallContentFiles = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      let result = await axios
-        .get(`${baseURL}/allFiles`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          setAllFiles(result.data.data);
-          // setFile(result.data.data.name);
-          // console.log(result.data.data.pdf);
-          console.log(allFiles);
-        })
-
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-        });
+      let response = await getAllContentFileInstance();
+      setAllFiles(response);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -130,31 +119,8 @@ const AllContentFiles = () => {
 
   const deleteContentFile = async (id) => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-
-      let result = await axios
-        .delete(`${baseURL}/file/delete/${id}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-        .then((result) => {
-          toast.success("Deleted successfully");
-          console.log("Deleted");
-          setTimeout(() => {
-            navigate("/managecategories");
-          }, 3000);
-
-          console.log(result);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-          console.log(id);
-        });
+      let result = await deleteContentFileInstance(id);
+      toast.success("Deleted successfully", { autoClose: 2000 });
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -226,7 +192,7 @@ const AllContentFiles = () => {
               setFile(ele.pdf);
               setFileName(ele.name);
               // setReadPDF(ele.pdf)
-              console.log(ele.pdf);
+              // console.log(ele.pdf);
               // window.open(ele.name);
               // let reader = new FileReader();
               // reader.readAsDataURL(ele.name);
@@ -284,10 +250,6 @@ const AllContentFiles = () => {
 
   return (
     <>
-      <div className="app">
-        <Sidebar isSidebar={isSidebar} />
-        <main className="content">
-          <Topbar setIsSidebar={setIsSidebar} />
           <Modal
             open={open}
             // onClose={handleClose}
@@ -408,13 +370,13 @@ const AllContentFiles = () => {
                   components={{ Toolbar: GridToolbar }}
                   getRowId={(rows) => rows.id}
                   editMode="row"
+                  // loading={loading}
                 />
               </Box>
             </Box>
           </Box>
           <ToastContainer />
-        </main>
-      </div>
+
     </>
   );
 };

@@ -18,6 +18,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { baseURL } from "../../../basic";
+import { getAllCourseInstance } from "../../../instances/Course/CourseInstance";
+import { createChapterInstance } from "../../../instances/ChapterInstance";
 
 export default function AddFormChapters({ closeEvent }) {
   useEffect(() => {
@@ -32,38 +34,17 @@ export default function AddFormChapters({ closeEvent }) {
   const [chapter, setChapter] = useState("");
   const onChangeCourse = (e) => {
     setCourseName(e.target.value);
-    console.log(e.target.value);
     setCourseNameError("");
   };
   const onChangeChapter = (e) => {
     setChapter(e.target.value);
-    console.log(e.target.value);
     setChapterError("");
   };
 
   const getAllCourse = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      let result = await axios
-        .get(`${baseURL}/getAllCourse`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data[0]);
-          console.log(allCourse, "all");
-          setAllCourse(result.data.data);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-        });
+      let response = await getAllCourseInstance();
+      setAllCourse(response);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -78,40 +59,17 @@ export default function AddFormChapters({ closeEvent }) {
     if (courseName && chapter) {
       try {
         e.preventDefault();
-        const accessToken = JSON.parse(
-          localStorage.getItem("accessToken") || ""
-        );
-        if (!accessToken) {
-          throw new Error("Access token is missing.");
-        }
         const fields = {
           chapterName: chapter,
           course: courseName,
         };
-        let result = await axios
-          .post(`http://localhost:5000/chapter/create`, fields, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              // "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((result) => {
-            console.log("Created");
-            console.log(result);
-            console.log(result.data.data);
-            toast.success(result.data.message);
-            closeEvent();
-            setTimeout(() => {
-              navigate("/managecategories");
-            }, 3000);
-          })
-          .catch((err) => {
-            console.log(err.response);
-            toast.error(err.response.data.message);
-            console.log(result.data.data.message);
-            console.log(accessToken);
-            // console.log(result);
-          });
+        let response = await createChapterInstance(fields);
+        if (response.message == "Chapter already exists") {
+          toast.error(response.message, { autoClose: 2000 });
+        } else {
+          toast.success(response.message, { autoClose: 2000 });
+          closeEvent();
+        }
       } catch (error) {
         console.error("Error during signup:", error);
       }

@@ -32,43 +32,82 @@ import AllContentFiles from "./scenes/ManageCategories/ContentFiles/AllContentFi
 import SignupPage from "./User/Test/SignupPage";
 import Logout from "./Instructor/Logout";
 import PieChart from "./components/DonutChart";
+import axios from "axios";
+import Loading from "./scenes/global/Loading";
+import { useEffect } from "react";
+import PrivateRoute from "./PrivateRoute";
+
 // import Project from "./s"
 // import Project from "./scenes/testn";
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
+  const [loading, setLoading] = useState(false);
+    useEffect(() => {
+    //Request Interceptor
+    axios.interceptors.request.use(
+      (config) => {
+        setLoading(true);
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      }
+    );
 
+    //Response Interceptor
+    axios.interceptors.response.use(
+      (config) => {
+        // setTimeout(() => {
+        setLoading(false);
+        // }, 1000);
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      }
+    );
+  }, []);
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <Loading show={loading}/>
             <Routes>
               <Route path="/" element={<SignupPage/>}/>
-             
               <Route path="/login" element={<Login/>}/>
               <Route path="/logout" element={<Logout/>}/>
               <Route path="/fb" element={<DesignFile/>}/>
-              <Route path="/db" element={<Dashboard />} />
-              <Route path="/profileupdate" element={<UpdateProfile/>} />
-              <Route path="/courses" element={<Course />} />
-              <Route path="/courseupdates" element={<CourseUpdate />} />
-              <Route path="/addnewcourse" element={<CreateCourse />} />
-              <Route path="/students" element={<Contacts />} />
-              <Route path="/managecategories" element={<Invoices />} />
-              <Route path="/manageallsubcategories" element={<Allsubcategories />} />
-              <Route path="/manageallprogramminglanguages" element={<Allprogramminglang />} />
-              <Route path="/manageallchapters" element={<Allchapteres />} />
-              <Route path="/manageallcontentvideos" element={<Allcontentvideoes />} />
-              <Route path="/manageallcontents" element={<Allcontent />} />
-              <Route path="/manageallcontentfiles" element={<AllContentFiles />} />
-              <Route path="/form" element={<Form />} />
-              <Route path="/bar" element={<Bar />} />
-              <Route path="/donut" element={<Donut />} />
-              <Route path="/line" element={<Line />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/calendar" element={<Calendar />} />
-              <Route path="/geography" element={<Geography />} />
             </Routes>
+            <div className="app">
+              <Sidebar isSidebar={isSidebar} />
+              <main className="content">
+                <Topbar setIsSidebar={setIsSidebar} />
+                  <Routes>
+                    <Route path="/db" element={<PrivateRoute>  <Dashboard /></PrivateRoute>} />
+                      <Route path="/profileupdate" element={<UpdateProfile/>} />
+                      <Route path="/courses" element={<Course />} />
+                      <Route path="/courseupdates" element={<CourseUpdate />} />
+                      <Route path="/addnewcourse" element={<CreateCourse />} />
+                      <Route path="/students" element={<Contacts />} />
+                      <Route path="/managecategories" element={<Invoices />} />
+                      <Route path="/manageallsubcategories" element={<Allsubcategories />} />
+                      <Route path="/manageallprogramminglanguages" element={<Allprogramminglang />} />
+                      <Route path="/manageallchapters" element={<Allchapteres />} />
+                      <Route path="/manageallcontentvideos" element={<Allcontentvideoes />} />
+                      <Route path="/manageallcontents" element={<Allcontent />} />
+                      <Route path="/manageallcontentfiles" element={<AllContentFiles />} />
+                      <Route path="/form" element={<Form />} />
+                      <Route path="/bar" element={<Bar />} />
+                      <Route path="/donut" element={<Donut />} />
+                      <Route path="/line" element={<Line />} />
+                      <Route path="/faq" element={<FAQ />} />
+                      <Route path="/calendar" element={<Calendar />} />
+                      <Route path="/geography" element={<Geography />} />
+                  </Routes>
+              </main>
+            </div>
+            
       </ThemeProvider>
     </ColorModeContext.Provider> 
   

@@ -71,8 +71,7 @@ export default function UpdateContent({ closeEvent }) {
         throw new Error("Access token is missing.");
       }
       const id = localStorage.getItem("updatecontent");
-      //   setCourseId(courseid);
-      //   console.log(courseid);
+
       let result = await axios
         .get(`${baseURL}/content/${id}`, {
           headers: {
@@ -82,21 +81,15 @@ export default function UpdateContent({ closeEvent }) {
         })
         .then((result) => {
           console.log(result);
-          console.log(result.data.data);
-          // console.log(courseId);
+
           setChapter(result.data.data.chapterDetailes._id);
-          console.log(result.data.data.chapterDetailes.chapterName);
           setCourseName(result.data.data.courseDetailes._id);
-          console.log(result.data.data.courseDetailes._id);
+
           setFile(result.data.data.contentFileDetailes._id);
-          console.log(result.data.data.contentFileDetailes._id);
-          console.log(file);
           setContentVideo(result.data.data.contentVideoDetailes._id);
-          console.log(result.data.data.contentVideoDetailes._id);
         })
         .catch((err) => {
           console.log(err.response);
-          console.log(accessToken);
         });
     } catch (error) {
       console.error("Error during signup:", error);
@@ -117,14 +110,11 @@ export default function UpdateContent({ closeEvent }) {
           },
         })
         .then((result) => {
-          console.log(result);
-          console.log(result.data.data[0]);
-          console.log(allCourse, "all");
+          // console.log(result);
           setAllCourse(result.data.data);
         })
         .catch((err) => {
           console.log(err.response);
-          console.log(accessToken);
         });
     } catch (error) {
       console.error("Error during signup:", error);
@@ -144,16 +134,10 @@ export default function UpdateContent({ closeEvent }) {
           },
         })
         .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          console.log(result.data.data[0]);
-          console.log(allChapter, "alllllll");
           setAllChapter(result.data.data);
-          console.log(result.data.data);
         })
         .catch((err) => {
           console.log(err.response);
-          console.log(accessToken);
         });
     } catch (error) {
       console.error("Error during signup:", error);
@@ -173,15 +157,12 @@ export default function UpdateContent({ closeEvent }) {
           },
         })
         .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
           setAllContentVideo(result.data.data);
           //   console.log(allProgrammingLanguage);
           // console.log(allProgrammingLanguage);
         })
         .catch((err) => {
           console.log(err.response);
-          console.log(accessToken);
         });
     } catch (error) {
       console.error("Error during signup:", error);
@@ -201,17 +182,11 @@ export default function UpdateContent({ closeEvent }) {
           },
         })
         .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
           setAllFiles(result.data.data);
-          // setFile(result.data.data.name);
-          console.log(result.data.data.name);
-          console.log(allFiles);
         })
 
         .catch((err) => {
           console.log(err.response);
-          console.log(accessToken);
         });
     } catch (error) {
       console.error("Error during signup:", error);
@@ -248,23 +223,12 @@ export default function UpdateContent({ closeEvent }) {
             },
           })
           .then((result) => {
-            console.log("Updated");
-            console.log(result);
-            console.log(result.data.data);
-            // setSubCategory(result.data.SubCategory.subprogrammingLangName);
-            toast.success(result.data.message);
+            toast.success(result.data.message, { autoClose: 2000 });
             closeEvent();
-            setTimeout(() => {
-              navigate("/managecategories");
-            }, 3000);
           })
           .catch((err) => {
             console.log(err.response);
             toast.error(err.response.data.message);
-            // console.log(result.data.data.message);
-            console.log(accessToken);
-            console.log(id);
-            // console.log(result);
           });
       } catch (error) {
         console.error("Error during signup:", error);

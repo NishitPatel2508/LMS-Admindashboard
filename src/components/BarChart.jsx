@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
 import { baseURL } from "../basic";
+import { getAllRevenueInstance } from "../instances/dashboardInstance";
 const BarChart = ({ isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -20,6 +21,7 @@ const BarChart = ({ isDashboard = false }) => {
     "hsl(291, 70%, 50%)",
     "hsl(229, 70%, 50%)",
     "hsl(344, 70%, 50%)",
+    "hsl(244, 70%, 50%)",
   ];
   //   January: 0,
   //   February: 0,
@@ -45,25 +47,15 @@ const BarChart = ({ isDashboard = false }) => {
   let cnt = 0;
   const getAllRevenue = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      const result = await axios
-        .get(`${baseURL}/getAllRevenue`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
+      const response = await getAllRevenueInstance()
         .then((response) => {
           console.log(response);
           if (response) {
-            if (response.data) {
-              setAllData(response.data.data);
-              console.log(response.data.data);
+            if (response) {
+              setAllData(response);
+              console.log(response);
               console.log("all", allData);
-              response.data.data.map((e) => {
+              response.map((e) => {
                 // if (courseNames.includes(e.courseInfo) == false) {
                 //   cnt++;
                 //   courseNames.push(e.courseInfo);
@@ -245,11 +237,11 @@ const BarChart = ({ isDashboard = false }) => {
           anchor: "top-right",
           direction: "column",
           justify: false,
-          translateX: 40,
+          translateX: 20,
           translateY: -50,
           itemsSpacing: 5,
           itemWidth: 100,
-          itemHeight: 20,
+          itemHeight: 25,
           itemDirection: "left-to-right",
           itemOpacity: 1,
           symbolSize: 20,

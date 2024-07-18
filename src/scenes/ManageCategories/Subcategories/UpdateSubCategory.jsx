@@ -19,6 +19,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { baseURL } from "../../../basic";
+import {
+  getSingleSubCategoryInstance,
+  getUpdateSubCategoryInstance,
+} from "../../../instances/SubCategoryInstance";
+import { getAllCategoryInstance } from "../../../instances/CategoryInstance";
 
 export default function UpdateSubCategory({ closeEvent }) {
   useEffect(() => {
@@ -37,45 +42,21 @@ export default function UpdateSubCategory({ closeEvent }) {
 
   const onChangeCategory = (e) => {
     setCategoryName(e.target.value);
-    console.log(e.target.value);
+
     setCategoryError("");
   };
   const onChangeSubCategory = (e) => {
     setSubCategory(e.target.value);
-    console.log(e.target.value);
     setSubCategoryError("");
   };
   const getSingleSubCategory = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
       const id = localStorage.getItem("updatesubcategories");
-      //   setCourseId(courseid);
-      //   console.log(courseid);
-      let result = await axios
-        .get(`${baseURL}/subCategory/${id}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          // console.log(courseId);
-          setCategoryName(result.data.data.category._id);
-          console.log(result.data.data.category._id);
-          // console.log(category.categoryName);
-          setSubCategory(result.data.data.subCategoryName);
-          console.log(result.data.data.subCategoryName);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-          console.log(id);
-        });
+
+      const data = await getSingleSubCategoryInstance(id);
+
+      setCategoryName(data.category._id);
+      setSubCategory(data.subCategoryName);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -83,30 +64,8 @@ export default function UpdateSubCategory({ closeEvent }) {
 
   const getAllCategory = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-
-      let result = await axios
-        .get(`${baseURL}/getAllCategory`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          setAllCategory(result.data.data);
-          // console.log(allCategory);
-          // console.log(arrayPrint());
-          // convertToArray(result.data.data);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-        });
+      const data = await getAllCategoryInstance();
+      setAllCategory(data);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -121,45 +80,24 @@ export default function UpdateSubCategory({ closeEvent }) {
     if (categoryName && subCategory) {
       try {
         e.preventDefault();
-        const accessToken = JSON.parse(
-          localStorage.getItem("accessToken") || ""
-        );
-        if (!accessToken) {
-          throw new Error("Access token is missing.");
-        }
         const id = localStorage.getItem("updatesubcategories");
         const fields = {
           category: categoryName,
           subCategoryName: subCategory,
         };
-        let result = await axios
-          .patch(`${baseURL}/subCategory/update/${id}`, fields, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              // "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((result) => {
-            console.log("Updated");
-            console.log(result);
-            console.log(result.data.data);
-            // setSubCategory(result.data.SubCategory.subCategoryName);
-            toast.success(result.data.message);
+        const response = await getUpdateSubCategoryInstance(fields, id)
+          .then((response) => {
+            toast.success(response.message, { autoClose: 2000 });
             closeEvent();
-            setTimeout(() => {
-              navigate("/managecategories");
-            }, 3000);
           })
           .catch((err) => {
             console.log(err.response);
-            toast.error(err.response.data.message);
-            console.log(result.data.data.message);
-            console.log(accessToken);
-            console.log(id);
+            toast.error(err.response.data.message, { autoClose: 2000 });
+
             // console.log(result);
           });
       } catch (error) {
-        console.error("Error during signup:", error);
+        console.error("Error during UpdateSubcategory:", error);
       }
     }
   };
