@@ -22,7 +22,7 @@ axiosInstructorInstance.interceptors.response.use(
   },
   error => {
       console.log("Unauthorized access - 401")
-      window.location.href = "/login"
+      // window.location.href = "/login"
       // Navigate("/login")
     return Promise.reject(error)
   }

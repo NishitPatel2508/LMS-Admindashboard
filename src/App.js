@@ -72,7 +72,6 @@ function App() {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Loading show={loading}/>
             <Routes>
               <Route path="/" element={<SignupPage/>}/>
               <Route path="/login" element={<Login/>}/>
@@ -83,6 +82,7 @@ function App() {
               <Sidebar isSidebar={isSidebar} />
               <main className="content">
                 <Topbar setIsSidebar={setIsSidebar} />
+        <Loading show={loading}/>
                   <Routes>
                     <Route path="/db" element={<PrivateRoute>  <Dashboard /></PrivateRoute>} />
                       <Route path="/profileupdate" element={<UpdateProfile/>} />

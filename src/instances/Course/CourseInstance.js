@@ -4,16 +4,16 @@ import axiosInstance from "../axiosInstances";
 // const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
 
 //Get All
-export const getAllCourseInstance = async () => {
+export const getAllCourseInstance = async (page) => {
   try {
     const response = await axiosInstance({
-      url: "/getAllCourse/",
+      url: `/getAllCourse?page=${page}`,
       method: "GET",
 
       // timeout: 20000,
     });
     // console.log(response.data.data);
-    return response.data.data;
+    return response.data;
   } catch (error) {
     console.log("eeeyyyy", error);
   }

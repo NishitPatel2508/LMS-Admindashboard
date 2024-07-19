@@ -5,11 +5,10 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 import { tokens } from "../../theme";
-import Topbar from "../global/Topbar";
-import Sidebar from "../global/Sidebar";
 import Header from "../../components/Header";
-import { ColorModeContext, useMode } from "../../theme";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -24,14 +23,24 @@ const Course = () => {
   const colors = tokens(theme.palette.mode);
   const [allCourse, setAllCourse] = useState([]);
   const navigate = useNavigate();
-
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState();
   useEffect(() => {
     CourseDetails();
-  }, []);
+    console.log(page);
+  }, [page, totalPage]);
+  const handlePageNo = (event, value) => {
+    setPage(value);
+  };
   const CourseDetails = async () => {
     try {
-      const data = await getAllCourseInstance();
-      setAllCourse(data);
+      const data = await getAllCourseInstance(page);
+      // console.log(data.data);
+      // // console.log(data);
+      // console.log("Pagination", data);
+      // console.log("Page", Math.round(data.pagination.pageCount));
+      setTotalPage(Math.round(data.pagination.pageCount));
+      setAllCourse(data.data);
     } catch (e) {
       console.log("ttt", e);
     }
@@ -47,15 +56,12 @@ const Course = () => {
   };
   const handleDelete = async (id) => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
       try {
         const response = await handleDeleteCourse(id).then((res) => {
           toast.success("Deleted successfully", { autoClose: 2000 });
           console.log("Deleted");
           setTimeout(() => {
+            setPage(1);
             CourseDetails();
           }, 2000);
         });
@@ -67,98 +73,122 @@ const Course = () => {
     }
   };
   return (
-        <Box m="20px">
-          {/* HEADER */}
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Header title="Courses" subtitle="Your Courses" />
+    <Box m="20px">
+      {/* HEADER */}
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Header title="Courses" subtitle="Your Courses" />
 
-            <Box>
-              <Button
-                sx={{
-                  backgroundColor: "#5d5de7",
-                  color: colors.grey[100],
-                  fontSize: "14px",
-                  fontWeight: "bold",
-                  padding: "10px 20px",
-                }}
-                onClick={() => {
-                  navigate("/addnewcourse");
-                }}
-              >
-                <AddIcon sx={{ mr: "10px" }} />
-                Add New Course
-              </Button>
-            </Box>
-          </Box>
-          <Box
-            display="grid"
-            gap="25px"
-            gridTemplateColumns="repeat(7, minmax(0, 1fr))"
+        <Box>
+          <Button
             sx={{
-              "& > div": {
-                gridColumn: "span 2",
-              },
+              backgroundColor: "#590ed3",
+              color: "white",
+              fontSize: "14px",
+              fontWeight: "bold",
+              padding: "10px 20px",
+              ":hover": { color: "black" },
+            }}
+            onClick={() => {
+              navigate("/addnewcourse");
             }}
           >
-            {allCourse.map((element) => {
-              return (
-                <Box mt="12px">
-                  <Card sx={{ width: 285 }} m="0 30px">
-                    <CardMedia
-                      sx={{ height: 140 }}
-                      image={`${element.courseImg}`}
-                      title={`${element.name}`}
-                    />
-                    <CardContent>
-                      <Typography
-                        gutterBottom
-                        component="div"
-                        style={{ fontWeight: "bold", fontSize: "16px" }}
-                      >
-                        {`${element.name}`}
-                      </Typography>
-                      <Typography
-                        gutterBottom
-                        variant="h5"
-                        component="div"
-                        style={{ fontWeight: "bold" }}
-                      >
-                        <CurrencyRupeeIcon />
-                        {`${element.price}`}
-                      </Typography>
-                    </CardContent>
-                    <CardActions>
-                      <Button
-                        variant="contained"
-                        color="success"
-                        onClick={() => {
-                          setDetailsToLocalStorage(element._id);
-                        }}
-                      >
-                        Update
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="error"
-                        onClick={() => {
-                          handleDelete(element._id);
-                        }}
-                      >
-                        Delete
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </Box>
-              );
-            })}
-          </Box>
-        <ToastContainer />
+            <AddIcon sx={{ mr: "10px" }} />
+            Add New Course
+          </Button>
         </Box>
-
+      </Box>
+      <Box
+        display="grid"
+        gap="25px"
+        mb="12px"
+        gridTemplateColumns="repeat(7, minmax(0, 1fr))"
+        sx={{
+          "& > div": {
+            gridColumn: "span 2",
+          },
+        }}
+      >
+        {allCourse.map((element) => {
+          return (
+            <Box mt="12px">
+              <Card sx={{ width: 285 }} m="0 30px">
+                <CardMedia
+                  sx={{ height: 140 }}
+                  image={`${element.courseImg}`}
+                  title={`${element.name}`}
+                />
+                <CardContent>
+                  <Typography
+                    gutterBottom
+                    component="div"
+                    style={{ fontWeight: "bold", fontSize: "16px" }}
+                  >
+                    {`${element.name}`}
+                  </Typography>
+                  <Typography
+                    gutterBottom
+                    variant="h5"
+                    component="div"
+                    style={{ fontWeight: "bold" }}
+                  >
+                    <CurrencyRupeeIcon />
+                    {`${element.price}`}
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    onClick={() => {
+                      setDetailsToLocalStorage(element._id);
+                    }}
+                  >
+                    Update
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => {
+                      handleDelete(element._id);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </CardActions>
+              </Card>
+            </Box>
+          );
+        })}
+      </Box>
+      <ToastContainer />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "5px",
+          height: "25px",
+        }}
+      >
+        <Stack
+          spacing={2}
+          sx={{
+            fontSize: "15px",
+            fontWeight: 600,
+          }}
+        >
+          <Pagination
+            count={totalPage}
+            onChange={handlePageNo}
+            page={page}
+            variant="outlined"
+            shape="rounded"
+            color="secondary"
+            showFirstButton
+            showLastButton
+          />
+        </Stack>
+      </Box>
+    </Box>
   );
 };
 

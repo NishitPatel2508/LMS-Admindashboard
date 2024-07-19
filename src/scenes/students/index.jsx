@@ -96,60 +96,66 @@ const Contacts = () => {
     };
   });
 
-  const [theme1, colorMode] = useMode();
-  const [isSidebar, setIsSidebar] = useState(true);
   return (
-        <Box m="20px">
-          <Header
-            title="STUDENTS"
-            subtitle="List of Students for Future Reference"
-          />
-          <Box
-            m="40px 0 0 0"
-            height="63vh"
-            sx={{
-              "& .MuiDataGrid-root": {
-                border: "none",
+    <Box m="20px">
+      <Header
+        title="STUDENTS"
+        subtitle="List of Students for Future Reference"
+      />
+      <Box
+        m="40px 0 0 0"
+        height="63vh"
+        sx={{
+          "& .MuiDataGrid-root": {
+            border: "none",
+          },
+          "& .MuiDataGrid-cell": {
+            borderBottom: "none",
+          },
+          "& .name-column--cell": {
+            color: colors.greenAccent[300],
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: colors.blueAccent[700],
+            borderBottom: "none",
+          },
+          "& .MuiDataGrid-virtualScroller": {
+            backgroundColor: colors.primary[400],
+          },
+          "& .MuiDataGrid-footerContainer": {
+            borderTop: "none",
+            backgroundColor: colors.blueAccent[700],
+          },
+          "& .MuiCheckbox-root": {
+            color: `${colors.greenAccent[200]} !important`,
+          },
+          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+            color: `${colors.grey[100]} !important`,
+          },
+        }}
+      >
+        {/* <Loading show={loading} /> */}
+        <DataGrid
+          sx={{
+            fontSize: "15px",
+          }}
+          rows={rows}
+          columns={columns}
+          // loading={loading}
+          components={{ Toolbar: GridToolbar }}
+          getRowId={(rows) => rows.id}
+          editMode="row"
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
               },
-              "& .MuiDataGrid-cell": {
-                borderBottom: "none",
-              },
-              "& .name-column--cell": {
-                color: colors.greenAccent[300],
-              },
-              "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: colors.blueAccent[700],
-                borderBottom: "none",
-              },
-              "& .MuiDataGrid-virtualScroller": {
-                backgroundColor: colors.primary[400],
-              },
-              "& .MuiDataGrid-footerContainer": {
-                borderTop: "none",
-                backgroundColor: colors.blueAccent[700],
-              },
-              "& .MuiCheckbox-root": {
-                color: `${colors.greenAccent[200]} !important`,
-              },
-              "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                color: `${colors.grey[100]} !important`,
-              },
-            }}
-          >
-            {/* <Loading show={loading} /> */}
-            <DataGrid
-              sx={{
-                fontSize: "15px",
-              }}
-              rows={rows}
-              columns={columns}
-              // loading={loading}
-              components={{ Toolbar: GridToolbar }}
-              getRowId={(rows) => rows.id}
-              editMode="row"
-            />
-          </Box>
-        </Box>
+            },
+          }}
+          pageSizeOptions={[5, 10, 25]}
+        />
+      </Box>
+    </Box>
   );
 };
 

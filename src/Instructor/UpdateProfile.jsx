@@ -30,7 +30,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { addImage } from "../app/Slice/imageSlice";
 import Loading from "../scenes/global/Loading";
 import { baseURL, BLOB_READ_WRITE_TOKEN } from "../basic";
-import { put } from "@vercel/blob";
+
+import { getInstructorInfoInstance, updateInstructorInfoInstance } from "../instances/InstructorInstance";
 
 const UpdateProfile = () => {
   const navigate = useNavigate();
@@ -127,42 +128,33 @@ const UpdateProfile = () => {
   // }
   const getInstructorInfo = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      //   setCourseId(courseid);
-      //   console.log(courseid);
-
-      let result = await axios
-        .get(`http://localhost:5000/instructor/get`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
+      let response = await getInstructorInfoInstance()
+        .then((response) => {
+          console.log(response);
+          console.log(response);
           localStorage.getItem("name");
-          //   console.log(courseId);
-          setName(result.data.data.name);
-          setId(result.data.data._id);
-          setFileName(result.data.data.profileImg);
-          setEmail(result.data.data.email);
-          setMobile(result.data.data.mobile);
-          setPassword(result.data.data.password);
-          setLinkedInLink(result.data.data.linkedin);
-          setGender(result.data.data.gender);
+          setName(response.name);
+          setId(response._id);
+          setFileName(response.profileImg);
+          setEmail(response.email);
+          setMobile(response.mobile);
+          setPassword(response.password);
+          setLinkedInLink(response.linkedin);
+          setGender(response.gender);
           setLoading(false);
-          // getFile(result.data.data.profileImg);
+          setUserPhoto(response.profileImg);
           console.log(id);
         })
         .catch((err) => {
           console.log(err.response);
-          console.log(accessToken);
-          console.log(id);
         });
+      // let result = await axios
+      //   .get(`http://localhost:5000/instructor/get`, {
+      //     headers: {
+      //       Authorization: `Bearer ${accessToken}`,
+      //       // "Content-Type": "multipart/form-data",
+      //     },
+      //   })
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -201,28 +193,7 @@ const UpdateProfile = () => {
     if (!linkedInLink) {
       setLinkedInLinkError("LinkedIn profile link is required");
     }
-    // if (name) {
-    //   todos.map((e) => {
-    //     console.log(e.id);
-    //     console.log(e.image);
-    //   });
-    // }
     try {
-      // const fields = {
-      //   name: name,
-      //   email: email,
-      //   password: password,
-      //   linkedin: linkedInLink,
-      //   gender: gender,
-      //   mobile: mobile,
-      //   profileImg: courseImg,
-      // };
-
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-
       const formDataImg = new FormData();
       formDataImg.append("file", file);
       formDataImg.append("upload_preset", "olpsdimages");
@@ -258,17 +229,17 @@ const UpdateProfile = () => {
       formData.append("profileImg", urlImg);
       localStorage.setItem("profilepic", urlImg);
 
-      await axios
-        .patch(`${baseURL}/instructor/update/${id}`, formData, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "multipart/form-data",
-          },
-        })
+      // await axios
+      //   .patch(`${baseURL}/instructor/update/${id}`, formData, {
+      //     headers: {
+      //       Authorization: `Bearer ${accessToken}`,
+      //       "Content-Type": "multipart/form-data",
+      //     },
+      //   })
+      const response = await updateInstructorInfoInstance(formData,id)
         .then((response) => {
           console.log(response);
           if (response) {
-            if (response.data) {
               // const user = response.data.user;
               // dispatch(setUser(user));
               console.log(formData);
@@ -279,7 +250,7 @@ const UpdateProfile = () => {
                 getInstructorInfo();
                 //   navigate("/db");
               }, 2000);
-            }
+            
           }
           localStorage.setItem("name", name);
         })
@@ -325,7 +296,7 @@ const UpdateProfile = () => {
             <label htmlFor="file" style={{ cursor: "pointer" }}>
               <Avatar
                 alt="User Photo"
-                src={`http://localhost:5000/uploads/${fileName}`}
+                src={userphoto}
                 sx={{
                   width: 100,
                   height: 95,

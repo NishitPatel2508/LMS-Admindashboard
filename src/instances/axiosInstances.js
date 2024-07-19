@@ -4,7 +4,7 @@ import { baseURL,BLOB_READ_WRITE_TOKEN } from "../basic"
 
 // localStorage.setItem("accessToken",JSON.stringify("ABC"))
 // const accessToken = useaccessTokenes()
-const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
+const accessToken = JSON.parse(localStorage.getItem("accessToken") || null);
 console.log(accessToken)
 // if(!accessToken){
 // window.location.href = "/login"
@@ -46,7 +46,7 @@ const axiosInstance = axios.create({
   
   
   // export {}
-  export default axiosInstance
+  export default axiosInstance;
   
   
   // export default axiosInstances
