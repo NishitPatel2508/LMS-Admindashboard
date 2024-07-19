@@ -7,10 +7,6 @@ import { useState } from "react";
 const Donut = () => {
   const [isSidebar, setIsSidebar] = useState(true);
   return (
-    <div className="app">
-      <Sidebar isSidebar={isSidebar} />
-      <main className="content">
-        <Topbar setIsSidebar={setIsSidebar} />
         <Box m="20px">
           <Header title="Donut Chart" subtitle="Revenue Course Vise" />
 
@@ -18,8 +14,6 @@ const Donut = () => {
             <DonutChart />
           </Box>
         </Box>
-      </main>
-    </div>
   );
 };
 

@@ -5,10 +5,16 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Avatar,Box, Grid,TextField,Button,Typography ,Link} from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { useAuth } from '../Store/auth';
+// import { useAuth } from '../Store/auth';
+import { baseURL } from '../basic';
+import { useDispatch } from 'react-redux';
+import { login } from '../app/Slice/authSlice';
+import axiosInstructorInstance from '../instances/axiosInstructorInstance';
+import { instructorLoginInstance } from '../instances/InstructorInstance';
+
 const Login = () => {
     
-  const {storeTokenInLS} = useAuth();
+  // const {storeTokenInLS} = useAuth();
     const [email ,setEmail] = useState("")
     const [password ,setPassword ] = useState("")
     const [emailError, setEmailError] = useState("")
@@ -20,39 +26,15 @@ const Login = () => {
       placeholder: null,
       file: null,
     });
-    useEffect(()=>{
-        setprofileImg(localStorage.getItem("profilepic"))
-    })
-  
+
+    //Redux
+    const dispatch = useDispatch();
+    
+    const handleSignup = () =>{
+      navigate("/")
+    }
     const [imgError, setImageError] = useState("");
-    const handleImageChange = (event) => {
-        // const localFile = event.target.files[0]
-        console.log(event.target.files[0]);
-        if (
-          event.target.files[0].type === "image/png" ||
-          event.target.files[0].type === "image/jpeg"
-        ) {
-          //Preview Show
-          setImageError("");
-          const reader = new FileReader();
-          reader.onload = (r) => {
-            setImage({
-              placeholder: r.target.result,
-              file: event.target.files[0],
-            });
-            setprofileImg(r.target.result);
-           
-          };
-          const imgfile = event.target.files[0];
-          reader.readAsDataURL(imgfile);
-          console.log(imgfile);
-          console.log(courseImg);
-          //readAsDataURL : file in anadar src ma value store kare.
-        } else {
-          setImageError("Invalid File");
-          avatar.file = null;
-        }
-      };
+    
 
     //Style
     const paperStyle ={
@@ -104,34 +86,46 @@ const Login = () => {
             setPasswordError("Password is required")
         }
         if(email && password){
-            
-            const header = {"Access-control-Allow-Origin":"*"}
-            let result = await axios.post('http://localhost:5000/instructor/login',{
-                email:email,
+            const payload = {
+              email:email,
                 password:password
-            })
-            .then(result =>{
-                console.log(result);
-                if (result.data) {
-                    if (result.data.data.accessToken) {
-                      // localStorage.setItem(
-                      //   "accessToken",
-                      //   JSON.stringify(result.data.data.accessToken)
-                      // );
-                      storeTokenInLS(result.data.data.accessToken)
-                }
             }
-                console.log("accessToken",result.data.data.accessToken)
+            const header = {"Access-control-Allow-Origin":"*"}
+            let response = await instructorLoginInstance(payload)
+            // axiosInstructorInstance({
+            //   url:"/login",
+            //   method:"POST",
+            //   data:payload
+            // })
+            .then((response) =>{
+              debugger
+                console.log(response);
+                if(response.data.message == "Password does not match." || response.data.message =="Email does not exists"){
+                  toast.error(response.data.message)
+                } else {
+                if (response) {
+                  if (response) {
+                      localStorage.setItem("accessToken",JSON.stringify(response.data.accessToken))
+                      // storeTokenInLS(result.data.data.accessToken)
+                      const user = {
+                        email:email
+                      }
+                      const accessToken = response.data.accessToken
+                      dispatch(login({user,accessToken}))
+                  }
+                }
+                console.log("accessToken",response.accessToken)
                 
-                toast.success(result.data.message)
+                toast.success(response.message)
                 setTimeout(() => {
                   navigate("/db")
                 }, 2000);
+              }
             })
             .catch(err => {
-                console.log(err.response.data)
+                console.log(err)
                 // setError(err.response.data.message)
-                toast.error(err.response.data.message)
+                toast.error(err.response)
                 setTimeout(() => {
                 //   setError("")
                 }, 5000);
@@ -186,8 +180,8 @@ const Login = () => {
             <Typography >
                 <Link href="/forgotpassword" underline="none">Forgot password?</Link>
             </Typography>
-            <Typography> 
-                <Link  href="/"  underline="none">Create new account</Link>
+            <Typography onClick={handleSignup}> 
+                <p    underline="none">Create new account</p>
             </Typography>
         </Grid>
         <ToastContainer />

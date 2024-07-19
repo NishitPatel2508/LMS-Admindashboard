@@ -13,22 +13,25 @@ import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../Store/auth";
+import { useDispatch } from "react-redux";
+import { logout } from "../../app/Slice/authSlice";
+import { getInstructorInfoInstance } from "../../instances/InstructorInstance";
 const Topbar = () => {
-  const { isLoggedIn } = useAuth();
+
+  // useEffect(() => {
+  //   getInstructorInfo();
+  // }, []);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const settings = ["Profile", "Logout"];
-  const [profileImg, setprofileImg] = useState(
-    localStorage.getItem("profilepic")
-  );
+  const [profileImg, setprofileImg] = useState("");
+  //Logout
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -41,11 +44,15 @@ const Topbar = () => {
     navigate("/profileupdate");
   };
   const handleLogout = () => {
-    navigate("/logout");
+    localStorage.removeItem("accessToken");
+    dispatch(logout());
   };
-  useEffect(() => {
-    setprofileImg(localStorage.getItem("profilepic"));
-  });
+
+  const getInstructorInfo = async () => {
+    const response = await getInstructorInfoInstance().then((response) => {
+      setprofileImg(response.profileImg);
+    });
+  };
   return (
     <Box display="flex" justifyContent="space-between" p={2}>
       {/* SEARCH BAR */}
@@ -54,7 +61,10 @@ const Topbar = () => {
         backgroundColor={colors.primary[400]}
         borderRadius="3px"
       >
-        <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" />
+        <InputBase
+          sx={{ ml: 2, flex: 2, width: "280px" }}
+          placeholder="Search"
+        />
         <IconButton type="button" sx={{ p: 1 }}>
           <SearchIcon />
         </IconButton>
@@ -73,14 +83,11 @@ const Topbar = () => {
           <NotificationsOutlinedIcon />
         </IconButton>
         <IconButton>
-          <SettingsOutlinedIcon />
-        </IconButton>
-        <IconButton>
           {/* <PersonOutlinedIcon /> */}
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar src={`http://localhost:5000/uploads/${profileImg}`} />
+                <Avatar src={`${profileImg}`} />
               </IconButton>
             </Tooltip>
             <Menu

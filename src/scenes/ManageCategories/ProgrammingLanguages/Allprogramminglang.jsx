@@ -36,24 +36,31 @@ import StatBox from "../../../components/StatBox";
 import Header from "../../../components/Header";
 import { ToastContainer, toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { baseURL } from "../../../basic";
+import {
+  deleteProgrammingLanguageInstance,
+  getAllProgrammingLanguageInstance,
+} from "../../../instances/ProgrammingLangauageInstance";
 
 const Allprogramminglang = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isSidebar, setIsSidebar] = useState(true);
+
   const [allProgrammingLanguage, setAllProgrammingLanguage] = useState([]);
 
   const [open, setOpen] = React.useState(false);
   const [update, setUpdate] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    getallProgrammingLanguage();
+  };
   const [openHandle, setOpenHandle] = React.useState(false);
   const handleOpenUpdate = () => setOpenHandle(true);
-  const handleCloseUpdate = () => setOpenHandle(false);
-  const navigate = useNavigate();
+  const handleCloseUpdate = () => {
+    setOpenHandle(false);
+    getallProgrammingLanguage();
+  };
 
   const style = {
     position: "absolute",
@@ -72,28 +79,8 @@ const Allprogramminglang = () => {
   }, []);
   const getallProgrammingLanguage = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      let result = await axios
-        .get(`${baseURL}/getallProgrammingLanguage`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          setAllProgrammingLanguage(result.data.data);
-          //   console.log(allProgrammingLanguage);
-          // console.log(allProgrammingLanguage);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-        });
+      let result = await getAllProgrammingLanguageInstance();
+      setAllProgrammingLanguage(result);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -101,31 +88,9 @@ const Allprogramminglang = () => {
 
   const deleteProgramingLang = async (id) => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-
-      let result = await axios
-        .delete(`${baseURL}/programmingLanguage/delete/${id}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-        .then((result) => {
-          toast.success("Deleted successfully");
-          console.log("Deleted");
-          setTimeout(() => {
-            navigate("/managecategories");
-          }, 3000);
-
-          console.log(result);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-          console.log(id);
-        });
+      let result = await deleteProgrammingLanguageInstance(id);
+      toast.success("Deleted successfully", { autoClose: 2000 });
+      getallProgrammingLanguage();
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -165,7 +130,6 @@ const Allprogramminglang = () => {
               setUpdate(true);
               handleOpenUpdate();
               localStorage.setItem("updateprogramminglang", ele._id);
-              console.log(ele._id);
             }
           });
         };
@@ -217,10 +181,6 @@ const Allprogramminglang = () => {
   });
   return (
     <>
-      <div className="app">
-        <Sidebar isSidebar={isSidebar} />
-        <main className="content">
-          <Topbar setIsSidebar={setIsSidebar} />
           <Modal
             open={open}
             // onClose={handleClose}
@@ -311,13 +271,13 @@ const Allprogramminglang = () => {
                   components={{ Toolbar: GridToolbar }}
                   getRowId={(rows) => rows.id}
                   editMode="row"
+                  // loading={loading}
                 />
               </Box>
             </Box>
           </Box>
           <ToastContainer />
-        </main>
-      </div>
+
     </>
   );
 };

@@ -24,6 +24,11 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { baseURL, BLOB_READ_WRITE_TOKEN } from "../../../basic";
 import { put } from "@vercel/blob";
+import { getAllChapterInstance } from "../../../instances/ChapterInstance";
+import {
+  getSingleContentFileInstance,
+  updateContentFileInstance,
+} from "../../../instances/ContentFileInstance";
 
 export default function UpdateFiles({ closeEvent }) {
   useEffect(() => {
@@ -31,29 +36,14 @@ export default function UpdateFiles({ closeEvent }) {
     getSingleContentFile();
   }, []);
 
-  const VisuallyHiddenInput = styled("input")({
-    clip: "rect(0 0 0 0)",
-    clipPath: "inset(50%)",
-    height: 1,
-    overflow: "hidden",
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    whiteSpace: "nowrap",
-    width: 1,
-  });
-
-  const [msg, setMsg] = useState(false);
-
-  const navigate = useNavigate();
-
-  const [allCourse, setAllCourse] = useState([]);
   const [chapterName, setChapterName] = useState("");
   const [chapterNameError, setChapterNameError] = useState("");
   const [file, setFile] = useState();
   const [fileError, setFileError] = useState();
   const [fileName, setFileName] = useState();
+  const [updatedFileName, setUpdatedFileName] = useState("");
   const [fileNameError, setFileNameError] = useState("");
+  const [PDFURL, setPDFURL] = useState(null);
   const [chapterError, setChapterError] = useState("");
   const [chapter, setChapter] = useState("");
   const [allChapter, setAllChapters] = useState([]);
@@ -65,47 +55,21 @@ export default function UpdateFiles({ closeEvent }) {
   //   };
   const onChangeChapter = (e) => {
     setChapter(e.target.value);
-    console.log(e.target.value);
     setChapterError("");
   };
   const onChangeFile = (e) => {
     setFile(e.target.files[0]);
     setFileName(e.target.files[0].name);
-    console.log(e.target.files[0].name);
-    console.log(e.target.files[0]);
-    console.log(e.target.files[0].path);
+    setUpdatedFileName(e.target.files[0].name);
     setFileError("");
   };
   const getSingleContentFile = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
       const id = localStorage.getItem("updatefile");
-      //   setCourseId(courseid);
-      //   console.log(courseid);
-      let result = await axios
-        .get(`${baseURL}/singleFile/${id}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          // console.log(courseId);
-          //   setChapter(result.data.data.chapter.chapterName);
-          setFileName(result.data.data.name);
-          console.log(result.data.data.chapter);
-          setChapterName(result.data.data.chapter._id);
-          console.log(result.data.data.chapter._id);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-        });
+      let response = await getSingleContentFileInstance(id);
+      setFileName(response.name);
+      setChapterName(response.chapter._id);
+      setChapter(response.chapter._id);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -113,90 +77,45 @@ export default function UpdateFiles({ closeEvent }) {
 
   const getallChapter = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      let result = await axios
-        .get(`${baseURL}/getAllChapter`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          setAllChapters(result.data.data);
-          console.log(allChapter);
-        })
-
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-        });
+      let response = await getAllChapterInstance();
+      setAllChapters(response);
     } catch (error) {
       console.error("Error during signup:", error);
     }
   };
   const handleUpdate = async (e) => {
-    if (!chapterName) {
+    if (!chapter) {
       setChapterNameError("Please select the course");
     }
-    if (!file) {
-      setFileError("Please select the file for the chapter");
-    }
-    if (chapterName && file) {
+    // if (!file) {
+    //   setFileError("Please select the file for the chapter");
+    // }
+    if (chapter) {
       try {
         e.preventDefault();
-        const accessToken = JSON.parse(
-          localStorage.getItem("accessToken") || ""
-        );
-        if (!accessToken) {
-          throw new Error("Access token is missing.");
-        }
+        
         const id = localStorage.getItem("updatefile");
 
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("name", fileName);
+        formData.append("name", updatedFileName);
         // formData.append("chapter", chapterName);
-        let r = await put(fileName, formData, {
+
+        let r = await put(updatedFileName, formData, {
           access: "public",
           token: BLOB_READ_WRITE_TOKEN,
         });
-        console.log(r.url);
+        console.log(r);
+        // setPDFURL();
         const fields = {
           name: fileName,
           pdf: r.url,
-          chapter: chapterName,
+          chapter: chapter,
         };
-        let result = await axios
-          .patch(`${baseURL}/file/update/${id}`, fields, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              // "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((result) => {
-            console.log("Updated");
-            console.log(result);
-            console.log(result.data.data);
-            // setSubCategory(result.data.SubCategory.subprogrammingLangName);
-            toast.success(result.data.message);
-            closeEvent();
-            setTimeout(() => {
-              navigate("/managecategories");
-            }, 3000);
-          })
-          .catch((err) => {
-            console.log(err.response);
-            toast.error(err.response.data.message);
-            // console.log(result.data.data.message);
-            console.log(accessToken);
-            console.log(id);
-            // console.log(result);
-          });
+        let response = await updateContentFileInstance(fields, id);
+        toast.success(response.message, { autoClose: 2000 });
+        closeEvent();
+
       } catch (error) {
         console.error("Error during signup:", error);
       }
@@ -206,7 +125,7 @@ export default function UpdateFiles({ closeEvent }) {
     <>
       <Box sx={{ m: 2 }}>
         <Typography variant="h5" align="center">
-          Update Chapter
+          Update Content File
         </Typography>
         <IconButton
           style={{ position: "absolute", top: "0", right: "0" }}
@@ -227,8 +146,8 @@ export default function UpdateFiles({ closeEvent }) {
               // defaultValue={fileName}
               fullWidth
               onChange={onChangeFile}
-              error={fileError}
-              helperText={fileError}
+              // error={fileError}
+              // helperText={fileError}
               sx={{ marginTop: "8px" }}
             />
           </Grid>
@@ -255,7 +174,7 @@ export default function UpdateFiles({ closeEvent }) {
                 fullWidth
                 labelId="demo-simple-select-filled-label"
                 id="demo-simple-select-filled"
-                value={chapterName}
+                value={chapter}
                 onChange={onChangeChapter}
                 error={chapterNameError}
                 helperText={chapterNameError}

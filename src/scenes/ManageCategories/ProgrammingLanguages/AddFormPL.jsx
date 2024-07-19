@@ -21,55 +21,34 @@ import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { baseURL } from "../../../basic";
+import { getAllSubCategoryInstance } from "../../../instances/SubCategoryInstance";
+import { createProgrammingLanguageInstance } from "../../../instances/ProgrammingLangauageInstance";
 
 export default function AddFormPL({ closeEvent }) {
   useEffect(() => {
     getAllSubCategories();
   }, []);
-  const [allCourse, setAllCourse] = useState([]);
   const [allSubCategory, setAllSubCategory] = useState([]);
   const [subCategoryName, setSubCategoryName] = useState("");
   const [subCategoryError, setSubCategoryError] = useState("");
   const [programmingLang, setProgrammingLang] = useState("");
   const [programmingLangError, setProgrammingLangError] = useState("");
   const [msg, setMsg] = useState(false);
-  const navigate = useNavigate();
+
   const onChangeSubCategory = (e) => {
     setSubCategoryName(e.target.value);
-    console.log(e.target.value);
+
     setSubCategoryError("");
   };
   const onChangePL = (e) => {
     setProgrammingLang(e.target.value);
-    console.log(e.target.value);
     setProgrammingLangError("");
   };
 
   const getAllSubCategories = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      let result = await axios
-        .get(`${baseURL}/getAllSubCategory`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          setAllSubCategory(result.data.data);
-          console.log(allSubCategory);
-          // console.log(arrayPrint());
-          // convertToArray(result.data.data);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-        });
+      let result = await getAllSubCategoryInstance();
+      setAllSubCategory(result);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -84,40 +63,17 @@ export default function AddFormPL({ closeEvent }) {
     if (subCategoryName && programmingLang) {
       try {
         e.preventDefault();
-        const accessToken = JSON.parse(
-          localStorage.getItem("accessToken") || ""
-        );
-        if (!accessToken) {
-          throw new Error("Access token is missing.");
-        }
         const fields = {
           programmingLanguageName: programmingLang,
           subCategory: subCategoryName,
         };
-        let result = await axios
-          .post(`${baseURL}/programmingLanguage/create`, fields, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              // "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((result) => {
-            console.log("Created");
-            console.log(result);
-            console.log(result.data.SubCategory);
-            toast.success(result.data.message);
-            closeEvent();
-            setTimeout(() => {
-              navigate("/managecategories");
-            }, 3000);
-          })
-          .catch((err) => {
-            console.log(err.response);
-            toast.error(err.response.data.message);
-            console.log(result.data.data.message);
-            console.log(accessToken);
-            // console.log(result);
-          });
+        let result = await createProgrammingLanguageInstance(fields);
+        if (result.message == "Programming Language already exists") {
+          toast.error(result.message, { autoClose: 2000 });
+        } else {
+          toast.success(result.message, { autoClose: 2000 });
+          closeEvent();
+        }
       } catch (error) {
         console.error("Error during signup:", error);
       }

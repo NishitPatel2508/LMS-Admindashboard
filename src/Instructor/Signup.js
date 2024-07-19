@@ -13,8 +13,8 @@ import {
 import Header from "../components/Header";
   import { useState, useEffect } from "react";
   import { useNavigate } from "react-router-dom";
-  import axios from "axios";
   import { ToastContainer, toast } from "react-toastify";
+import axiosInstructorInstance from "../instances/axiosInstructorInstance";
 //   import { useDispatch, useSelector } from "react-redux";
 //   import { setUser } from "../../reducers/userSlice";
   const Signup = () => {
@@ -185,12 +185,14 @@ import Header from "../components/Header";
             profileImg: courseImg,
           };
         // const formData = new FormData();
-        await axios
-          .post(`http://localhost:5000/instructor/create`, fields)
+        let response = await axiosInstructorInstance({
+          url:"/create",
+          method:"POST",
+          data:fields
+        })
           .then((response) => {
             console.log(response);
             if (response) {
-
               if (response.data) {
                 // const user = response.data.user;
                 // dispatch(setUser(user));

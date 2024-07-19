@@ -11,10 +11,10 @@ const Geography = () => {
   const colors = tokens(theme.palette.mode);
   const [isSidebar, setIsSidebar] = useState(true);
   return (
-    <div className="app">
-      <Sidebar isSidebar={isSidebar} />
-      <main className="content">
-        <Topbar setIsSidebar={setIsSidebar} />
+    // <div className="app">
+    //   <Sidebar isSidebar={isSidebar} />
+    //   <main className="content">
+    //     <Topbar setIsSidebar={setIsSidebar} />
         <Box m="20px">
           <Header title="Geography" subtitle="Simple Geography Chart" />
 
@@ -26,8 +26,8 @@ const Geography = () => {
             <GeographyChart />
           </Box>
         </Box>
-      </main>
-    </div>
+    //   </main>
+    // </div>
   );
 };
 

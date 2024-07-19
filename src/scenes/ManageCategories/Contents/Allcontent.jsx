@@ -48,20 +48,31 @@ import { Viewer, Worker } from "@react-pdf-viewer/core";
 // // Import the styles
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import { baseURL } from "../../../basic";
+import {
+  deleteContentInstance,
+  getAllContentInstance,
+} from "../../../instances/ContentInstance";
 
 const Allcontent = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
   const [isSidebar, setIsSidebar] = useState(true);
   const [allContent, setAllContent] = useState([]);
 
   const [update, setUpdate] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const [open, setOpen] = React.useState(false);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    getAllContent();
+  };
   const [openHandle, setOpenHandle] = React.useState(false);
   const handleOpenUpdate = () => setOpenHandle(true);
-  const handleCloseUpdate = () => setOpenHandle(false);
+  const handleCloseUpdate = () => {
+    setOpenHandle(false);
+    getAllContent();
+  };
   const [openHandleView, setOpenHandleView] = React.useState(false);
   const handleOpenView = () => setOpenHandleView(true);
   const handleCloseView = () => setOpenHandleView(false);
@@ -89,28 +100,8 @@ const Allcontent = () => {
   }, []);
   const getAllContent = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      let result = await axios
-        .get(`${baseURL}/getAllContent`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(result.data.data);
-          setAllContent(result.data.data);
-          console.log(allContent);
-        })
-
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-        });
+      let response = await getAllContentInstance();
+      setAllContent(response);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -118,31 +109,10 @@ const Allcontent = () => {
 
   const deleteContent = async (id) => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-
-      let result = await axios
-        .delete(`${baseURL}/content/delete/${id}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-        .then((result) => {
-          toast.success("Deleted successfully");
-          console.log("Deleted");
-          setTimeout(() => {
-            navigate("/managecategories");
-          }, 3000);
-
-          console.log(result);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(accessToken);
-          console.log(id);
-        });
+      let result = await deleteContentInstance(id);
+      toast.success("Deleted successfully", { autoClose: 2000 });
+      console.log("Deleted");
+      getAllContent();
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -274,10 +244,6 @@ const Allcontent = () => {
 
   return (
     <>
-      <div className="app">
-        <Sidebar isSidebar={isSidebar} />
-        <main className="content">
-          <Topbar setIsSidebar={setIsSidebar} />
           <Modal
             open={open}
             // onClose={handleClose}
@@ -429,13 +395,12 @@ const Allcontent = () => {
                   components={{ Toolbar: GridToolbar }}
                   getRowId={(rows) => rows.id}
                   editMode="row"
+                  // loading={loading}
                 />
               </Box>
             </Box>
           </Box>
           <ToastContainer />
-        </main>
-      </div>
     </>
   );
 };

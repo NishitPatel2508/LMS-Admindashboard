@@ -51,10 +51,6 @@ const Invoices = () => {
     },
   ];
   return (
-    <div className="app">
-      <Sidebar isSidebar={isSidebar} />
-      <main className="content">
-        <Topbar setIsSidebar={setIsSidebar} />
         <Box m="18px">
           <Header
             title="Manage Categories"
@@ -138,8 +134,6 @@ const Invoices = () => {
             })}
           </Box>
         </Box>
-      </main>
-    </div>
   );
 };
 
