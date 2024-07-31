@@ -12,11 +12,16 @@ import {
   Grid,
 } from "@mui/material";
 
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { baseURL } from "../../../basic";
+import {
+  getSingleContentInstance,
+  getUpdateContentInstance,
+} from "../../../instances/ContentInstance";
+import { getAllCourseInstance } from "../../../instances/Course/CourseInstance";
+import { getAllChapterInstance } from "../../../instances/ChapterInstance";
+import { getAllContentVideoInstance } from "../../../instances/ContentVideoInstance";
+import { getAllContentFileInstance } from "../../../instances/ContentFileInstance";
 
 export default function UpdateContent({ closeEvent }) {
   useEffect(() => {
@@ -32,18 +37,14 @@ export default function UpdateContent({ closeEvent }) {
   const [allFiles, setAllFiles] = useState([]);
   const [contentVideo, setContentVideo] = useState("");
   const [contentVideoError, setContentVideoError] = useState("");
-  const [msg, setMsg] = useState(false);
   const [file, setFile] = useState("");
   const [fileError, setFileError] = useState();
-
-  const navigate = useNavigate();
 
   const [allCourse, setAllCourse] = useState([]);
   const [courseName, setCourseName] = useState("");
   const [courseNameError, setCourseNameError] = useState("");
   const [chapterError, setChapterError] = useState("");
   const [chapter, setChapter] = useState("");
-  const [chapterName, setChapterName] = useState("");
   const onChangeCourse = (e) => {
     setCourseName(e.target.value);
     console.log(e.target.value);
@@ -66,27 +67,17 @@ export default function UpdateContent({ closeEvent }) {
   };
   const getSingleContent = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
       const id = localStorage.getItem("updatecontent");
 
-      let result = await axios
-        .get(`${baseURL}/content/${id}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          console.log(result);
+      await getSingleContentInstance(id)
+        .then((response) => {
+          console.log(response);
 
-          setChapter(result.data.data.chapterDetailes._id);
-          setCourseName(result.data.data.courseDetailes._id);
+          setChapter(response.chapterDetailes._id);
+          setCourseName(response.courseDetailes._id);
 
-          setFile(result.data.data.contentFileDetailes._id);
-          setContentVideo(result.data.data.contentVideoDetailes._id);
+          setFile(response.contentFileDetailes._id);
+          setContentVideo(response.contentVideoDetailes._id);
         })
         .catch((err) => {
           console.log(err.response);
@@ -98,20 +89,10 @@ export default function UpdateContent({ closeEvent }) {
 
   const getAllCourse = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      let result = await axios
-        .get(`${baseURL}/getAllCourse`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
+      await getAllCourseInstance()
+        .then((response) => {
           // console.log(result);
-          setAllCourse(result.data.data);
+          setAllCourse(response.data);
         })
         .catch((err) => {
           console.log(err.response);
@@ -122,19 +103,9 @@ export default function UpdateContent({ closeEvent }) {
   };
   const getAllChapter = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      let result = await axios
-        .get(`${baseURL}/getAllChapter`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((result) => {
-          setAllChapter(result.data.data);
+      await getAllChapterInstance()
+        .then((response) => {
+          setAllChapter(response);
         })
         .catch((err) => {
           console.log(err.response);
@@ -145,21 +116,9 @@ export default function UpdateContent({ closeEvent }) {
   };
   const getAllContentVideo = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      let result = await axios
-        .get(`${baseURL}/getAllContentVideo`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
+      await getAllContentVideoInstance()
         .then((result) => {
-          setAllContentVideo(result.data.data);
-          //   console.log(allProgrammingLanguage);
-          // console.log(allProgrammingLanguage);
+          setAllContentVideo(result);
         })
         .catch((err) => {
           console.log(err.response);
@@ -170,21 +129,10 @@ export default function UpdateContent({ closeEvent }) {
   };
   const getallContentFiles = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      let result = await axios
-        .get(`${baseURL}/allFiles`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "multipart/form-data",
-          },
+      await getAllContentFileInstance()
+        .then((response) => {
+          setAllFiles(response);
         })
-        .then((result) => {
-          setAllFiles(result.data.data);
-        })
-
         .catch((err) => {
           console.log(err.response);
         });
@@ -202,12 +150,6 @@ export default function UpdateContent({ closeEvent }) {
     if (courseName && chapter) {
       try {
         e.preventDefault();
-        const accessToken = JSON.parse(
-          localStorage.getItem("accessToken") || ""
-        );
-        if (!accessToken) {
-          throw new Error("Access token is missing.");
-        }
         const id = localStorage.getItem("updatecontent");
         const fields = {
           courseDetailes: courseName,
@@ -215,15 +157,9 @@ export default function UpdateContent({ closeEvent }) {
           contentVideoDetailes: contentVideo,
           contentFileDetailes: file,
         };
-        let result = await axios
-          .patch(`${baseURL}/content/update/${id}`, fields, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              // "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((result) => {
-            toast.success(result.data.message, { autoClose: 2000 });
+        await getUpdateContentInstance(fields, id)
+          .then((response) => {
+            toast.success(response.message, { autoClose: 2000 });
             closeEvent();
           })
           .catch((err) => {

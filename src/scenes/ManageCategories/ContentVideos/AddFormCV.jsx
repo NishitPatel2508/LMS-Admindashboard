@@ -13,13 +13,10 @@ import {
   TextField,
 } from "@mui/material";
 
-import { ToastContainer, toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { baseURL } from "../../../basic";
 import { getAllChapterInstance } from "../../../instances/ChapterInstance";
 import { createContentVideoInstance } from "../../../instances/ContentVideoInstance";
+import { toast } from "react-toastify";
 
 export default function AddFormCV({ closeEvent }) {
   useEffect(() => {
@@ -33,8 +30,6 @@ export default function AddFormCV({ closeEvent }) {
   const [chapterNameError, setChapterNameError] = useState("");
   const [videoLink, setVideoLink] = useState("");
   const [videoLinkError, setVideoLinkError] = useState("");
-
-  const navigate = useNavigate();
 
   const onChangeThumbnail = (e) => {
     setThumbail(e.target.value);
@@ -54,7 +49,7 @@ export default function AddFormCV({ closeEvent }) {
   const getAllChapter = async () => {
     try {
       let data = await getAllChapterInstance();
-      setAllChapter(data);
+      setAllChapter(data.data);
     } catch (error) {
       console.error("Error during signup:", error);
     }

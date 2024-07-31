@@ -1,15 +1,16 @@
 import axiosInstance from "./axiosInstances";
 
 // Get All
-export const getAllSubCategoryInstance = async () => {
+export const getAllSubCategoryInstance = async (keyword) => {
   try {
     const response = await axiosInstance({
-      url: "/getAllSubCategory",
+      url: `/getAllSubCategory?keyword=${keyword}`,
       method: "GET",
     });
-    return response.data.data;
+    return response.data;
   } catch (error) {
     console.log("subCategoryErr", error);
+    return error.response.data.message;
   }
 };
 

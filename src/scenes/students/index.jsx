@@ -1,27 +1,17 @@
 import { Box } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-
 import { tokens } from "../../theme";
-import { mockDataContacts } from "../../data/mockData";
 import Header from "../../components/Header";
 import { useTheme } from "@mui/material";
 import Topbar from "../global/Topbar";
 import Sidebar from "../global/Sidebar";
-import { CssBaseline, ThemeProvider } from "@mui/material";
-import { ColorModeContext, useMode } from "../../theme";
 import { useEffect, useState } from "react";
 import moment from "moment";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { baseURL } from "../../basic";
-import Loading from "../global/Loading";
 import { getAllRevenueInstance } from "../../instances/dashboardInstance";
 
 const Contacts = () => {
   const [allData, setAllData] = useState([]);
-
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const [isSidebar, setIsSidebar] = useState(true);
   useEffect(() => {
     getAllRevenue();
   }, []);
@@ -43,7 +33,6 @@ const Contacts = () => {
                 console.log(e.courseAmount);
               });
               console.log(i);
-              setLoading(false);
             }
           }
         })
@@ -97,65 +86,70 @@ const Contacts = () => {
   });
 
   return (
-    <Box m="20px">
-      <Header
-        title="STUDENTS"
-        subtitle="List of Students for Future Reference"
-      />
-      <Box
-        m="40px 0 0 0"
-        height="63vh"
-        sx={{
-          "& .MuiDataGrid-root": {
-            border: "none",
-          },
-          "& .MuiDataGrid-cell": {
-            borderBottom: "none",
-          },
-          "& .name-column--cell": {
-            color: colors.greenAccent[300],
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: colors.blueAccent[700],
-            borderBottom: "none",
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: colors.primary[400],
-          },
-          "& .MuiDataGrid-footerContainer": {
-            borderTop: "none",
-            backgroundColor: colors.blueAccent[700],
-          },
-          "& .MuiCheckbox-root": {
-            color: `${colors.greenAccent[200]} !important`,
-          },
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${colors.grey[100]} !important`,
-          },
-        }}
-      >
-        {/* <Loading show={loading} /> */}
-        <DataGrid
-          sx={{
-            fontSize: "15px",
-          }}
-          rows={rows}
-          columns={columns}
-          // loading={loading}
-          components={{ Toolbar: GridToolbar }}
-          getRowId={(rows) => rows.id}
-          editMode="row"
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 5,
+    <div className="app">
+      <Sidebar isSidebar={isSidebar} />
+      <main className="content">
+        <Topbar setIsSidebar={setIsSidebar} />
+        <Box m="20px">
+          <Header
+            title="STUDENTS"
+            subtitle="List of Students for Future Reference"
+          />
+          <Box
+            m="40px 0 0 0"
+            height="63vh"
+            sx={{
+              "& .MuiDataGrid-root": {
+                border: "none",
               },
-            },
-          }}
-          pageSizeOptions={[5, 10, 25]}
-        />
-      </Box>
-    </Box>
+              "& .MuiDataGrid-cell": {
+                borderBottom: "none",
+              },
+              "& .name-column--cell": {
+                color: colors.greenAccent[300],
+              },
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: colors.blueAccent[700],
+                borderBottom: "none",
+              },
+              "& .MuiDataGrid-virtualScroller": {
+                backgroundColor: colors.primary[400],
+              },
+              "& .MuiDataGrid-footerContainer": {
+                borderTop: "none",
+                backgroundColor: colors.blueAccent[700],
+              },
+              "& .MuiCheckbox-root": {
+                color: `${colors.greenAccent[200]} !important`,
+              },
+              "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                color: `${colors.grey[100]} !important`,
+              },
+            }}
+          >
+            <DataGrid
+              sx={{
+                fontSize: "15px",
+              }}
+              rows={rows}
+              columns={columns}
+              // loading={loading}
+              components={{ Toolbar: GridToolbar }}
+              getRowId={(rows) => rows.id}
+              editMode="row"
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 5,
+                  },
+                },
+              }}
+              pageSizeOptions={[5, 10, 25]}
+            />
+          </Box>
+        </Box>
+      </main>
+    </div>
   );
 };
 

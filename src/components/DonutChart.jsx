@@ -1,21 +1,13 @@
-import { Pie, ResponsivePie } from "@nivo/pie";
+import { ResponsivePie } from "@nivo/pie";
 import { tokens } from "../theme";
 import { useTheme } from "@mui/material";
-import { mockPieData as data } from "../data/mockData";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { ResponsivePieCanvas } from "@nivo/pie";
-
-// import { Pie } from "react-chartjs-2";
-import { baseURL } from "../basic";
 import { Chart as ChartJS, Tooltip, Legend, ArcElement } from "chart.js";
 import { getAllRevenueInstance } from "../instances/dashboardInstance";
 ChartJS.register(Tooltip, Legend, ArcElement);
 const DonutChart = ({ isDashboard = false }) => {
   const [finalArray1, setFinalArray1] = useState([]);
   const finalArray = [];
-  const pieArray = [];
-  const options = {};
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -7,18 +7,14 @@ import {
   Select,
   MenuItem,
   InputLabel,
-  Modal,
   FormControl,
   FormHelperText,
   Grid,
   TextField,
 } from "@mui/material";
 
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { baseURL } from "../../../basic";
 import {
   getAllChapterInstance,
   getSingleChapterInstance,
@@ -33,16 +29,12 @@ export default function UpdateChapters({ closeEvent }) {
     getallChapter();
   }, []);
 
-  const navigate = useNavigate();
-
   const [allCourse, setAllCourse] = useState([]);
   const [courseName, setCourseName] = useState("");
   const [courseNameError, setCourseNameError] = useState("");
   const [chapterError, setChapterError] = useState("");
   const [chapter, setChapter] = useState("");
-  const [courseId, setCourseId] = useState("");
-  const [allChapter, setAllChapters] = useState([]);
-  const [updated, setUpdated] = useState(false);
+  const [, setAllChapters] = useState([]);
 
   const onChangeCourse = (e) => {
     setCourseName(e.target.value);
@@ -67,7 +59,7 @@ export default function UpdateChapters({ closeEvent }) {
   const getAllCourse = async () => {
     try {
       let data = await getAllCourseInstance();
-      setAllCourse(data);
+      setAllCourse(data.data);
     } catch (error) {
       console.error("Error during signup:", error);
     }

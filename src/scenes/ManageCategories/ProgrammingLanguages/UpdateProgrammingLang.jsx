@@ -56,7 +56,7 @@ export default function UpdateProgrammingLang({ closeEvent }) {
   const getAllSubCategories = async () => {
     try {
       let result = await getAllSubCategoryInstance();
-      setAllSubCategory(result);
+      setAllSubCategory(result.data);
     } catch (error) {
       console.error("Error during signup:", error);
     }

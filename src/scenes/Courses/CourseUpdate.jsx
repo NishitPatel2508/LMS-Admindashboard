@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme, Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -19,9 +19,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { baseURL, BLOB_READ_WRITE_TOKEN } from "../../basic";
 
-import { put } from "@vercel/blob";
 import {
   handleSingleCourse,
   handleUpdateCourse,
@@ -33,8 +31,7 @@ import { getAllLanguagesInstance } from "../../instances/LanguagesInstance";
 
 const CourseUpdate = () => {
   const [isSidebar, setIsSidebar] = useState(true);
-  const [singleCourse, setSingleCourse] = useState([]);
-  const [courseId, setCourseId] = useState("");
+  const [, setSingleCourse] = useState([]);
 
   const [name, setName] = useState("");
   const [subCategory, setSubCategory] = useState("");
@@ -58,11 +55,11 @@ const CourseUpdate = () => {
     file: null,
   });
 
-  const [imgError, setImageError] = useState("");
-  const [file, setFile] = useState("");
+  const [, setImageError] = useState("");
+  const [, setFile] = useState("");
 
-  const [imgName, setImgName] = useState("");
-  const [imgURL, setImgURL] = useState("");
+  const [, setImgName] = useState("");
+  const [, setImgURL] = useState("");
 
   const navigate = useNavigate();
 
@@ -105,7 +102,7 @@ const CourseUpdate = () => {
       formDataImg.append("file", event.target.files[0]);
       formDataImg.append("upload_preset", "olpsdimages");
       formDataImg.append("cloud_name", "nishitproject");
-      const response = await axios
+      await axios
         .post(
           "https://api.cloudinary.com/v1_1/nishitproject/image/upload",
           formDataImg
@@ -115,7 +112,7 @@ const CourseUpdate = () => {
 
           console.log(response);
           setImgURL(response.data.url);
-          urlImg = response.data.url;
+          // urlImg = response.data.url;
           setCourseImg(response.data.url);
           console.log(response.data.url);
           // console.log(response);
@@ -127,17 +124,6 @@ const CourseUpdate = () => {
         .catch((err) => {
           console.log(err);
         });
-      // const imgfile = event.target.files[0];
-      // const url = URL.createObjectURL(imgfile);
-      // console.log("uuuu", url);
-      // setImgFinale(url);
-      // reader.readAsDataURL(imgfile);
-
-      // console.log(imgfile);
-      // console.log(avatar.placeholder);
-      // const courseImg = avatar.placeholder;
-
-      //readAsDataURL : Store the value inside the file.
     } else {
       setImageError("Invalid File");
       avatar.file = null;
@@ -157,11 +143,11 @@ const CourseUpdate = () => {
   };
   const onChangeCategory = (e) => {
     setCategoryName(e.target.value);
-    console.log(e.target.value);
+    // console.log(e.target.value);
   };
   const onChangeSubCategory = (e) => {
     setSubCategory(e.target.value);
-    console.log(e.target.value);
+    // console.log(e.target.value);
   };
   const onChangeProgrammingLanguage = (e) => {
     setProgrammingLanguage(e.target.value);
@@ -204,7 +190,7 @@ const CourseUpdate = () => {
   const getAllSubCategory = async () => {
     try {
       const data = await getAllSubCategoryInstance();
-      setAllSubCategory(data);
+      setAllSubCategory(data.data);
     } catch (error) {
       console.error("Error during subCategory:", error);
     }
@@ -212,7 +198,7 @@ const CourseUpdate = () => {
   const getAllProgrammingLanguage = async () => {
     try {
       const data = await getAllProgrammingLanguageInstance();
-      setAllProgrammingLanguage(data);
+      setAllProgrammingLanguage(data.data);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -272,7 +258,7 @@ const CourseUpdate = () => {
         courseImg: courseImg,
       };
       try {
-        const data = await handleUpdateCourse(fields, id);
+        await handleUpdateCourse(fields, id);
         toast.success("Updated successfully", { autoClose: 2000 });
         setTimeout(() => {
           navigate("/courses");
@@ -285,6 +271,10 @@ const CourseUpdate = () => {
     }
   };
   return (
+    <div className="app">
+      <Sidebar isSidebar={isSidebar} />
+      <main className="content">
+        <Topbar setIsSidebar={setIsSidebar} />
         <Box m="20px">
           {/* HEADER */}
           <Box
@@ -513,9 +503,10 @@ const CourseUpdate = () => {
               Update
             </Button>
           </Box>
-        <ToastContainer />
+          <ToastContainer />
         </Box>
-
+      </main>
+    </div>
   );
 };
 export default CourseUpdate;

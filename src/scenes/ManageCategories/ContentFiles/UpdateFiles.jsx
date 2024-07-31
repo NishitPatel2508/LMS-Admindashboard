@@ -7,22 +7,14 @@ import {
   Select,
   MenuItem,
   InputLabel,
-  Modal,
   FormControl,
   FormHelperText,
   Grid,
-  useTheme,
   TextField,
-  Stack,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
-
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { baseURL, BLOB_READ_WRITE_TOKEN } from "../../../basic";
+import { BLOB_READ_WRITE_TOKEN } from "../../../basic";
 import { put } from "@vercel/blob";
 import { getAllChapterInstance } from "../../../instances/ChapterInstance";
 import {
@@ -36,23 +28,17 @@ export default function UpdateFiles({ closeEvent }) {
     getSingleContentFile();
   }, []);
 
-  const [chapterName, setChapterName] = useState("");
+  const [, setChapterName] = useState("");
   const [chapterNameError, setChapterNameError] = useState("");
   const [file, setFile] = useState();
-  const [fileError, setFileError] = useState();
+  const [, setFileError] = useState();
   const [fileName, setFileName] = useState();
   const [updatedFileName, setUpdatedFileName] = useState("");
-  const [fileNameError, setFileNameError] = useState("");
-  const [PDFURL, setPDFURL] = useState(null);
-  const [chapterError, setChapterError] = useState("");
+
+  const [, setChapterError] = useState("");
   const [chapter, setChapter] = useState("");
   const [allChapter, setAllChapters] = useState([]);
 
-  //   const onChangeChapter = (e) => {
-  //     setChapterName(e.target.value);
-  //     console.log(e.target.value);
-  //     setChapterNameError("");
-  //   };
   const onChangeChapter = (e) => {
     setChapter(e.target.value);
     setChapterError("");
@@ -78,7 +64,7 @@ export default function UpdateFiles({ closeEvent }) {
   const getallChapter = async () => {
     try {
       let response = await getAllChapterInstance();
-      setAllChapters(response);
+      setAllChapters(response.data);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -93,7 +79,7 @@ export default function UpdateFiles({ closeEvent }) {
     if (chapter) {
       try {
         e.preventDefault();
-        
+
         const id = localStorage.getItem("updatefile");
 
         const formData = new FormData();
@@ -115,7 +101,6 @@ export default function UpdateFiles({ closeEvent }) {
         let response = await updateContentFileInstance(fields, id);
         toast.success(response.message, { autoClose: 2000 });
         closeEvent();
-
       } catch (error) {
         console.error("Error during signup:", error);
       }
@@ -160,8 +145,8 @@ export default function UpdateFiles({ closeEvent }) {
               value={fileName}
               defaultValue={fileName}
               onChange={onChangeFile}
-              error={fileNameError}
-              helperText={fileNameError}
+              // error={fileNameError}
+              // helperText={fileNameError}
               sx={{ marginTop: "8px" }}
             />
           </Grid>

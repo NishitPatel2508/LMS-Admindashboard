@@ -1,13 +1,12 @@
-import { BLOB_READ_WRITE_TOKEN } from "../../basic";
 import axiosInstance from "../axiosInstances";
 
 // const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
 
 //Get All
-export const getAllCourseInstance = async (page) => {
+export const getAllCourseInstance = async (page, keyword) => {
   try {
     const response = await axiosInstance({
-      url: `/getAllCourse?page=${page}`,
+      url: `/getAllCourse?page=${page}&keyword=${keyword}`,
       method: "GET",
 
       // timeout: 20000,
@@ -16,6 +15,7 @@ export const getAllCourseInstance = async (page) => {
     return response.data;
   } catch (error) {
     console.log("eeeyyyy", error);
+    return error.response.data.message;
   }
 };
 

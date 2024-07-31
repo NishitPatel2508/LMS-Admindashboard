@@ -7,16 +7,14 @@ import {
   Select,
   MenuItem,
   InputLabel,
-  Modal,
   FormControl,
   FormHelperText,
   Grid,
 } from "@mui/material";
 
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
-import axios from "axios";
-import { baseURL } from "../../../basic";
+
 import { getAllCourseInstance } from "../../../instances/Course/CourseInstance";
 import { getAllChapterInstance } from "../../../instances/ChapterInstance";
 import { getAllContentVideoInstance } from "../../../instances/ContentVideoInstance";
@@ -63,7 +61,7 @@ export default function AddFormContent({ closeEvent }) {
   const getAllCourse = async () => {
     try {
       let response = await getAllCourseInstance();
-      setAllCourse(response);
+      setAllCourse(response.data);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -71,19 +69,15 @@ export default function AddFormContent({ closeEvent }) {
   const getAllChapter = async () => {
     try {
       let response = await getAllChapterInstance();
-      setAllChapter(response);
+      setAllChapter(response.data);
     } catch (error) {
       console.error("Error during signup:", error);
     }
   };
   const getAllContentVideo = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
       let response = await getAllContentVideoInstance();
-      setAllContentVideo(response);
+      setAllContentVideo(response.data);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -91,7 +85,7 @@ export default function AddFormContent({ closeEvent }) {
   const getallContentFiles = async () => {
     try {
       let response = await getAllContentFileInstance();
-      setAllFiles(response);
+      setAllFiles(response.data);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -117,7 +111,7 @@ export default function AddFormContent({ closeEvent }) {
         };
 
         let response = await createContentInstance(fields);
-        if (response.message == "Content already exists") {
+        if (response.message === "Content already exists") {
           toast.error(response.message, { autoClose: 2000 });
         } else {
           toast.success(response.message, { autoClose: 2000 });
@@ -256,7 +250,7 @@ export default function AddFormContent({ closeEvent }) {
               onClick={handleCreate}
             >
               {/* <AddIcon sx={{ mr: "10px" }} /> */}
-              Add New Content
+              submit
             </Button>
           </Grid>
         </Grid>

@@ -1,17 +1,14 @@
-import { Box, Typography, useTheme, Button } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import Topbar from "../global/Topbar";
 import Sidebar from "../global/Sidebar";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 const Invoices = () => {
-  const theme = useTheme();
   const [isSidebar, setIsSidebar] = useState(true);
-  const colors = tokens(theme.palette.mode);
   const navigate = useNavigate();
   const fields = [
     // {
@@ -51,6 +48,10 @@ const Invoices = () => {
     },
   ];
   return (
+    <div className="app">
+      <Sidebar isSidebar={isSidebar} />
+      <main className="content">
+        <Topbar setIsSidebar={setIsSidebar} />
         <Box m="18px">
           <Header
             title="Manage Categories"
@@ -134,6 +135,8 @@ const Invoices = () => {
             })}
           </Box>
         </Box>
+      </main>
+    </div>
   );
 };
 

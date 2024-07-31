@@ -1,5 +1,5 @@
-import React, { useCallback } from "react";
-import { Box, Button, Modal, useTheme } from "@mui/material";
+import React from "react";
+import { Box, Fab, Modal, useTheme } from "@mui/material";
 import { DataGrid, GridToolbar, GridActionsCellItem } from "@mui/x-data-grid";
 
 import AddFormChapters from "./AddFormChapters";
@@ -19,16 +19,17 @@ import {
   deleteChapterInstance,
   getAllChapterInstance,
 } from "../../../instances/ChapterInstance";
+import Search from "../../../components/Search";
 
 const Allchapteres = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isSidebar, setIsSidebar] = useState(true);
   const [allChapter, setAllChapters] = useState([]);
-  const [updateChapter, setUpdateChapter] = useState("");
+  const [, setUpdateChapter] = useState("");
 
   const [open, setOpen] = React.useState(false);
-  const [update, setUpdate] = React.useState(false);
+  const [, setUpdate] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
@@ -41,6 +42,12 @@ const Allchapteres = () => {
     getallChapter();
   };
 
+  const [search, setSearch] = useState("");
+  const [searchErrMsg, setSearchErrMsg] = useState("");
+
+  const handleChangeSearch = async (e) => {
+    setSearch(e.target.value);
+  };
   const style = {
     position: "absolute",
     top: "50%",
@@ -55,13 +62,21 @@ const Allchapteres = () => {
 
   useEffect(() => {
     getallChapter();
-  }, []);
+  }, [search]);
   // const show
 
   const getallChapter = async () => {
     try {
-      let data = await getAllChapterInstance();
-      setAllChapters(data);
+      let response = await getAllChapterInstance(search);
+      if (response.message === "Got data Successfully") {
+        setAllChapters(response.data);
+        // setTotalPage(Math.ceil(response.pagination.pageCount));
+        console.log(response.data);
+        setSearchErrMsg("");
+      }
+      if (response === "Record not found") {
+        setSearchErrMsg("Record not found");
+      }
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -100,18 +115,13 @@ const Allchapteres = () => {
       disableClickEventBubbling: true,
 
       renderCell: (params) => {
-        const onClick = (e) => {
-          const currentRow = params.row;
-          return alert(JSON.stringify(currentRow, null, 4));
-        };
-
         const handleUpdate = () => {
           const currentRow = params.row;
 
           allChapter.map((ele) => {
             if (
-              currentRow.name == ele.chapterName &&
-              currentRow.course == ele.course.name
+              currentRow.name === ele.chapterName &&
+              currentRow.course === ele.course.name
             ) {
               setUpdate(true);
               handleOpenUpdate();
@@ -127,8 +137,8 @@ const Allchapteres = () => {
           // const id = ;
           allChapter.map((ele) => {
             if (
-              currentRow.name == ele.chapterName &&
-              currentRow.course == ele.course.name
+              currentRow.name === ele.chapterName &&
+              currentRow.course === ele.course.name
             ) {
               // console.log(currentRow._id);
               deleteChapter(ele._id);
@@ -172,6 +182,10 @@ const Allchapteres = () => {
 
   return (
     <>
+      <div className="app">
+        <Sidebar isSidebar={isSidebar} />
+        <main className="content">
+          <Topbar setIsSidebar={setIsSidebar} />
 
           <Modal
             open={open}
@@ -193,7 +207,7 @@ const Allchapteres = () => {
               <UpdateChapters closeEvent={handleCloseUpdate} />
             </Box>
           </Modal>
-        
+
           <Box m="18px">
             <Box
               display="flex"
@@ -202,7 +216,11 @@ const Allchapteres = () => {
             >
               <Header title="Manage Chapters" subtitle="List of Chapters" />
               <Box>
-                <Button
+                <Search
+                  handleChangeSearch={handleChangeSearch}
+                  searchErrMsg={searchErrMsg}
+                />
+                {/* <Button
                   variant="contained"
                   sx={{
                     // backgroundColor: "#5d5de7",
@@ -215,7 +233,7 @@ const Allchapteres = () => {
                 >
                   <AddIcon sx={{ mr: "10px" }} />
                   Add New Chapter
-                </Button>
+                </Button> */}
               </Box>
             </Box>
             <Box>
@@ -264,8 +282,24 @@ const Allchapteres = () => {
                 />
               </Box>
             </Box>
+            <Fab
+              color="primary"
+              aria-label="add"
+              sx={{
+                bottom: 16,
+                right: 30,
+                position: "fixed",
+              }}
+              onClick={() => {
+                setOpen(true);
+              }}
+            >
+              <AddIcon />
+            </Fab>
           </Box>
           <ToastContainer />
+        </main>
+      </div>
     </>
   );
 };

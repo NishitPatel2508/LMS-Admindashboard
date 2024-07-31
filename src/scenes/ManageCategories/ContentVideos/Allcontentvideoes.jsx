@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Modal, useTheme } from "@mui/material";
+import { Box, Fab, Modal, useTheme } from "@mui/material";
 import { DataGrid, GridToolbar, GridActionsCellItem } from "@mui/x-data-grid";
 
 import AddFormCV from "./AddFormCV";
@@ -13,9 +13,11 @@ import Topbar from "../../global/Topbar";
 import Header from "../../../components/Header";
 import { ToastContainer, toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { baseURL } from "../../../basic";
-import { getAllContentVideoInstance } from "../../../instances/ContentVideoInstance";
+import {
+  deleteContentVideoInstance,
+  getAllContentVideoInstance,
+} from "../../../instances/ContentVideoInstance";
+import Search from "../../../components/Search";
 
 const Allcontentvideoes = () => {
   const theme = useTheme();
@@ -25,7 +27,7 @@ const Allcontentvideoes = () => {
   const [allContentVideo, setAllContentVideo] = useState([]);
 
   const [open, setOpen] = React.useState(false);
-  const [update, setUpdate] = React.useState(false);
+  const [, setUpdate] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
@@ -36,6 +38,13 @@ const Allcontentvideoes = () => {
   const handleCloseUpdate = () => {
     setOpenHandle(false);
     getAllContentVideo();
+  };
+
+  const [search, setSearch] = useState("");
+  const [searchErrMsg, setSearchErrMsg] = useState("");
+
+  const handleChangeSearch = async (e) => {
+    setSearch(e.target.value);
   };
 
   const style = {
@@ -52,11 +61,20 @@ const Allcontentvideoes = () => {
 
   useEffect(() => {
     getAllContentVideo();
-  }, []);
+  }, [search]);
   const getAllContentVideo = async () => {
     try {
-      let response = await getAllContentVideoInstance();
-      setAllContentVideo(response);
+      let response = await getAllContentVideoInstance(search);
+      console.log(response.message);
+      if (response.message === "Got data Successfully") {
+        setAllContentVideo(response.data);
+        // setTotalPage(Math.ceil(response.pagination.pageCount));
+        // console.log(response.data);
+        setSearchErrMsg("");
+      }
+      if (response.message === "Record not found") {
+        setSearchErrMsg("Record not found");
+      }
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -69,12 +87,7 @@ const Allcontentvideoes = () => {
         throw new Error("Access token is missing.");
       }
 
-      let result = await axios
-        .delete(`${baseURL}/contentvideo/delete/${id}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
+      await deleteContentVideoInstance(id)
         .then((result) => {
           toast.success("Deleted successfully", { autoClose: 2000 });
           console.log("Deleted");
@@ -116,16 +129,11 @@ const Allcontentvideoes = () => {
       disableClickEventBubbling: true,
 
       renderCell: (params) => {
-        const onClick = (e) => {
-          const currentRow = params.row;
-          return alert(JSON.stringify(currentRow, null, 4));
-        };
-
         const handleUpdate = () => {
           const currentRow = params.row;
 
           allContentVideo.map((ele) => {
-            if (currentRow.thumbnail == ele.thumbnail) {
+            if (currentRow.thumbnail === ele.thumbnail) {
               setUpdate(true);
               handleOpenUpdate();
               localStorage.setItem("updatecontentvideo", ele._id);
@@ -138,7 +146,7 @@ const Allcontentvideoes = () => {
 
           // const id = ;
           allContentVideo.map((ele) => {
-            if (currentRow.videoLink == ele.videoLink) {
+            if (currentRow.videoLink === ele.videoLink) {
               // console.log(currentRow._id);
               deleteContentVideo(ele._id);
               // alert(JSON.stringify(currentRow));
@@ -181,6 +189,10 @@ const Allcontentvideoes = () => {
   });
   return (
     <>
+      <div className="app">
+        <Sidebar isSidebar={isSidebar} />
+        <main className="content">
+          <Topbar setIsSidebar={setIsSidebar} />
           <Modal
             open={open}
             // onClose={handleClose}
@@ -213,7 +225,7 @@ const Allcontentvideoes = () => {
                 subtitle="List of Content Videos"
               />
               <Box>
-                <Button
+                {/* <Button
                   variant="contained"
                   sx={{
                     // backgroundColor: "#5d5de7",
@@ -226,7 +238,11 @@ const Allcontentvideoes = () => {
                 >
                   <AddIcon sx={{ mr: "10px" }} />
                   Add New Content Video
-                </Button>
+                </Button> */}
+                <Search
+                  handleChangeSearch={handleChangeSearch}
+                  searchErrMsg={searchErrMsg}
+                />
               </Box>
             </Box>
             <Box>
@@ -275,8 +291,24 @@ const Allcontentvideoes = () => {
                 />
               </Box>
             </Box>
+            <Fab
+              color="primary"
+              aria-label="add"
+              sx={{
+                bottom: 16,
+                right: 30,
+                position: "fixed",
+              }}
+              onClick={() => {
+                setOpen(true);
+              }}
+            >
+              <AddIcon />
+            </Fab>
           </Box>
           <ToastContainer />
+        </main>
+      </div>
     </>
   );
 };

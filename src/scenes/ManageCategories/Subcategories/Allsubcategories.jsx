@@ -1,9 +1,10 @@
 import React from "react";
-import { Box, Button, Modal, useTheme } from "@mui/material";
+import { Box, Modal, useTheme } from "@mui/material";
 import { DataGrid, GridToolbar, GridActionsCellItem } from "@mui/x-data-grid";
 import AddForm from "./AddForm";
 import UpdateSubCategory from "./UpdateSubCategory";
 import { tokens } from "../../../theme";
+import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
@@ -12,12 +13,11 @@ import Topbar from "../../global/Topbar";
 import Header from "../../../components/Header";
 import { ToastContainer, toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { baseURL } from "../../../basic";
 import {
   deleteSubCategoryInstance,
   getAllSubCategoryInstance,
 } from "../../../instances/SubCategoryInstance";
+import Search from "../../../components/Search";
 
 const Allsubcategories = () => {
   const theme = useTheme();
@@ -25,6 +25,9 @@ const Allsubcategories = () => {
 
   const [isSidebar, setIsSidebar] = useState(true);
   const [allSubCategories, setAllSubCategories] = useState([]);
+
+  const [search, setSearch] = useState("");
+  const [searchErrMsg, setSearchErrMsg] = useState("");
   const [open, setOpen] = React.useState(false);
   const [, setUpdate] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -32,6 +35,7 @@ const Allsubcategories = () => {
     setOpen(false);
     getAllSubCategories();
   };
+
   const [openHandle, setOpenHandle] = React.useState(false);
   const handleOpenUpdate = () => setOpenHandle(true);
   const handleCloseUpdate = () => {
@@ -53,11 +57,19 @@ const Allsubcategories = () => {
 
   useEffect(() => {
     getAllSubCategories();
-  }, []);
+  }, [search]);
   const getAllSubCategories = async () => {
     try {
-      const data = await getAllSubCategoryInstance();
-      setAllSubCategories(data);
+      const response = await getAllSubCategoryInstance(search);
+      if (response.message === "Got data Successfully") {
+        setAllSubCategories(response.data);
+        // setTotalPage(Math.ceil(response.pagination.pageCount));
+        // console.log(response.data);
+        setSearchErrMsg("");
+      }
+      if (response === "Record not found") {
+        setSearchErrMsg("Record not found");
+      }
     } catch (error) {
       console.error("Error during Get all subcategory:", error);
     }
@@ -99,7 +111,7 @@ const Allsubcategories = () => {
           const currentRow = params.row;
 
           allSubCategories.map((ele) => {
-            if (currentRow.name == ele.subCategoryName) {
+            if (currentRow.name === ele.subCategoryName) {
               setUpdate(true);
               handleOpenUpdate();
               localStorage.setItem("updatesubcategories", ele._id);
@@ -113,7 +125,7 @@ const Allsubcategories = () => {
 
           // const id = ;
           allSubCategories.map((ele) => {
-            if (currentRow.name == ele.subCategoryName) {
+            if (currentRow.name === ele.subCategoryName) {
               // console.log(currentRow._id);
               deleteSubCategory(ele._id);
               // alert(JSON.stringify(currentRow));
@@ -147,8 +159,16 @@ const Allsubcategories = () => {
       category: element.category.categoryName,
     };
   });
+
+  const handleChangeSearch = async (e) => {
+    setSearch(e.target.value);
+  };
   return (
     <>
+      <div className="app">
+        <Sidebar isSidebar={isSidebar} />
+        <main className="content">
+          <Topbar setIsSidebar={setIsSidebar} />
           <Modal
             open={open}
             // onClose={handleClose}
@@ -169,7 +189,7 @@ const Allsubcategories = () => {
               <UpdateSubCategory closeEvent={handleCloseUpdate} />
             </Box>
           </Modal>
-          ,
+
           <Box m="18px">
             <Box
               display="flex"
@@ -181,20 +201,10 @@ const Allsubcategories = () => {
                 subtitle="List of Subcategories"
               />
               <Box>
-                <Button
-                  variant="contained"
-                  sx={{
-                    backgroundColor: "#5d5de7",
-                    // color: colors.grey[100],
-                    fontSize: "14px",
-                    fontWeight: "bold",
-                    padding: "10px 20px",
-                  }}
-                  onClick={handleOpen}
-                >
-                  <AddIcon sx={{ mr: "10px" }} />
-                  Add New Sub Category
-                </Button>
+                <Search
+                  handleChangeSearch={handleChangeSearch}
+                  searchErrMsg={searchErrMsg}
+                />
               </Box>
             </Box>
             <Box>
@@ -244,8 +254,23 @@ const Allsubcategories = () => {
               </Box>
             </Box>
           </Box>
+          <Fab
+            color="primary"
+            aria-label="add"
+            sx={{
+              bottom: 16,
+              right: 30,
+              position: "fixed",
+            }}
+            onClick={() => {
+              setOpen(true);
+            }}
+          >
+            <AddIcon />
+          </Fab>
           <ToastContainer />
-
+        </main>
+      </div>
     </>
   );
 };

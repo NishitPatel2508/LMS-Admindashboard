@@ -31,7 +31,6 @@ export default function AddFormContentFiles({ closeEvent }) {
   const [fileError, setFileError] = useState();
   const [chapterName, setChapterName] = useState("");
   const [chapterNameError, setChapterNameError] = useState("");
-  const [chapterError, setChapterError] = useState("");
 
   //Vercel File Upload
   const inputFileRef = useRef(null);
@@ -47,7 +46,7 @@ export default function AddFormContentFiles({ closeEvent }) {
   const getallChapter = async () => {
     try {
       let response = await getAllChapterInstance();
-      setAllChapters(response);
+      setAllChapters(response.data);
     } catch (error) {
       console.error("Error during signup:", error);
     }

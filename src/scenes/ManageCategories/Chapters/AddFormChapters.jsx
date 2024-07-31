@@ -13,11 +13,8 @@ import {
   TextField,
 } from "@mui/material";
 
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { baseURL } from "../../../basic";
 import { getAllCourseInstance } from "../../../instances/Course/CourseInstance";
 import { createChapterInstance } from "../../../instances/ChapterInstance";
 
@@ -30,7 +27,6 @@ export default function AddFormChapters({ closeEvent }) {
   const [courseNameError, setCourseNameError] = useState("");
   const [chapterError, setChapterError] = useState("");
 
-  const navigate = useNavigate();
   const [chapter, setChapter] = useState("");
   const onChangeCourse = (e) => {
     setCourseName(e.target.value);
@@ -43,8 +39,8 @@ export default function AddFormChapters({ closeEvent }) {
 
   const getAllCourse = async () => {
     try {
-      let response = await getAllCourseInstance();
-      setAllCourse(response);
+      let response = await getAllCourseInstance(1);
+      setAllCourse(response.data);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -64,7 +60,7 @@ export default function AddFormChapters({ closeEvent }) {
           course: courseName,
         };
         let response = await createChapterInstance(fields);
-        if (response.message == "Chapter already exists") {
+        if (response.message === "Chapter already exists") {
           toast.error(response.message, { autoClose: 2000 });
         } else {
           toast.success(response.message, { autoClose: 2000 });
@@ -140,7 +136,7 @@ export default function AddFormChapters({ closeEvent }) {
               onClick={handleCreate}
             >
               {/* <AddIcon sx={{ mr: "10px" }} /> */}
-              Add New Chapter
+              Submit
             </Button>
           </Grid>
         </Grid>
