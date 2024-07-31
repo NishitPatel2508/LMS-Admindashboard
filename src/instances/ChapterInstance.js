@@ -1,16 +1,17 @@
 import axiosInstance from "./axiosInstances";
 
 //Get All
-export const getAllChapterInstance = async () => {
+export const getAllChapterInstance = async (search) => {
   try {
     const response = await axiosInstance({
-      url: "/getAllChapter",
+      url: `/getAllChapter?keyword=${search}`,
       method: "GET",
     });
 
-    return response.data.data;
+    return response.data;
   } catch (error) {
-    console.log("ChapterErr", error);
+    console.log("ChapterErr", error.response.data.message);
+    return error.response.data.message;
   }
 };
 

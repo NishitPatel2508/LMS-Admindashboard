@@ -15,8 +15,6 @@ import {
 
 import { toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
-import axios from "axios";
-import { baseURL } from "../../../basic";
 import { getAllCategoryInstance } from "../../../instances/CategoryInstance";
 import { createSubCategoryInstance } from "../../../instances/SubCategoryInstance";
 
@@ -62,7 +60,7 @@ export default function AddForm({ closeEvent }) {
           subCategoryName: subCategory,
         };
         let result = await createSubCategoryInstance(fields);
-        if (result.message == "Subcategory already exists") {
+        if (result.message === "Subcategory already exists") {
           toast.error(result.message, { autoClose: 2000 });
         } else {
           toast.success(result.message, { autoClose: 2000 });
@@ -138,12 +136,13 @@ export default function AddForm({ closeEvent }) {
               onClick={handleCreate}
             >
               {/* <AddIcon sx={{ mr: "10px" }} /> */}
-              Add New Sub Category
+              submit
             </Button>
           </Grid>
         </Grid>
 
-        <Box height={15} />
+        {/* <Box height={15} /> */}
+        {/* <AddNew navigateTo={"/ad"}/> */}
       </Box>
     </>
   );

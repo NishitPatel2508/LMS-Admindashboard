@@ -1,38 +1,16 @@
 import React from "react";
-import {
-  Box,
-  Button,
-  IconButton,
-  Typography,
-  Modal,
-  useTheme,
-  FormControl,
-  Select,
-  MenuItem,
-  InputLabel,
-  Stack,
-} from "@mui/material";
-import {
-  GridRowModes,
-  DataGrid,
-  GridToolbar,
-  GridToolbarContainer,
-  GridActionsCellItem,
-  GridRowEditStopReasons,
-} from "@mui/x-data-grid";
+import { Box, Modal, useTheme } from "@mui/material";
+import { DataGrid, GridToolbar, GridActionsCellItem } from "@mui/x-data-grid";
 
+import Fab from "@mui/material/Fab";
 import AddFormPL from "./AddFormPL";
 import UpdateProgrammingLang from "./UpdateProgrammingLang";
 import { tokens } from "../../../theme";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Close";
-import { useMode } from "../../../theme";
 import Sidebar from "../../global/Sidebar";
 import Topbar from "../../global/Topbar";
-import StatBox from "../../../components/StatBox";
 import Header from "../../../components/Header";
 import { ToastContainer, toast } from "react-toastify";
 import { useEffect, useState } from "react";
@@ -40,6 +18,7 @@ import {
   deleteProgrammingLanguageInstance,
   getAllProgrammingLanguageInstance,
 } from "../../../instances/ProgrammingLangauageInstance";
+import Search from "../../../components/Search";
 
 const Allprogramminglang = () => {
   const theme = useTheme();
@@ -49,7 +28,7 @@ const Allprogramminglang = () => {
   const [allProgrammingLanguage, setAllProgrammingLanguage] = useState([]);
 
   const [open, setOpen] = React.useState(false);
-  const [update, setUpdate] = React.useState(false);
+  const [, setUpdate] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
@@ -60,6 +39,13 @@ const Allprogramminglang = () => {
   const handleCloseUpdate = () => {
     setOpenHandle(false);
     getallProgrammingLanguage();
+  };
+
+  const [search, setSearch] = useState("");
+  const [searchErrMsg, setSearchErrMsg] = useState("");
+
+  const handleChangeSearch = async (e) => {
+    setSearch(e.target.value);
   };
 
   const style = {
@@ -76,11 +62,19 @@ const Allprogramminglang = () => {
 
   useEffect(() => {
     getallProgrammingLanguage();
-  }, []);
+  }, [search]);
   const getallProgrammingLanguage = async () => {
     try {
-      let result = await getAllProgrammingLanguageInstance();
-      setAllProgrammingLanguage(result);
+      let response = await getAllProgrammingLanguageInstance(search);
+      if (response.message === "Got data Successfully") {
+        setAllProgrammingLanguage(response.data);
+        // setTotalPage(Math.ceil(response.pagination.pageCount));
+        // console.log(response.data);
+        setSearchErrMsg("");
+      }
+      if (response === "Record not found") {
+        setSearchErrMsg("Record not found");
+      }
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -88,7 +82,7 @@ const Allprogramminglang = () => {
 
   const deleteProgramingLang = async (id) => {
     try {
-      let result = await deleteProgrammingLanguageInstance(id);
+      await deleteProgrammingLanguageInstance(id);
       toast.success("Deleted successfully", { autoClose: 2000 });
       getallProgrammingLanguage();
     } catch (error) {
@@ -117,16 +111,11 @@ const Allprogramminglang = () => {
       disableClickEventBubbling: true,
 
       renderCell: (params) => {
-        const onClick = (e) => {
-          const currentRow = params.row;
-          return alert(JSON.stringify(currentRow, null, 4));
-        };
-
         const handleUpdate = () => {
           const currentRow = params.row;
 
           allProgrammingLanguage.map((ele) => {
-            if (currentRow.name == ele.programmingLanguageName) {
+            if (currentRow.name === ele.programmingLanguageName) {
               setUpdate(true);
               handleOpenUpdate();
               localStorage.setItem("updateprogramminglang", ele._id);
@@ -139,7 +128,7 @@ const Allprogramminglang = () => {
 
           // const id = ;
           allProgrammingLanguage.map((ele) => {
-            if (currentRow.name == ele.programmingLanguageName) {
+            if (currentRow.name === ele.programmingLanguageName) {
               // console.log(currentRow._id);
               deleteProgramingLang(ele._id);
               // alert(JSON.stringify(currentRow));
@@ -181,6 +170,10 @@ const Allprogramminglang = () => {
   });
   return (
     <>
+      <div className="app">
+        <Sidebar isSidebar={isSidebar} />
+        <main className="content">
+          <Topbar setIsSidebar={setIsSidebar} />
           <Modal
             open={open}
             // onClose={handleClose}
@@ -201,7 +194,6 @@ const Allprogramminglang = () => {
               <UpdateProgrammingLang closeEvent={handleCloseUpdate} />
             </Box>
           </Modal>
-          ,
           <Box m="18px">
             <Box
               display="flex"
@@ -212,7 +204,7 @@ const Allprogramminglang = () => {
                 title="Manage Programming Languages"
                 subtitle="List of Programming Languages"
               />
-              <Box>
+              {/* <Box>
                 <Button
                   variant="contained"
                   sx={{
@@ -227,7 +219,11 @@ const Allprogramminglang = () => {
                   <AddIcon sx={{ mr: "10px" }} />
                   Add New Programming Languages
                 </Button>
-              </Box>
+              </Box> */}
+              <Search
+                handleChangeSearch={handleChangeSearch}
+                searchErrMsg={searchErrMsg}
+              />
             </Box>
             <Box>
               <Box
@@ -275,9 +271,24 @@ const Allprogramminglang = () => {
                 />
               </Box>
             </Box>
+            <Fab
+              color="primary"
+              aria-label="add"
+              sx={{
+                bottom: 16,
+                right: 30,
+                position: "fixed",
+              }}
+              onClick={() => {
+                setOpen(true);
+              }}
+            >
+              <AddIcon />
+            </Fab>
           </Box>
           <ToastContainer />
-
+        </main>
+      </div>
     </>
   );
 };

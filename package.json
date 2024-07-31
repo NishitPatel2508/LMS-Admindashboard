@@ -52,6 +52,7 @@
     "react-to-print": "^2.15.1",
     "react-toastify": "^10.0.5",
     "redux-persist": "^6.0.0",
+    "styled-components": "^6.1.12",
     "web-vitals": "^2.1.4",
     "yup": "^1.4.0"
   },

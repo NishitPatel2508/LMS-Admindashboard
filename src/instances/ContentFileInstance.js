@@ -1,15 +1,16 @@
 import axiosInstance from "./axiosInstances";
 
 // Get All
-export const getAllContentFileInstance = async () => {
+export const getAllContentFileInstance = async (search) => {
   try {
     const response = await axiosInstance({
-      url: "/allFiles",
+      url: `/allFiles?keyword=${search}`,
       method: "GET",
     });
-    return response.data.data;
+    return response.data;
   } catch (error) {
     console.log("cfErr", error);
+    return error.response.data.message;
   }
 };
 

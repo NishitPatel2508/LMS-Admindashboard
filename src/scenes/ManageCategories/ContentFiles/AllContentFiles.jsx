@@ -1,27 +1,6 @@
 import React from "react";
-import {
-  Box,
-  Button,
-  IconButton,
-  Typography,
-  Modal,
-  useTheme,
-  Grid,
-  FormControl,
-  Select,
-  MenuItem,
-  InputLabel,
-  Stack,
-} from "@mui/material";
-import {
-  GridRowModes,
-  DataGrid,
-  GridToolbar,
-  GridToolbarContainer,
-  GridActionsCellItem,
-  GridRowEditStopReasons,
-} from "@mui/x-data-grid";
-import { Document, Page } from "react-pdf";
+import { Box, Fab, IconButton, Modal, useTheme } from "@mui/material";
+import { DataGrid, GridToolbar, GridActionsCellItem } from "@mui/x-data-grid";
 import UpdateFiles from "./UpdateFiles";
 import { pdfjs } from "react-pdf";
 import AddFormContentFiles from "./AddFormContentFiles";
@@ -33,34 +12,30 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import FileOpenIcon from "@mui/icons-material/FileOpen";
 import CloseIcon from "@mui/icons-material/Close";
-import { useMode } from "../../../theme";
 import Sidebar from "../../global/Sidebar";
 import Topbar from "../../global/Topbar";
 import Header from "../../../components/Header";
 import { ToastContainer, toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import ReactPDF from "@react-pdf/renderer";
-import { baseURL, BLOB_READ_WRITE_TOKEN } from "../../../basic";
+import { BLOB_READ_WRITE_TOKEN } from "../../../basic";
 import { del } from "@vercel/blob";
 import {
   deleteContentFileInstance,
   getAllContentFileInstance,
 } from "../../../instances/ContentFileInstance";
+import Search from "../../../components/Search";
 
 const AllContentFiles = () => {
   pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
   const theme = useTheme();
 
-  const [loading, setLoading] = useState(true);
   const colors = tokens(theme.palette.mode);
   const [isSidebar, setIsSidebar] = useState(true);
   const [allFiles, setAllFiles] = useState([]);
   const [file, setFile] = useState();
   const [fileName, setFileName] = useState();
   const [open, setOpen] = React.useState(false);
-  const [update, setUpdate] = React.useState(false);
+  const [, setUpdate] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
@@ -79,9 +54,11 @@ const AllContentFiles = () => {
     // getallContentFiles();
   };
 
-  // const port = process.env.PORT;
-  const [numPages, setNumPages] = useState();
-
+  const [search, setSearch] = useState("");
+  const [searchErrMsg, setSearchErrMsg] = useState("");
+  const handleChangeSearch = async (e) => {
+    setSearch(e.target.value);
+  };
   const style = {
     position: "absolute",
     top: "50%",
@@ -107,11 +84,17 @@ const AllContentFiles = () => {
 
   useEffect(() => {
     getallContentFiles();
-  }, []);
+  }, [search]);
   const getallContentFiles = async () => {
     try {
-      let response = await getAllContentFileInstance();
-      setAllFiles(response);
+      let response = await getAllContentFileInstance(search);
+      if (response.message === "Got data Successfully") {
+        setAllFiles(response.data);
+        setSearchErrMsg("");
+      }
+      if (response.message === "Record not found") {
+        setSearchErrMsg("Record not found");
+      }
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -119,7 +102,7 @@ const AllContentFiles = () => {
 
   const deleteContentFile = async (id) => {
     try {
-      let result = await deleteContentFileInstance(id);
+      await deleteContentFileInstance(id);
       toast.success("Deleted successfully", { autoClose: 2000 });
     } catch (error) {
       console.error("Error during signup:", error);
@@ -148,16 +131,11 @@ const AllContentFiles = () => {
       disableClickEventBubbling: true,
 
       renderCell: (params) => {
-        const onClick = (e) => {
-          const currentRow = params.row;
-          return alert(JSON.stringify(currentRow, null, 4));
-        };
-
         const handleUpdate = () => {
           const currentRow = params.row;
 
           allFiles.map((ele) => {
-            if (currentRow.filename == ele.name) {
+            if (currentRow.filename === ele.name) {
               setUpdate(true);
               localStorage.setItem("updatefile", ele._id);
               console.log(ele._id);
@@ -171,9 +149,9 @@ const AllContentFiles = () => {
 
           // const id = ;
           allFiles.map((ele) => {
-            if (currentRow.filename == ele.name) {
+            if (currentRow.filename === ele.name) {
               console.log(ele._id);
-              let r = del(ele.pdf, {
+              del(ele.pdf, {
                 access: "public",
                 token: BLOB_READ_WRITE_TOKEN,
               });
@@ -187,19 +165,10 @@ const AllContentFiles = () => {
         const handleOpenFiles = () => {
           const currentRow = params.row;
           allFiles.map((ele) => {
-            if (currentRow.filename == ele.name) {
+            if (currentRow.filename === ele.name) {
               console.log(ele._id);
               setFile(ele.pdf);
               setFileName(ele.name);
-              // setReadPDF(ele.pdf)
-              // console.log(ele.pdf);
-              // window.open(ele.name);
-              // let reader = new FileReader();
-              // reader.readAsDataURL(ele.name);
-              // reader.onload = (e) => {
-              //   setFile(e.target.result);
-              // };
-              // alert(JSON.stringify(currentRow));
 
               handleOpenFile();
             }
@@ -250,6 +219,10 @@ const AllContentFiles = () => {
 
   return (
     <>
+      <div className="app">
+        <Sidebar isSidebar={isSidebar} />
+        <main className="content">
+          <Topbar setIsSidebar={setIsSidebar} />
           <Modal
             open={open}
             // onClose={handleClose}
@@ -312,20 +285,10 @@ const AllContentFiles = () => {
                 subtitle="List of Content Files"
               />
               <Box>
-                <Button
-                  variant="contained"
-                  sx={{
-                    // backgroundColor: "#5d5de7",
-                    // color: colors.grey[100],
-                    fontSize: "14px",
-                    fontWeight: "bold",
-                    padding: "10px 20px",
-                  }}
-                  onClick={handleOpen}
-                >
-                  <AddIcon sx={{ mr: "10px" }} />
-                  Add New Content File
-                </Button>
+                <Search
+                  handleChangeSearch={handleChangeSearch}
+                  searchErrMsg={searchErrMsg}
+                />
               </Box>
             </Box>
             <Box>
@@ -374,9 +337,25 @@ const AllContentFiles = () => {
                 />
               </Box>
             </Box>
+
+            <Fab
+              color="primary"
+              aria-label="add"
+              sx={{
+                bottom: 16,
+                right: 30,
+                position: "fixed",
+              }}
+              onClick={() => {
+                setOpen(true);
+              }}
+            >
+              <AddIcon />
+            </Fab>
           </Box>
           <ToastContainer />
-
+        </main>
+      </div>
     </>
   );
 };

@@ -7,18 +7,14 @@ import {
   Select,
   MenuItem,
   InputLabel,
-  Modal,
   FormControl,
   FormHelperText,
   Grid,
   TextField,
 } from "@mui/material";
 
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { baseURL } from "../../../basic";
 import {
   getSingleSubCategoryInstance,
   getUpdateSubCategoryInstance,
@@ -36,9 +32,6 @@ export default function UpdateSubCategory({ closeEvent }) {
   const [subCategory, setSubCategory] = useState("");
   const [categoryError, setCategoryError] = useState("");
   const [subCategoryError, setSubCategoryError] = useState("");
-  const [msg, setMsg] = useState(false);
-
-  const navigate = useNavigate();
 
   const onChangeCategory = (e) => {
     setCategoryName(e.target.value);
@@ -85,7 +78,7 @@ export default function UpdateSubCategory({ closeEvent }) {
           category: categoryName,
           subCategoryName: subCategory,
         };
-        const response = await getUpdateSubCategoryInstance(fields, id)
+        await getUpdateSubCategoryInstance(fields, id)
           .then((response) => {
             toast.success(response.message, { autoClose: 2000 });
             closeEvent();

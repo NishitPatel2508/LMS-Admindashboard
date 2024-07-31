@@ -15,13 +15,11 @@ import {
 
 import { toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
-import axios from "axios";
-import { baseURL } from "../../../basic";
+import { getAllChapterInstance } from "../../../instances/ChapterInstance";
 import {
-  getAllChapterInstance,
-  getSingleChapterInstance,
-} from "../../../instances/ChapterInstance";
-import { getSingleContentVideoInstance, getUpdateContentVideoInstance } from "../../../instances/ContentVideoInstance";
+  getSingleContentVideoInstance,
+  getUpdateContentVideoInstance,
+} from "../../../instances/ContentVideoInstance";
 
 export default function UpdateContentVideoes({ closeEvent }) {
   useEffect(() => {
@@ -37,7 +35,6 @@ export default function UpdateContentVideoes({ closeEvent }) {
   const [chapterNameError, setChapterNameError] = useState("");
   const [videoLink, setVideoLink] = useState("");
   const [videoLinkError, setVideoLinkError] = useState("");
-  const [msg, setMsg] = useState(false);
 
   const onChangeThumbnail = (e) => {
     setThumbail(e.target.value);
@@ -66,7 +63,7 @@ export default function UpdateContentVideoes({ closeEvent }) {
   const getAllChapter = async () => {
     try {
       let response = await getAllChapterInstance();
-      setAllChapter(response);
+      setAllChapter(response.data);
     } catch (error) {
       console.error("Error during signup:", error);
     }

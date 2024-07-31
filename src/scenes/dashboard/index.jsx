@@ -71,12 +71,11 @@ const Dashboard = () => {
   const [isSidebar, setIsSidebar] = useState(true);
   // const [user,setUser] = useState(null)
   const [totalStudents, setTotalStudents] = useState(0);
-  const [allContentVideo, setAllContentVideo] = useState({});
-  const [revenue, setAllRevenue] = useState([]);
+  const [, setAllRevenue] = useState([]);
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [courseLength, setCoursesLength] = useState("");
   const [contentFileLength, setContentFileLength] = useState("");
-  const [loading, setLoading] = useState(true);
+  // const [, setLoading] = useState(true);
   useEffect(() => {
     getAllData();
   }, []);
@@ -86,7 +85,7 @@ const Dashboard = () => {
       const response = await getAllDataDBInstance();
 
       fetchDataFieldVise(response);
-      setLoading(false);
+      // setLoading(false);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -132,6 +131,10 @@ const Dashboard = () => {
     }
   };
   return (
+    <div className="app">
+      <Sidebar isSidebar={isSidebar} />
+      <main className="content">
+        <Topbar setIsSidebar={setIsSidebar} />
         <Box m="20px">
           {/* HEADER */}
           <Box
@@ -444,6 +447,8 @@ const Dashboard = () => {
           </Box>
           <ToastContainer />
         </Box>
+      </main>
+    </div>
   );
 };
 

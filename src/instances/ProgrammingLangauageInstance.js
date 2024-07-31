@@ -1,15 +1,16 @@
-import  axiosInstance from "./axiosInstances";
+import axiosInstance from "./axiosInstances";
 
 // Get All
-export const getAllProgrammingLanguageInstance = async () => {
+export const getAllProgrammingLanguageInstance = async (search) => {
   try {
     const response = await axiosInstance({
-      url: "/getAllProgrammingLanguage",
+      url: `/getAllProgrammingLanguage?keyword=${search}`,
       method: "GET",
     });
-    return response.data.data;
+    return response.data;
   } catch (error) {
-    console.log("pl", error);
+    console.log("pl", error.response.data.message);
+    return error.response.data.message;
   }
 };
 

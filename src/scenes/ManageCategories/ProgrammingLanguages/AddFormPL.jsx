@@ -7,20 +7,14 @@ import {
   Select,
   MenuItem,
   InputLabel,
-  Modal,
   FormControl,
   FormHelperText,
   Grid,
-  useTheme,
   TextField,
-  Stack,
 } from "@mui/material";
 
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { baseURL } from "../../../basic";
 import { getAllSubCategoryInstance } from "../../../instances/SubCategoryInstance";
 import { createProgrammingLanguageInstance } from "../../../instances/ProgrammingLangauageInstance";
 
@@ -33,7 +27,6 @@ export default function AddFormPL({ closeEvent }) {
   const [subCategoryError, setSubCategoryError] = useState("");
   const [programmingLang, setProgrammingLang] = useState("");
   const [programmingLangError, setProgrammingLangError] = useState("");
-  const [msg, setMsg] = useState(false);
 
   const onChangeSubCategory = (e) => {
     setSubCategoryName(e.target.value);
@@ -47,8 +40,8 @@ export default function AddFormPL({ closeEvent }) {
 
   const getAllSubCategories = async () => {
     try {
-      let result = await getAllSubCategoryInstance();
-      setAllSubCategory(result);
+      let response = await getAllSubCategoryInstance();
+      setAllSubCategory(response.data);
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -68,7 +61,7 @@ export default function AddFormPL({ closeEvent }) {
           subCategory: subCategoryName,
         };
         let result = await createProgrammingLanguageInstance(fields);
-        if (result.message == "Programming Language already exists") {
+        if (result.message === "Programming Language already exists") {
           toast.error(result.message, { autoClose: 2000 });
         } else {
           toast.success(result.message, { autoClose: 2000 });
@@ -144,7 +137,8 @@ export default function AddFormPL({ closeEvent }) {
               onClick={handleCreate}
             >
               {/* <AddIcon sx={{ mr: "10px" }} /> */}
-              Add New Programming Language
+              {/* Add New Programming Language */}
+              submit
             </Button>
           </Grid>
         </Grid>

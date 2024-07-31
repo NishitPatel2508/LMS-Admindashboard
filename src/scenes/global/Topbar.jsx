@@ -1,5 +1,4 @@
 import { Box, IconButton, useTheme } from "@mui/material";
-import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 
@@ -7,28 +6,24 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import Avatar from "@mui/material/Avatar";
 import { useContext, useEffect, useState } from "react";
-import { ColorModeContext, tokens } from "../../theme";
-import InputBase from "@mui/material/InputBase";
+import { ColorModeContext } from "../../theme";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import SearchIcon from "@mui/icons-material/Search";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../../app/Slice/authSlice";
 import { getInstructorInfoInstance } from "../../instances/InstructorInstance";
-const Topbar = () => {
 
-  // useEffect(() => {
-  //   getInstructorInfo();
-  // }, []);
+const Topbar = () => {
   const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [profileImg, setprofileImg] = useState("");
+  useEffect(() => {
+    getInstructorInfo();
+  }, []);
   //Logout
   const dispatch = useDispatch();
 
@@ -49,25 +44,82 @@ const Topbar = () => {
   };
 
   const getInstructorInfo = async () => {
-    const response = await getInstructorInfoInstance().then((response) => {
+    await getInstructorInfoInstance().then((response) => {
       setprofileImg(response.profileImg);
     });
   };
+  // const handleChangeSearch = async (e) => {
+  //   setSearch(e.target.value);
+
+  //   if (search) {
+  //     setIsSearch(true);
+  //     await searchDBInstance(e.target.value).then((response) => {
+  //       setSearchData(response.data);
+  //       // console.log(response.data);
+  //       // searchData.map((item) => {
+  //       //   console.log(item.name);
+  //       // });
+  //     });
+  //   }
+  //   if (e.target.value.length === 0) {
+  //     setIsSearch(false);
+  //     setSearchData([]);
+  //   }
+  // };
+
   return (
     <Box display="flex" justifyContent="space-between" p={2}>
       {/* SEARCH BAR */}
       <Box
-        display="flex"
-        backgroundColor={colors.primary[400]}
-        borderRadius="3px"
+        display="inline-block"
+        position="relative"
+        // backgroundColor={colors.primary[400]}
+        // flexDirection="row"
+        // borderRadius="3px"
       >
-        <InputBase
-          sx={{ ml: 2, flex: 2, width: "280px" }}
+        {/* <input
+          type="text"
+          onChange={handleChangeSearch}
           placeholder="Search"
+          style={{
+            marginLeft: "2px",
+            width: "280px",
+            border: "3px solid #eee",
+            height: "45px",
+            backgroundColor: "#6c757",
+            borderRadius: "5px",
+          }}
         />
-        <IconButton type="button" sx={{ p: 1 }}>
-          <SearchIcon />
-        </IconButton>
+        {searchData && (
+          <Box
+            display={isSearch ? "block" : "none"}
+            position="absolute"
+            minWidth="160px"
+            padding="8px 5px"
+            zIndex="1"
+            backgroundColor={colors.primary[400]}
+            color="black"
+          >
+            {searchData.map((item) => {
+              return (
+                <div
+                  key={item._id}
+                  style={{
+                    width: "270px",
+                    textAlign: "left",
+                    height: "35px",
+                    display: "flex",
+                    alignItems: "center",
+                    cursor: "pointer",
+                  }}
+                  onClick={handleSelectedSearch(item._id)}
+                >
+                  {item.name}
+                </div>
+              );
+            })}
+          </Box>
+        )} */}
       </Box>
 
       {/* ICONS */}

@@ -5,22 +5,18 @@ import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import BookIcon from "@mui/icons-material/Book";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import DonutLargeIcon from "@mui/icons-material/DonutLarge";
 
 import CategoryIcon from "@mui/icons-material/Category";
-import axios from "axios";
-import { baseURL } from "../../basic";
+import { getInstructorInfoInstance } from "../../instances/InstructorInstance";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -44,8 +40,6 @@ const Sidebar = () => {
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
-  const [userName, setUserName] = useState("");
-  // const name = localStorage.getItem("name");
   const [profileImg, setprofileImg] = useState("");
   const [name, setName] = useState("");
   useEffect(() => {
@@ -54,31 +48,17 @@ const Sidebar = () => {
   }, []);
   const getInstructorInfo = async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken") || "");
-      if (!accessToken) {
-        throw new Error("Access token is missing.");
-      }
-      //   setCourseId(courseid);
-      //   console.log(courseid);
-      let result = await axios
-        .get(`${baseURL}/instructor/get`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            // "Content-Type": "multipart/form-data",
-          },
-        })
+      await getInstructorInfoInstance()
         .then((result) => {
           console.log(result);
-          console.log(result.data.data);
           // localStorage.getItem("name");
           //   console.log(courseId);
-          setName(result.data.data.name);
-          setprofileImg(result.data.data.profileImg);
+          setName(result.name);
+          setprofileImg(result.profileImg);
           localStorage.setItem("profilepic", profileImg);
         })
         .catch((err) => {
           console.log(err.response);
-          console.log(accessToken);
         });
     } catch (error) {
       console.error("Error during signup:", error);

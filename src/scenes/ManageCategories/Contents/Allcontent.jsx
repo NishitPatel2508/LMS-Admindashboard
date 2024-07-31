@@ -3,55 +3,34 @@ import {
   Box,
   Button,
   IconButton,
-  Typography,
   Modal,
   useTheme,
-  FormControl,
   Grid,
-  Select,
-  MenuItem,
-  InputLabel,
   TextField,
-  Stack,
+  Fab,
 } from "@mui/material";
-import {
-  GridRowModes,
-  DataGrid,
-  GridToolbar,
-  GridToolbarContainer,
-  GridActionsCellItem,
-  GridRowEditStopReasons,
-} from "@mui/x-data-grid";
+import { DataGrid, GridToolbar, GridActionsCellItem } from "@mui/x-data-grid";
 
-// import AddFormChapters from "./AddFormChapters";
 import AddFormContent from "./AddFormContent";
 import UpdateContent from "./UpdateContent";
-// import UpdateChapters from "./UpdateChapters";
 import { tokens } from "../../../theme";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import FileOpenIcon from "@mui/icons-material/FileOpen";
-import CancelIcon from "@mui/icons-material/Close";
-import { useMode } from "../../../theme";
 import Sidebar from "../../global/Sidebar";
 import Topbar from "../../global/Topbar";
-import StatBox from "../../../components/StatBox";
 import Header from "../../../components/Header";
 import { ToastContainer, toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-// Import the main component
 import { Viewer, Worker } from "@react-pdf-viewer/core";
-// // Import the styles
 import "@react-pdf-viewer/core/lib/styles/index.css";
-import { baseURL } from "../../../basic";
 import {
   deleteContentInstance,
   getAllContentInstance,
 } from "../../../instances/ContentInstance";
+import Search from "../../../components/Search";
 
 const Allcontent = () => {
   const theme = useTheme();
@@ -60,7 +39,7 @@ const Allcontent = () => {
   const [isSidebar, setIsSidebar] = useState(true);
   const [allContent, setAllContent] = useState([]);
 
-  const [update, setUpdate] = React.useState(false);
+  const [, setUpdate] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {
@@ -81,7 +60,13 @@ const Allcontent = () => {
   const [viewContentVideo, setViewContentVideo] = useState("");
   const [viewContentFile, setViewContentFile] = useState("");
   const [viewContentFilePDF, setViewContentFilePDF] = useState("");
-  const navigate = useNavigate();
+
+  const [search, setSearch] = useState("");
+  const [searchErrMsg, setSearchErrMsg] = useState("");
+
+  const handleChangeSearch = async (e) => {
+    setSearch(e.target.value);
+  };
 
   const style = {
     position: "absolute",
@@ -97,11 +82,19 @@ const Allcontent = () => {
 
   useEffect(() => {
     getAllContent();
-  }, []);
+  }, [search]);
   const getAllContent = async () => {
     try {
-      let response = await getAllContentInstance();
-      setAllContent(response);
+      let response = await getAllContentInstance(search);
+      if (response.message === "Got data Successfully") {
+        setAllContent(response.data);
+        // setTotalPage(Math.ceil(response.pagination.pageCount));
+        // console.log(response.data);
+        setSearchErrMsg("");
+      }
+      if (response === "Record not found") {
+        setSearchErrMsg("Record not found");
+      }
     } catch (error) {
       console.error("Error during signup:", error);
     }
@@ -109,7 +102,7 @@ const Allcontent = () => {
 
   const deleteContent = async (id) => {
     try {
-      let result = await deleteContentInstance(id);
+      await deleteContentInstance(id);
       toast.success("Deleted successfully", { autoClose: 2000 });
       console.log("Deleted");
       getAllContent();
@@ -149,20 +142,14 @@ const Allcontent = () => {
       disableClickEventBubbling: true,
 
       renderCell: (params) => {
-        const onClick = (e) => {
-          const currentRow = params.row;
-          return alert(JSON.stringify(currentRow, null, 4));
-        };
-
         const handleUpdate = () => {
           const currentRow = params.row;
 
           allContent.map((ele) => {
-            if (currentRow.contentfile == ele.contentFileDetailes.name) {
+            if (currentRow.contentfile === ele.contentFileDetailes.name) {
               setUpdate(true);
               handleOpenUpdate();
               localStorage.setItem("updatecontent", ele._id);
-              console.log(ele._id);
             }
           });
         };
@@ -172,10 +159,8 @@ const Allcontent = () => {
 
           // const id = ;
           allContent.map((ele) => {
-            if (currentRow.contentfile == ele.contentFileDetailes.name) {
-              // console.log(currentRow._id);
+            if (currentRow.contentfile === ele.contentFileDetailes.name) {
               deleteContent(ele._id);
-              // alert(JSON.stringify(currentRow));
             }
           });
         };
@@ -185,7 +170,7 @@ const Allcontent = () => {
 
           // const id = ;
           allContent.map((ele) => {
-            if (currentRow.contentfile == ele.contentFileDetailes.name) {
+            if (currentRow.contentfile === ele.contentFileDetailes.name) {
               console.log(currentRow._id);
               setViewChapterName(currentRow.name);
               setViewCourse(currentRow.course);
@@ -244,6 +229,10 @@ const Allcontent = () => {
 
   return (
     <>
+      <div className="app">
+        <Sidebar isSidebar={isSidebar} />
+        <main className="content">
+          <Topbar setIsSidebar={setIsSidebar} />
           <Modal
             open={open}
             // onClose={handleClose}
@@ -337,7 +326,11 @@ const Allcontent = () => {
             >
               <Header title="Manage Contnets" subtitle="List of Contents" />
               <Box>
-                <Button
+                <Search
+                  handleChangeSearch={handleChangeSearch}
+                  searchErrMsg={searchErrMsg}
+                />
+                {/* <Button
                   variant="contained"
                   sx={{
                     // backgroundColor: "#5d5de7",
@@ -350,7 +343,7 @@ const Allcontent = () => {
                 >
                   <AddIcon sx={{ mr: "10px" }} />
                   Add New Content
-                </Button>
+                </Button> */}
               </Box>
             </Box>
             <Box>
@@ -399,8 +392,24 @@ const Allcontent = () => {
                 />
               </Box>
             </Box>
+            <Fab
+              color="primary"
+              aria-label="add"
+              sx={{
+                bottom: 16,
+                right: 30,
+                position: "fixed",
+              }}
+              onClick={() => {
+                setOpen(true);
+              }}
+            >
+              <AddIcon />
+            </Fab>
           </Box>
           <ToastContainer />
+        </main>
+      </div>
     </>
   );
 };

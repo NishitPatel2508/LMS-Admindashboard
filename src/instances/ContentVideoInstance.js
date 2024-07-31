@@ -1,19 +1,18 @@
-
 import axiosInstance from "./axiosInstances";
 // Get All
 
-export const getAllContentVideoInstance = async () =>{
-    try {
-        const response = await axiosInstance({
-            url:"/getAllContentVideo",
-            method:"GET"
-        })
-        return response.data.data;
-    } catch (error) {
-        console.log("CV",error);
-    }
-}
-
+export const getAllContentVideoInstance = async (search) => {
+  try {
+    const response = await axiosInstance({
+      url: `/getAllContentVideo?keyword=${search}`,
+      method: "GET",
+    });
+    return response.data;
+  } catch (error) {
+    console.log("CV", error.response.data.message);
+    return error.response.data.message;
+  }
+};
 
 //Get Single
 export const getSingleContentVideoInstance = async (id) => {

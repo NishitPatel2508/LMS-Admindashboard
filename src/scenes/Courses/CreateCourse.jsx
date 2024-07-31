@@ -2,16 +2,12 @@ import React from "react";
 import {
   Box,
   TextField,
-  Typography,
   FormControl,
   Select,
   MenuItem,
   InputLabel,
-  useTheme,
   Button,
-  Link,
 } from "@mui/material";
-import { tokens } from "../../theme";
 import Topbar from "../global/Topbar";
 import Sidebar from "../global/Sidebar";
 import Header from "../../components/Header";
@@ -109,14 +105,7 @@ const CreateCourse = () => {
         setprofileImg(r.target.result);
       };
       const imgfile = event.target.files[0];
-      // const url = URL.createObjectURL(imgfile);
-      // console.log("uuuu", url);
-      // setImgFinale(url);
       reader.readAsDataURL(imgfile);
-
-      // console.log(imgfile);
-      // console.log(avatar.placeholder);
-      // const courseImg = avatar.placeholder;
 
       //readAsDataURL : Store the value inside the file.
     } else {
@@ -330,7 +319,7 @@ const CreateCourse = () => {
           const response = await handleCreateCourse(fields);
           console.log(response.data);
           console.log(response.message);
-          if (response.message == "Course already you created.") {
+          if (response.message === "Course already you created.") {
             toast.error(response.message, { autoClose: 2000 });
           } else {
             toast.success(response.message, { autoClose: 2000 });
@@ -347,6 +336,10 @@ const CreateCourse = () => {
     }
   };
   return (
+    <div className="app">
+      <Sidebar isSidebar={isSidebar} />
+      <main className="content">
+        <Topbar setIsSidebar={setIsSidebar} />
         <Box m="20px">
           {/* HEADER */}
           <Box
@@ -606,6 +599,8 @@ const CreateCourse = () => {
           </Box>
           <ToastContainer />
         </Box>
+      </main>
+    </div>
   );
 };
 
