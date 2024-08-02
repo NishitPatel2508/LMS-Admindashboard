@@ -28,7 +28,6 @@ import Allcontent from "./scenes/ManageCategories/Contents/Allcontent";
 import AllContentFiles from "./scenes/ManageCategories/ContentFiles/AllContentFiles";
 import SignupPage from "./User/Test/SignupPage";
 import Logout from "./Instructor/Logout";
-import PieChart from "./components/DonutChart";
 import axios from "axios";
 import Loading from "./scenes/global/Loading";
 import { useEffect } from "react";

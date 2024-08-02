@@ -22,7 +22,7 @@ const Topbar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [profileImg, setprofileImg] = useState("");
   useEffect(() => {
-    getInstructorInfo();
+    // getInstructorInfo();
   }, []);
   //Logout
   const dispatch = useDispatch();
@@ -41,6 +41,7 @@ const Topbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     dispatch(logout());
+    navigate("/login")
   };
 
   const getInstructorInfo = async () => {
