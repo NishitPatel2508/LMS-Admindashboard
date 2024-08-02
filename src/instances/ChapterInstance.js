@@ -1,11 +1,18 @@
+import { store } from "../app/store/store";
 import axiosInstance from "./axiosInstances";
 
 //Get All
+
 export const getAllChapterInstance = async (search) => {
   try {
+    const accessToken = store.getState()?.accessToken;
+    console.log("atP", accessToken);
     const response = await axiosInstance({
       url: `/getAllChapter?keyword=${search}`,
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
 
     return response.data;
@@ -18,9 +25,14 @@ export const getAllChapterInstance = async (search) => {
 //Get Single
 export const getSingleChapterInstance = async (id) => {
   try {
+    const accessToken = store.getState()?.accessToken;
+    console.log("atP", accessToken);
     const response = await axiosInstance({
       url: `/chapter/${id}`,
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
     return response.data.data;
   } catch (error) {
@@ -30,10 +42,15 @@ export const getSingleChapterInstance = async (id) => {
 //Update
 export const updateChapterInstance = async (payload, id) => {
   try {
+    const accessToken = store.getState()?.accessToken;
+    console.log("atP", accessToken);
     const response = await axiosInstance({
       url: `/chapter/update/${id}`,
       method: "PATCH",
       data: payload,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
     return response.data;
   } catch (error) {
@@ -44,10 +61,15 @@ export const updateChapterInstance = async (payload, id) => {
 export const createChapterInstance = async (payload) => {
   try {
     try {
+      const accessToken = store.getState()?.accessToken;
+      console.log("atP", accessToken);
       const response = await axiosInstance({
         url: `/chapter/create`,
         method: "POST",
         data: payload,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
       return response.data;
     } catch (error) {
@@ -60,9 +82,14 @@ export const createChapterInstance = async (payload) => {
 //Delete
 export const deleteChapterInstance = async (id) => {
   try {
+    const accessToken = store.getState()?.accessToken;
+    console.log("atP", accessToken);
     const response = await axiosInstance({
       url: `/chapter/delete/${id}`,
       method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
     return response.data;
   } catch (error) {

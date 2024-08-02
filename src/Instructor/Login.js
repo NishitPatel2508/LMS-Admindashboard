@@ -88,6 +88,7 @@ const Login = () => {
           } else {
             if (response) {
               if (response) {
+                console.log("re", response);
                 localStorage.setItem(
                   "accessToken",
                   JSON.stringify(response.data.accessToken)
@@ -97,10 +98,11 @@ const Login = () => {
                   email: email,
                 };
                 const accessToken = response.data.accessToken;
+                // localStorage.setItem("accessToken", accessToken);
                 dispatch(login({ user, accessToken }));
               }
             }
-            console.log("accessToken", response.accessToken);
+            // console.log("accessToken", response.accessToken);
 
             toast.success(response.message);
             setTimeout(() => {

@@ -105,7 +105,7 @@ export default function UpdateContent({ closeEvent }) {
     try {
       await getAllChapterInstance()
         .then((response) => {
-          setAllChapter(response);
+          setAllChapter(response.data);
         })
         .catch((err) => {
           console.log(err.response);
@@ -118,7 +118,7 @@ export default function UpdateContent({ closeEvent }) {
     try {
       await getAllContentVideoInstance()
         .then((result) => {
-          setAllContentVideo(result);
+          setAllContentVideo(result.data);
         })
         .catch((err) => {
           console.log(err.response);
@@ -131,7 +131,7 @@ export default function UpdateContent({ closeEvent }) {
     try {
       await getAllContentFileInstance()
         .then((response) => {
-          setAllFiles(response);
+          setAllFiles(response.data);
         })
         .catch((err) => {
           console.log(err.response);

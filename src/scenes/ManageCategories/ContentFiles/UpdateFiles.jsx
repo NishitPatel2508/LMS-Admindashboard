@@ -12,7 +12,7 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 import { BLOB_READ_WRITE_TOKEN } from "../../../basic";
 import { put } from "@vercel/blob";
@@ -194,10 +194,10 @@ export default function UpdateFiles({ closeEvent }) {
             </Button>
           </Grid>
         </Grid>
+        <ToastContainer />
 
         <Box height={15} />
       </Box>
-      {/* <ToastContainer /> */}
     </>
   );
 }

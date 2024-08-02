@@ -1,11 +1,17 @@
+import { store } from "../app/store/store";
 import axiosInstance from "./axiosInstances";
 
+// console.log("atP", accessToken);
 // Get All
 export const getAllSubCategoryInstance = async (keyword) => {
   try {
+    const accessToken = store.getState()?.accessToken;
     const response = await axiosInstance({
       url: `/getAllSubCategory?keyword=${keyword}`,
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
     return response.data;
   } catch (error) {
@@ -17,9 +23,13 @@ export const getAllSubCategoryInstance = async (keyword) => {
 //Get Single
 export const getSingleSubCategoryInstance = async (id) => {
   try {
+    const accessToken = store.getState()?.accessToken;
     const response = await axiosInstance({
       url: `/subCategory/${id}`,
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
     return response.data.data;
   } catch (error) {
@@ -31,10 +41,14 @@ export const getSingleSubCategoryInstance = async (id) => {
 export const createSubCategoryInstance = async (payload) => {
   try {
     try {
+      const accessToken = store.getState()?.accessToken;
       const response = await axiosInstance({
         url: `/subCategory/create`,
         method: "POST",
         data: payload,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
       return response.data;
     } catch (error) {
@@ -47,10 +61,14 @@ export const createSubCategoryInstance = async (payload) => {
 //Update
 export const getUpdateSubCategoryInstance = async (payload, id) => {
   try {
+    const accessToken = store.getState()?.accessToken;
     const response = await axiosInstance({
       url: `/subCategory/update/${id}`,
       method: "PATCH",
       data: payload,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
     return response.data;
   } catch (error) {
@@ -61,9 +79,13 @@ export const getUpdateSubCategoryInstance = async (payload, id) => {
 //Delete
 export const deleteSubCategoryInstance = async (id) => {
   try {
+    const accessToken = store.getState()?.accessToken;
     const response = await axiosInstance({
       url: `/subCategory/delete/${id}`,
       method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
     return response.data;
   } catch (error) {
